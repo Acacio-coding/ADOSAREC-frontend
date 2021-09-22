@@ -29,3 +29,6 @@ yarn-error.log*
 **/*.scss.map
 **/.sass-cache
 **/.sass-cache/*
+
+# readmeReact
+READMEREACT.TXT
