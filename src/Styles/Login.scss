@@ -1,0 +1,114 @@
+@import "./Variables.scss";
+@import "./Mixins.scss";
+
+/* =============================================== Login*/
+.loginContainer {
+  width: 43vw;
+  height: 100vh;
+  @include displayFlex();
+
+  .loginSquare {
+    width: 320px;
+    height: 430px;
+    border-radius: 5px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    position: absolute;
+
+    .loginSquareTop {
+      width: 100%;
+      height: 100px;
+      border-radius: 5px 5px 0 0;
+      background-color: #670000;
+      position: relative;
+      top: 0;
+      @include displayFlex();
+
+      h1 {
+        color: #fff;
+        font-weight: 400;
+        font-size: 2.5em;
+      }
+    }
+
+    .form {
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      position: absolute;
+
+      form {
+        position: relative;
+        top: 15%;
+      }
+
+      input {
+        padding: 1em;
+        margin-bottom: 1.5em;
+        border: none;
+        background-color: hsla(240, 11%, 83%, 0.6);
+      }
+
+      #user {
+        border-radius: 0 5px 5px 0;
+      }
+
+      #password {
+        border-radius: 0 5px 5px 0;
+      }
+
+      #login {
+        background-color: #670000;
+        color: #fff;
+        cursor: pointer;
+        padding: 0.5em;
+        width: 5.5em;
+        border-radius: 5px;
+        border: solid 2px #670000;
+        transition: 230ms ease-in-out;
+        font-size: 1.05em;
+      }
+
+      #login:hover {
+        background-color: #fff;
+        color: #670000;
+        border: solid 2px #670000;
+      }
+    }
+
+    #forgotPassword {
+      color: rgb(129, 129, 145);
+      margin: 0;
+      position: relative;
+      bottom: -68%;
+      left: 6%;
+      text-decoration: underline;
+    }
+
+    .esqueceuSenha {
+      font-size: 13px;
+      color: rgb(206, 206, 216);
+      margin: 0, 50px;
+    }
+  }
+}
+
+/* =============================================== Logo */
+.logoContainer {
+  width: 57vw;
+  height: 100vh;
+  background-color: hsl(0, 100%, 20%);
+  @include displayFlex();
+
+  .logoCircle {
+    padding: 1em;
+    border-radius: 50%;
+    background-color: white;
+    @include displayFlex();
+  }
+
+  p {
+    color: #fff;
+    font-size: 1.3em;
+    position: sticky;
+  }
+}
