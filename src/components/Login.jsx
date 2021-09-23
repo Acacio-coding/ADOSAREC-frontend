@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import Copyright from "./Copyright";
 import logo from "../img/logo.png";
 import user from "../img/user.png";
@@ -12,7 +13,11 @@ const Login = () => {
         <div className="login-title">
           <h1>Login</h1>
         </div>
+
         <div className="login-content">
+          <div id="logo-mobile">
+            <img src={logo} alt="Logo ADOSAREC" />
+          </div>
           <form action="">
             <div className="user-holder">
               <div className="user-icon">
@@ -27,9 +32,16 @@ const Login = () => {
               </div>
               <input type="text" placeholder="Senha" id="password" />
             </div>
-            <input type="submit" value="Entrar" />
+            <motion.input
+              type="submit"
+              value="Entrar"
+              whileTap={{ scale: 1.5 }}
+            />
           </form>
           <a href="#">Esqueceu sua senha?</a>
+        </div>
+        <div id="copyright-mobile">
+          <Copyright />
         </div>
       </div>
 
