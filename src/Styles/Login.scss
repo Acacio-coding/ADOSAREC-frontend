@@ -2,113 +2,152 @@
 @import "./Mixins.scss";
 
 /* =============================================== Login*/
-.loginContainer {
-  width: 43vw;
+.login-container {
+  width: 45vw;
   height: 100vh;
-  @include displayFlex();
+  @include display-flex();
 
-  .loginSquare {
+  .login-title {
     width: 320px;
-    height: 430px;
-    border-radius: 5px;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
-    position: absolute;
+    max-width: 100%;
+    height: 100px;
+    max-height: auto;
+    border-radius: 5px 5px 0 0;
+    background-color: $red;
+    @include display-flex();
 
-    .loginSquareTop {
-      width: 100%;
-      height: 100px;
-      border-radius: 5px 5px 0 0;
-      background-color: #670000;
-      position: relative;
-      top: 0;
-      @include displayFlex();
-
-      h1 {
-        color: #fff;
-        font-weight: 400;
-        font-size: 2.5em;
-      }
+    h1 {
+      color: $white;
     }
+  }
 
-    .form {
-      width: 100%;
-      height: 100%;
-      text-align: center;
-      position: absolute;
+  .login-content {
+    width: 320px;
+    max-width: 100%;
+    height: 330px;
+    max-height: auto;
+    border-radius: 0 0 5px 5px;
+    background-color: $white;
+    @include box-shadow(0, 4px, 4px);
+    @include display-flex();
 
-      form {
-        position: relative;
-        top: 15%;
+    form {
+      width: 320px;
+      @include display-flex();
+
+      .user-holder {
+        @include display-flex(row, center, center);
+
+        .user-icon {
+          padding: 0.435em;
+          border-radius: 5px 0 0 5px;
+          background-color: $red;
+          @include display-flex();
+
+          img {
+            width: 32px;
+            height: 32px;
+          }
+        }
       }
 
-      input {
-        padding: 1em;
-        margin-bottom: 1.5em;
-        border: none;
-        background-color: hsla(240, 11%, 83%, 0.6);
+      .password-holder {
+        @include display-flex(row, center, center);
+
+        .password-icon {
+          margin-top: 1em;
+          padding: 0.435em;
+          border-radius: 5px 0 0 5px;
+          background-color: $red;
+          @include display-flex();
+
+          img {
+            width: 32px;
+            height: 32px;
+          }
+        }
       }
 
-      #user {
+      input[type="text"] {
+        width: 12em;
+        padding: 0.75em;
+        font-size: 1.001em;
         border-radius: 0 5px 5px 0;
+        background-color: $gray;
+      }
+
+      input[type="text"]::placeholder {
+        $gray: hsl(0, 0%, 60%);
+        color: $gray;
+      }
+
+      input[type="submit"] {
+        margin-top: 1em;
+        padding: 0.5em;
+        width: 5.5em;
+        font-size: 1.15em;
+        font-weight: 600;
+        border: solid 2px $red;
+        border-radius: 5px;
+        color: $white;
+        background-color: $red;
+        transition: 200ms ease-in;
+      }
+
+      input[type="submit"]:hover {
+        background-color: $white;
+        color: $red;
       }
 
       #password {
-        border-radius: 0 5px 5px 0;
-      }
-
-      #login {
-        background-color: #670000;
-        color: #fff;
-        cursor: pointer;
-        padding: 0.5em;
-        width: 5.5em;
-        border-radius: 5px;
-        border: solid 2px #670000;
-        transition: 230ms ease-in-out;
-        font-size: 1.05em;
-      }
-
-      #login:hover {
-        background-color: #fff;
-        color: #670000;
-        border: solid 2px #670000;
+        margin-top: 1em;
       }
     }
+  }
 
-    #forgotPassword {
-      color: rgb(129, 129, 145);
-      margin: 0;
-      position: relative;
-      bottom: -68%;
-      left: 6%;
-      text-decoration: underline;
-    }
-
-    .esqueceuSenha {
-      font-size: 13px;
-      color: rgb(206, 206, 216);
-      margin: 0, 50px;
-    }
+  a {
+    position: relative;
+    top: 15%;
+    left: -19%;
+    $gray: hsl(0, 0%, 60%);
+    color: $gray;
   }
 }
 
 /* =============================================== Logo */
-.logoContainer {
-  width: 57vw;
+.logo-container {
+  width: 55vw;
   height: 100vh;
-  background-color: hsl(0, 100%, 20%);
-  @include displayFlex();
+  background-color: $red;
+  @include box-shadow(-4px, 0, 4px);
+  @include display-flex();
 
-  .logoCircle {
-    padding: 1em;
-    border-radius: 50%;
-    background-color: white;
-    @include displayFlex();
+  .logo-placer {
+    width: 100%;
+    height: 95%;
+    @include display-flex();
+
+    .logo-circle {
+      background-color: $white;
+      border-radius: 50%;
+      padding: 1em;
+      @include display-flex();
+
+      img {
+        max-width: 17vw;
+        height: auto;
+      }
+    }
   }
 
-  p {
-    color: #fff;
-    font-size: 1.3em;
-    position: sticky;
+  .copyright-container {
+    width: 100%;
+    height: 5%;
+    @include display-flex();
+    p {
+      color: $white;
+      font-size: 1.05em;
+      font-weight: 600;
+    }
   }
 }

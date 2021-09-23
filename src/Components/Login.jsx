@@ -1,36 +1,47 @@
 import React from "react";
+import Copyright from "./Copyright";
 import logo from "../img/logo.png";
+import user from "../img/user.png";
+import password from "../img/password.png";
 import "../styles/Login.css";
 
 const Login = () => {
   return (
     <>
-      <div className="loginContainer">
-        <div className="loginSquare">
-          <div className="loginSquareTop">
-            <h1>Login</h1>
-          </div>
-          <div className="form">
-            <form action="">
-              <div>
-                <input type="text" placeholder="Usuário" id="user" />
+      <div className="login-container">
+        <div className="login-title">
+          <h1>Login</h1>
+        </div>
+        <div className="login-content">
+          <form action="">
+            <div className="user-holder">
+              <div className="user-icon">
+                <img src={user} alt="Ícone de usuário" />
               </div>
+              <input type="text" placeholder="Usuário" />
+            </div>
 
+            <div className="password-holder">
+              <div className="password-icon">
+                <img src={password} alt="Ícone de senha" />
+              </div>
               <input type="text" placeholder="Senha" id="password" />
-              <br />
-              <input type="submit" value="Entrar" id="login" />
-            </form>
-          </div>
-
-          <a id="forgotPassword">Esqueceu a senha?</a>
+            </div>
+            <input type="submit" value="Entrar" />
+          </form>
+          <a href="#">Esqueceu sua senha?</a>
         </div>
       </div>
 
-      <div className="logoContainer">
-        <div className="logoCircle">
-          <img src={logo} alt="Logo ADOSAREC" id="logo" />
+      <div className="logo-container">
+        <div className="logo-placer">
+          <div className="logo-circle">
+            <img src={logo} alt="Logo ADOSAREC" id="logo" />
+          </div>
         </div>
-        <p>© ADOSAREC</p>
+        <div className="copyright-container">
+          <Copyright />
+        </div>
       </div>
     </>
   );
