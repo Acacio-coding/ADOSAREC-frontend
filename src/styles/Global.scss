@@ -1,0 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap");
+@import "./Variables.scss";
+@import "./Mixins.scss";
+
+* {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  box-sizing: border-box;
+  font-family: "Nunito", sans-serif;
+}
+
+*:focus {
+  outline: none;
+}
+
+input[type="submit"] {
+  cursor: pointer;
+}
