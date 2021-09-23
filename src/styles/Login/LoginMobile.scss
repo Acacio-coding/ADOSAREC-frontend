@@ -1,0 +1,43 @@
+@import "../Variables.scss";
+@import "../Mixins.scss";
+
+.mobile-container {
+  width: 100vw;
+  height: 100vh;
+  @include display-flex();
+
+  .loginM-container {
+    width: 100%;
+    height: 92%;
+    @include display-flex();
+
+    .loginM-title {
+      border-radius: 5px 5px 0 0;
+      @include display-flex();
+
+      img {
+        max-width: 60vw;
+        height: auto;
+      }
+    }
+
+    .loginM-content {
+      width: 280px;
+      height: 300px;
+      border-radius: 0 0 5px 5px;
+      @include display-flex();
+    }
+  }
+
+  .copyrightM-container {
+    width: 100%;
+    height: 8%;
+    background-color: $red;
+    @include display-flex();
+
+    p {
+      color: $white;
+      font-weight: 600;
+    }
+  }
+}
