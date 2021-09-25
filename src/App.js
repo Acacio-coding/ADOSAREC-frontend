@@ -1,21 +1,33 @@
 import React from "react";
-import { isMobile } from "react-device-detect";
-import LoginDesktop from "./components/Login/LoginDesktop";
-import LoginMobile from "./components/Login/LoginMobile";
-import "./styles/App.css";
+import { AppContainer } from "./styles/Container.style";
+import { createGlobalStyle } from "styled-components";
+import Login from "./pages/Login";
+
+const Reset = createGlobalStyle`
+  * {
+  margin: 0;
+  padding: 0;
+  border: none;
+  list-style: none;
+  box-sizing: border-box;
+  font-family: "Nunito", sans-serif;
+}
+
+*:focus {
+  outline: none;
+}
+
+input[type="submit"] {
+  cursor: pointer;
+}
+`;
 
 const App = () => {
-  if (isMobile) {
-    return (
-      <div className="App">
-        <LoginMobile />
-      </div>
-    );
-  }
   return (
-    <div className="App">
-      <LoginDesktop />
-    </div>
+    <AppContainer>
+      <Reset />
+      <Login />
+    </AppContainer>
   );
 };
 

@@ -22,13 +22,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# sass
-**/*.css
-**/*.css.map
-**/*.sass.map
-**/*.scss.map
-**/.sass-cache
-**/.sass-cache/*
 
 # readmeReact
 READMEREACT.TXT
