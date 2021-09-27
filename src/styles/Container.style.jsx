@@ -39,3 +39,10 @@ export const FlexCustomContainer = styled.div(
     background: ${background};
   `
 );
+
+export const Container = styled.div(
+  ({ width, height }) => `
+  width: ${width ? width : "auto"};
+  height: ${height ? height : "auto"};
+`
+);

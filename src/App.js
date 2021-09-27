@@ -1,7 +1,7 @@
 import React from "react";
 import { AppContainer } from "./styles/Container.style";
 import { createGlobalStyle } from "styled-components";
-import Login from "./pages/Login";
+import Nav from "./components/Nav";
 
 const Reset = createGlobalStyle`
   * {
@@ -26,7 +26,7 @@ const App = () => {
   return (
     <AppContainer>
       <Reset />
-      <Login />
+      <Nav />
     </AppContainer>
   );
 };
