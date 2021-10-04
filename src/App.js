@@ -1,33 +1,36 @@
 import React from "react";
-import { AppContainer } from "./styles/Container.style";
-import { createGlobalStyle } from "styled-components";
-import Nav from "./components/Nav";
-
-const Reset = createGlobalStyle`
-  * {
-  margin: 0;
-  padding: 0;
-  border: none;
-  list-style: none;
-  box-sizing: border-box;
-  font-family: "Nunito", sans-serif;
-}
-
-*:focus {
-  outline: none;
-}
-
-input[type="submit"] {
-  cursor: pointer;
-}
-`;
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Statistics from "./pages/Statistics";
+import Donators from "./pages/Donators";
+import Donations from "./pages/Donations";
+import Unities from "./pages/Unities";
 
 const App = () => {
   return (
-    <AppContainer>
-      <Reset />
-      <Nav />
-    </AppContainer>
+    <Router>
+      <Switch>
+        <Route exact path="/">
+          <Login />
+        </Route>
+
+        <Route path="/estatisticas">
+          <Statistics />
+        </Route>
+
+        <Route path="/doadores">
+          <Donators />
+        </Route>
+
+        <Route path="/doacoes">
+          <Donations />
+        </Route>
+
+        <Route path="/unidades">
+          <Unities />
+        </Route>
+      </Switch>
+    </Router>
   );
 };
 

@@ -5,7 +5,7 @@ import Nav from "../components/Nav";
 import Text from "../components/Text";
 import TopMenu from "../components/TopMenu";
 
-const Donators = () => {
+const Unities = () => {
   if (!isMobile) {
     return (
       <>
@@ -23,7 +23,6 @@ const Donators = () => {
               <Text copyright />
             </Div>
           </Div>
-
           <Div
             width="80vw"
             height="100vh"
@@ -33,8 +32,8 @@ const Donators = () => {
             secondary
           >
             <TopMenu
-              titleChildren="Doadores"
-              placeholderText="Pesquisar doador"
+              titleChildren="Unidades de coleta"
+              placeholderText="Pesquisar unidade"
             />
           </Div>
         </Div>
@@ -44,4 +43,4 @@ const Donators = () => {
   return <></>;
 };
 
-export default Donators;
+export default Unities;

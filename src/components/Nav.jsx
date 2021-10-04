@@ -1,61 +1,78 @@
 import React from "react";
 import { isMobile } from "react-device-detect";
-import { FlexCustomContainer } from "../styles/Container.style";
-import { Navitem, Navlist } from "../styles/Nav.style";
-import { FaUser as Donator } from "react-icons/fa";
-import {
-  RiPieChartFill as Statistics,
-  RiHospitalFill as Association,
-} from "react-icons/ri";
-import { ImDroplet as Donation } from "react-icons/im";
+import { NavLink } from "react-router-dom";
+import { NavData } from "./NavData";
+import styled from "styled-components";
+import Div from "./Div";
 import logo from "../img/logo.png";
+
+const NavList = styled.ul`
+  width: 100%;
+`;
+
+const NavItem = styled.li`
+  &.link:hover {
+    background: hsl(0, 100%, 11.96078431372549%);
+  }
+
+  &.link:focus {
+    background: hsl(0, 100%, 11.96078431372549%);
+  }
+
+  &#active {
+    background: hsl(0, 100%, 11.96078431372549%);
+    border-left: solid 3px #fff;
+  }
+`;
+
+const StyledNavLink = styled(NavLink)`
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.2em;
+`;
 
 const Nav = () => {
   if (!isMobile) {
     return (
-      <>
-        <FlexCustomContainer
-          width={"20vw"}
-          height={"100vh"}
-          background={"hsl(0, 100%, 20%)"}
-          align={"center"}
-          direction={"column"}
-        >
-          <FlexCustomContainer
-            background={"hsl(0, 0%, 100%)"}
-            radius={"50%"}
-            justify={"center"}
-            align={"center"}
-            padding={"0.5em"}
-            margin={"3em 0"}
+      <Div height="93vh" flex direction="column" align="center">
+        <StyledNavLink to="/estatisticas">
+          <Div
+            circle
+            flex
+            justify="center"
+            background="#fff"
+            margin="2vh 0 2.5vh"
           >
-            <img src={logo} alt="Logo da ADOSAREC." width={"200px"} />
-          </FlexCustomContainer>
-          <Navlist>
-            <Navitem
-              borderTop={"solid 0.5px hsl(0, 0%, 100%)"}
-              borderBottom={"solid 0.75px hsl(0, 0%, 100%)"}
-            >
-              <Statistics />
-              <span>Estatísticas</span>
-            </Navitem>
-            <Navitem borderBottom={"solid 0.75px hsl(0, 0%, 100%)"}>
-              <Donator />
-              <span>Doadores</span>
-            </Navitem>
-            <Navitem borderBottom={"solid 0.75px hsl(0, 0%, 100%)"}>
-              <Donation />
-              <span>Doações</span>
-            </Navitem>
-            <Navitem borderBottom={"solid 0.75px hsl(0, 0%, 100%)"}>
-              <Association />
-              <span>Associações</span>
-            </Navitem>
-          </Navlist>
-        </FlexCustomContainer>
-      </>
+            <img
+              src={logo}
+              alt="Logo da ADOSAREC."
+              width="auto"
+              height="192px"
+            />
+          </Div>
+        </StyledNavLink>
+        <NavList>
+          {NavData.map((val, key) => {
+            return (
+              <NavItem
+                key={key}
+                id={window.location.pathname === val.link ? "active" : ""}
+                className="link"
+              >
+                <StyledNavLink to={val.link}>
+                  <Div flex align="center" padding="1.25em 0 1.25em 1.25em">
+                    {val.icon}
+                    {val.title}
+                  </Div>
+                </StyledNavLink>
+              </NavItem>
+            );
+          })}
+        </NavList>
+      </Div>
     );
   }
+
   return <></>;
 };
 
