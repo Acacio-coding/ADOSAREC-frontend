@@ -1,0 +1,120 @@
+@import "../styles/Variables.scss";
+@import "../styles/Mixins.scss";
+
+.menuContainer {
+  width: 100%;
+  height: 185px;
+  @include dFlex(column, center, center);
+
+  .buttonsContainer {
+    width: 95%;
+    height: 50px;
+  }
+
+  .topContainer {
+    width: 95%;
+    height: 100px;
+    padding-bottom: 0.25em;
+    border-bottom: solid 1px $black40;
+    @include dFlex(row, center, flex-end);
+
+    .topPlacer {
+      width: 100%;
+      @include dFlex(row, space-between, center);
+
+      #textRegister {
+        padding-bottom: 0.125em;
+      }
+
+      .inputContainer {
+        width: 270px;
+        height: 40px;
+        margin-bottom: 0.75em;
+        @include dFlex(row, center, center);
+        input {
+          $black40: hsla(0, 0%, 0%, 0.1);
+          width: 100%;
+          height: 100%;
+          font-size: 16px;
+          border-radius: 30px 0 0 30px;
+          padding: 0 20px 0 20px;
+          border-top: solid 1px $black40;
+          box-shadow: 0 4px 4px $black40;
+        }
+        .searchContainer {
+          $black40: hsla(0, 0%, 0%, 0.2);
+          width: 60px;
+          height: 40px;
+          background: $red;
+          border-radius: 0 5px 5px 0;
+          box-shadow: 0 4px 4px $black40;
+          transition: 100ms ease-in-out;
+          @include dFlex(row, center, center);
+
+          button {
+            width: 100%;
+            height: 100%;
+            font-size: 20px;
+            color: $white;
+            background: none;
+            @include dFlex(row, center, center);
+          }
+        }
+
+        .searchContainer:hover {
+          background: $darkRed;
+        }
+      }
+    }
+  }
+
+  .optionsContainer {
+    width: 95%;
+    height: 45px;
+    border-bottom: solid 1px $black40;
+    @include dFlex(row, flex-end, center);
+
+    .optionsPlacerRegister {
+      width: 100%;
+      height: 100%;
+      @include dFlex(row, space-between, center);
+
+      button {
+        background: $red;
+        color: $white;
+        width: 40px;
+        height: 32px;
+        font-size: 1.25em;
+        border-radius: 5px;
+        @include dFlex(row, center, center);
+        transition: 100ms ease-in-out;
+      }
+
+      button:hover {
+        transform: scale(1.1);
+        background: $darkRed;
+      }
+    }
+
+    .optionsPlacer {
+      height: 100%;
+      @include dFlex(row, flex-start, center);
+
+      a {
+        color: $red;
+        text-decoration: none;
+        font-size: 2em;
+        transition: 100ms ease-in-out;
+      }
+
+      a:hover {
+        transform: scale(1.1);
+        color: $darkRed;
+      }
+
+      .paddedIcons {
+        margin-right: 0.75em;
+      }
+    }
+  }
+}

@@ -1,0 +1,139 @@
+@import "../../styles/Variables.scss";
+@import "../../styles/Mixins.scss";
+
+.container {
+  width: 100%;
+  height: 100%;
+  @include dFlex(column, center, center);
+
+  .subTitleContainer {
+    width: 100%;
+    height: 8%;
+    @include dFlex(row, center, flex-start);
+
+    .iconContainer {
+      font-size: 32px;
+    }
+
+    span {
+      font-size: 24px;
+      margin-left: 10px;
+    }
+  }
+
+  .formContainer {
+    width: 100%;
+    overflow: auto;
+    max-height: 600px;
+    @include dFlex(column, flex-start, center);
+
+    form {
+      label {
+        color: $red;
+      }
+
+      input[type="text"] {
+        $black40: hsla(0, 0%, 0%, 0.2);
+        width: 410px;
+        font-size: 1em;
+        padding: 0.25em;
+        border: solid 1px $red;
+        box-shadow: 0 4px 4px $black40;
+      }
+
+      input[type="email"] {
+        $black40: hsla(0, 0%, 0%, 0.2);
+        width: 410px;
+        font-size: 1em;
+        padding: 0.25em;
+        border: solid 1px $red;
+        box-shadow: 0 4px 4px $black40;
+      }
+
+      input[type="date"] {
+        $black40: hsla(0, 0%, 0%, 0.2);
+        width: 410px;
+        font-size: 1em;
+        padding: 0.25em;
+        border: solid 1px $red;
+        box-shadow: 0 4px 4px $black40;
+      }
+
+      input[type="checkbox"] {
+        opacity: 0;
+      }
+
+      input[type="checkbox"] + label {
+        margin-top: 0.5em;
+        position: relative;
+        padding-left: 20px;
+        cursor: pointer;
+        display: inline-block;
+        line-height: 25px;
+      }
+
+      input[type="checkbox"] + label::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -6%;
+        width: 20px;
+        height: 20px;
+        outline: 1px solid $red;
+        background: $white;
+      }
+
+      input[type="checkbox"]:checked + label::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -6%;
+        width: 20px;
+        height: 20px;
+        outline: 1px solid $red;
+        background-image: url("../../../img/check-icon.png");
+        background-size: contain;
+      }
+
+      .genderContainer {
+        width: 100%;
+        margin-bottom: 1em;
+        @include dFlex(row, flex-start, flex-start);
+
+        #marginDiv {
+          padding-left: 20px;
+        }
+
+        div {
+          input[type="radio"] {
+            margin-right: 10px;
+          }
+          @include dFlex(row, flex-start, center);
+        }
+      }
+
+      .buttonContainer {
+        width: 100%;
+        padding-bottom: 3.5em;
+        @include dFlex(row, center, center);
+
+        input {
+          width: 130px;
+          font-size: 1.1em;
+          font-weight: 600;
+          padding: 0.75em;
+          border-radius: 30px;
+          box-shadow: 0px 8px 15px hsla(0, 0%, 0%, 0.2);
+          color: $white;
+          background: $darkRed;
+          transition: 100ms ease;
+        }
+
+        input:hover {
+          transform: scale(1.1);
+          background: $red;
+        }
+      }
+    }
+  }
+}
