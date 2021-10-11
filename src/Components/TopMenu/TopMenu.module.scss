@@ -79,6 +79,26 @@
       height: 100%;
       @include dFlex(row, space-between, center);
 
+      .optionsContainerDetails {
+        @include dFlex(row, space-around, center);
+
+        a {
+          color: $red;
+          text-decoration: none;
+          font-size: 2em;
+          transition: 100ms ease-in-out;
+        }
+
+        a:hover {
+          transform: scale(1.1);
+          color: $darkRed;
+        }
+
+        .paddedIcons {
+          margin-right: 0.75em;
+        }
+      }
+
       button {
         background: $red;
         color: $white;

@@ -1,10 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { donatorContext } from "../../Context/DonatorContext";
 import Nav from "../Nav/Nav";
 import TopMenu from "../TopMenu/TopMenu";
 import styles from "./Donators.module.scss";
 
 const Donators = () => {
-  const token = localStorage.getItem("token");
+  const [donators, setDonators] = useState([{}]);
+  const { setDonatorRg } = useContext(donatorContext);
+  const token = sessionStorage.getItem("token");
 
   useEffect(() => {
     const getDonators = async () => {
@@ -19,11 +23,12 @@ const Donators = () => {
         }
       );
       const data = await response.json();
-      console.log(data);
+
+      if (response.ok) setDonators(data);
     };
 
     getDonators();
-  }, []);
+  }, [token, setDonators]);
 
   return (
     <div className={styles.container}>
@@ -38,13 +43,43 @@ const Donators = () => {
 
         <div className={styles.tableContainer}>
           <table>
-            <tr>
-              <th>BLA</th>
-              <th>Nome</th>
-              <th>Grupo Sanguíneo</th>
-              <th>RH</th>
-            </tr>
-            <tr></tr>
+            <thead>
+              <tr>
+                <th id={styles.th2}>Nome</th>
+                <th id={styles.th3}>Grupo Sanguíneo</th>
+                <th id={styles.th4}>RH</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                {donators.map((value, index) => {
+                  return (
+                    <td key={index} className={styles.td2}>
+                      <Link
+                        to="/detalhes_doador"
+                        onClick={() => setDonatorRg(value.rg)}
+                      >
+                        {value.nome}
+                      </Link>
+                    </td>
+                  );
+                })}
+                {donators.map((value, index) => {
+                  return (
+                    <td key={index} className={styles.td3}>
+                      {value.grupo_sanguineo}
+                    </td>
+                  );
+                })}
+                {donators.map((value, index) => {
+                  return (
+                    <td key={index} className={styles.td4}>
+                      {value.rh_sanguineo === "0" ? "-" : "+"}
+                    </td>
+                  );
+                })}
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>

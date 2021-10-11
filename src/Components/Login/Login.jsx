@@ -5,7 +5,7 @@ import logo from "../../img/logo.png";
 import userImg from "../../img/user.png";
 import passwordImg from "../../img/password.png";
 import styles from "./Login.module.scss";
-import { authContext } from "../../Context/Auth";
+import { authContext } from "../../Context/AuthContext";
 
 const Login = () => {
   const { register, handleSubmit } = useForm();

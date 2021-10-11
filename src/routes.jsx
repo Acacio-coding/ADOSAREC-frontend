@@ -9,10 +9,12 @@ import RegisterDonators from "./Components/Donators/Register/RegisterDonators";
 import EditDonators from "./Components/Donators/Edit/EditDonators";
 import RegisterDonations from "./Components/Donations/Register/RegisterDonations";
 import EditDonations from "./Components/Donations/Edit/EditDonations";
+import DonatorDetails from "./Components/Donators/Details/DonatorDetails";
+import DonatorProvider from "./Context/DonatorContext";
 
 const CustomRoute = ({ isPrivate, ...rest }) => {
   const history = useHistory();
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
   if (isPrivate && !token) {
     history.push("/");
@@ -26,13 +28,28 @@ const Routes = () => {
     <Switch>
       <CustomRoute exact path="/" component={Login} />
       <CustomRoute isPrivate path="/estatisticas" component={Statistics} />
-      <CustomRoute isPrivate path="/doadores" component={Donators} />
-      <CustomRoute
-        isPrivate
-        path="/doadores_registrar"
-        component={RegisterDonators}
-      />
-      <CustomRoute isPrivate path="/doadores_editar" component={EditDonators} />
+
+      {/* Donator */}
+      <DonatorProvider>
+        <CustomRoute isPrivate path="/doadores" component={Donators} />
+        <CustomRoute
+          isPrivate
+          path="/doadores_registrar"
+          component={RegisterDonators}
+        />
+        <CustomRoute
+          isPrivate
+          path="/doadores_editar"
+          component={EditDonators}
+        />
+        <CustomRoute
+          isPrivate
+          path="/detalhes_doador"
+          component={DonatorDetails}
+        />
+      </DonatorProvider>
+
+      {/* Donations */}
       <CustomRoute isPrivate path="/doacoes" component={Donations} />
       <CustomRoute
         isPrivate
@@ -40,6 +57,8 @@ const Routes = () => {
         component={RegisterDonations}
       />
       <CustomRoute isPrivate path="/doacoes_editar" component={EditDonations} />
+
+      {/* Unities */}
       <CustomRoute isPrivate path="/unidades" component={Unities} />
     </Switch>
   );

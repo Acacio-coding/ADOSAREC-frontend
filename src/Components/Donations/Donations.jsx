@@ -15,14 +15,40 @@ const Donations = () => {
         />
         <div className={styles.tableContainer}>
           <table>
-            <tr>
-              <th>BLA</th>
-              <th>Nome</th>
-              <th>Sobrenome</th>
-              <th>Grupo Sanguíneo</th>
-              <th>RH</th>
-            </tr>
-            <tr></tr>
+            <thead>
+              <tr>
+                <th id={styles.th1}>BLA</th>
+                <th id={styles.th2}>Doador</th>
+                {/* doador_id */}
+                <th id={styles.th2}>Data</th>
+                {/* data */}
+                <th id={styles.th3}>Volume</th>
+                {/* volume */}
+                <th id={styles.th4}>Orgão Coletor</th>
+                {/* orgao_coletor_id */}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td id={styles.td1}>null</td>
+                {/* 
+                
+                {donations.map((value, index) => {
+                  return (
+                    <td key={index} className={styles.td3}>
+                      {value.volume}
+                    </td>
+                  );
+                })}
+                {donations.map((value, index) => {
+                  return (
+                    <td key={index} className={styles.td4}>
+                      {value.rh_sanguineo === 0 ? "+" : "-"}
+                    </td>
+                  );
+                })} */}
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>

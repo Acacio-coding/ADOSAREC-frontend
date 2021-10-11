@@ -10,14 +10,15 @@ const AuthProvider = ({ children }) => {
   //Armazenar token
   useEffect(() => {
     if (token) {
-      localStorage.setItem("token", token);
+      sessionStorage.setItem("token", token);
       history.push("/estatisticas");
     }
   }, [token, history]);
 
   //Logout
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("donatorRg");
     history.push("/");
   };
 

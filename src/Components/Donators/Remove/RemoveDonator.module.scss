@@ -1,0 +1,16 @@
+@import "../../styles/Variables.scss";
+@import "../../styles/Mixins.scss";
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  background: hsla(0, 0%, 0%, 0.25);
+  @include dFlex(row, center, center);
+
+  .removeContainer {
+    width: 350px;
+    height: 400px;
+    @include dFlex(column, center, center);
+  }
+}

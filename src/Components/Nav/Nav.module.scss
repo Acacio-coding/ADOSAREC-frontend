@@ -76,12 +76,10 @@
   @include dFlex(row, center, center);
 
   button {
-    $black: hsla(0, 0%, 0%, 0.3);
     width: 7em;
-    padding: 0.5em 2em;
+    padding: 0.75em 2em;
     font-size: 1.1em;
     font-weight: 600;
-    box-shadow: 0px 8px 15px $black;
     border-radius: 50px;
     color: $white;
     background: $darkRed;
@@ -89,8 +87,10 @@
   }
 
   button:hover {
+    $black: hsla(0, 0%, 0%, 0.3);
     transform: scale(1.1);
     background: hsl(0, 58%, 40%);
+    box-shadow: 0px 8px 15px $black;
   }
 }
 

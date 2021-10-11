@@ -40,25 +40,71 @@ const TopMenu = ({ title, page, typePage, placeholder }) => {
                 <AddIcon />
               </div>
             </NavLink>
-
-            <NavLink to={`${page}_editar`} className={styles.paddedIcons}>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <EditIcon />
-              </div>
-            </NavLink>
-
-            <NavLink to={`${page}_remover`}>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <RemoveIcon />
-              </div>
-            </NavLink>
           </div>
         </div>
       </div>
     );
   }
 
-  if (typePage === "register" || typePage === "edit") {
+  if (typePage === "register") {
+    return (
+      <div className={styles.menuContainer}>
+        <div className={styles.buttonsContainer}></div>
+
+        <div className={styles.topContainer}>
+          <div className={styles.topPlacer}>
+            <h1 id={styles.textRegister}>{title}</h1>
+          </div>
+        </div>
+
+        <div className={styles.optionsContainer}>
+          <div className={styles.optionsPlacerRegister}>
+            <button onClick={() => history.goBack()}>
+              <GoBack />
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (typePage === "details") {
+    return (
+      <div className={styles.menuContainer}>
+        <div className={styles.buttonsContainer}></div>
+
+        <div className={styles.topContainer}>
+          <div className={styles.topPlacer}>
+            <h1 id={styles.textRegister}>{title}</h1>
+          </div>
+        </div>
+
+        <div className={styles.optionsContainer}>
+          <div className={styles.optionsPlacerRegister}>
+            <button onClick={() => history.goBack()}>
+              <GoBack />
+            </button>
+
+            <div className={styles.optionsContainerDetails}>
+              <NavLink to="/doadores_editar" className={styles.paddedIcons}>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <EditIcon />
+                </div>
+              </NavLink>
+
+              <NavLink to={`${page}_remover`}>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <RemoveIcon />
+                </div>
+              </NavLink>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (typePage === "edit") {
     return (
       <div className={styles.menuContainer}>
         <div className={styles.buttonsContainer}></div>

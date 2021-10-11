@@ -1,5 +1,5 @@
 import React from "react";
-import DonatorForm from "../DonatorForm/DonatorForm";
+import DonatorFormRegister from "../DonatorForm/DonatorFormRegister";
 import Nav from "../../Nav/Nav";
 import TopMenu from "../../TopMenu/TopMenu";
 import styles from "./RegisterDonators.module.scss";
@@ -13,7 +13,7 @@ const RegisterDonators = () => {
         <TopMenu typePage="register" title="Doadores - Cadastrar" />
 
         <div className={styles.formContainer}>
-          <DonatorForm typePage="register" />
+          <DonatorFormRegister typePage="register" />
         </div>
       </div>
     </div>
