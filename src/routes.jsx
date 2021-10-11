@@ -47,19 +47,24 @@ const Routes = () => {
           path="/detalhes_doador"
           component={DonatorDetails}
         />
+
+        <CustomRoute isPrivate path="/doacoes" component={Donations} />
+
+        <CustomRoute
+          isPrivate
+          path="/doacoes_registrar"
+          component={RegisterDonations}
+        />
+        <CustomRoute
+          isPrivate
+          path="/doacoes_editar"
+          component={EditDonations}
+        />
+
+        {/* Unities */}
+        <CustomRoute isPrivate path="/unidades" component={Unities} />
       </DonatorProvider>
-
       {/* Donations */}
-      <CustomRoute isPrivate path="/doacoes" component={Donations} />
-      <CustomRoute
-        isPrivate
-        path="/doacoes_registrar"
-        component={RegisterDonations}
-      />
-      <CustomRoute isPrivate path="/doacoes_editar" component={EditDonations} />
-
-      {/* Unities */}
-      <CustomRoute isPrivate path="/unidades" component={Unities} />
     </Switch>
   );
 };

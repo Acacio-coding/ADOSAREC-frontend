@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   BsFillInfoCircleFill as InfoIcon,
   BsFillTelephoneFill as ContactIcon,
@@ -15,30 +15,31 @@ const DonatorFormEdit = () => {
   const history = useHistory();
   const token = sessionStorage.getItem("token");
   const donatorObj = JSON.parse(sessionStorage.getItem("donator"));
+  const donatorCep = localStorage.getItem("donatorCep");
+
+  const getAdress = useCallback(async () => {
+    const response = await fetch(
+      `https://app-node-api-test.herokuapp.com/cep/${donatorCep}`,
+      {
+        method: "get",
+        headers: new Headers({
+          Authorization: `Bearer ${JSON.parse(token)}`,
+          "Content-type": "application/json",
+        }),
+      }
+    );
+
+    const data = await response.json();
+    if (response.ok) setEndereço(data);
+  }, [token, donatorCep]);
 
   useEffect(() => {
-    const getAdress = async (cep) => {
-      const response = await fetch(
-        `https://app-node-api-test.herokuapp.com/cep/${cep}`,
-        {
-          method: "get",
-          headers: new Headers({
-            Authorization: `Bearer ${JSON.parse(token)}`,
-            "Content-type": "application/json",
-          }),
-        }
-      );
-
-      const data = await response.json();
-      if (response.ok) setEndereço(data);
-    };
-
-    if (cep.length === 8) {
-      getAdress(cep);
+    if (donatorCep.length === 8) {
+      getAdress();
     }
-  }, [cep, token]);
+  }, [getAdress, donatorCep]);
 
-  const handleData = async (data, RG) => {
+  const handleData = async (data, donatorRg) => {
     data.doador_de_medula === "true"
       ? (data.doador_de_medula = true)
       : (data.doador_de_medula = false);
@@ -55,7 +56,7 @@ const DonatorFormEdit = () => {
     console.log(bodyData);
 
     const response = await fetch(
-      `https://app-node-api-test.herokuapp.com/donator/${RG}`,
+      `https://app-node-api-test.herokuapp.com/donator/${donatorRg}`,
       {
         method: "post",
         headers: new Headers({
@@ -73,13 +74,11 @@ const DonatorFormEdit = () => {
     }
   };
 
-  const RG = donatorObj.rg;
-
-  console.log(donatorObj);
+  const donatorRg = donatorObj.rg;
 
   return (
     <div className={styles.formContainer}>
-      <form onSubmit={handleSubmit(handleData, RG)}>
+      <form onSubmit={handleSubmit(handleData, donatorRg)}>
         <div className={styles.subTitleContainer}>
           <div className={styles.iconContainer}>
             <InfoIcon style={{ fontSize: "32px" }} />

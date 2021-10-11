@@ -1,59 +1,59 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Nav from "../../Nav/Nav";
 import TopMenu from "../../TopMenu/TopMenu";
 import styles from "./DonatorDetails.module.scss";
 
 const DonatorDetails = () => {
   const [endereço, setEndereço] = useState({});
-  const RG = sessionStorage.getItem("donatorRg");
+  const [donatorObj, setDonatorObj] = useState({});
   const token = sessionStorage.getItem("token");
+  const rg = sessionStorage.getItem("donatorRg");
 
-  useEffect(() => {
-    const getDonator = async () => {
-      const response = await fetch(
-        `https://app-node-api-test.herokuapp.com/donator/${RG}`,
-        {
-          method: "get",
-          headers: new Headers({
-            Authorization: `Bearer ${JSON.parse(token)}`,
-            "Content-type": "application/json",
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (response.ok) {
-        sessionStorage.setItem("donator", JSON.stringify(data));
-      } else {
-        alert("Erro ao encontrar doador...");
+  const getDonator = useCallback(async () => {
+    const response = await fetch(
+      `https://app-node-api-test.herokuapp.com/donator/${rg}`,
+      {
+        method: "get",
+        headers: new Headers({
+          Authorization: `Bearer ${JSON.parse(token)}`,
+          "Content-type": "application/json",
+        }),
       }
-    };
-    getDonator();
-  }, [token, RG]);
+    );
 
-  const donatorObj = JSON.parse(sessionStorage.getItem("donator"));
-  const cep = donatorObj.cep;
+    const data = await response.json();
+
+    if (response.ok) {
+      sessionStorage.setItem("donator", JSON.stringify(data));
+      const stringData = sessionStorage.getItem("donator");
+      setDonatorObj(JSON.parse(stringData));
+    }
+  }, [rg, token]);
+
+  localStorage.setItem("donatorCep", donatorObj.cep);
+  const donatorCep = localStorage.getItem("donatorCep");
+
+  const getAdress = useCallback(async () => {
+    const response = await fetch(
+      `https://app-node-api-test.herokuapp.com/cep/${donatorCep}`,
+      {
+        method: "get",
+        headers: new Headers({
+          Authorization: `Bearer ${JSON.parse(token)}`,
+          "Content-type": "application/json",
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (response.ok) setEndereço(data);
+  }, [token, donatorCep]);
 
   useEffect(() => {
-    const getAdress = async (cep) => {
-      const response = await fetch(
-        `https://app-node-api-test.herokuapp.com/cep/${cep}`,
-        {
-          method: "get",
-          headers: new Headers({
-            Authorization: `Bearer ${JSON.parse(token)}`,
-            "Content-type": "application/json",
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (response.ok) setEndereço(data);
-    };
+    getDonator();
     getAdress();
-  }, [cep, token]);
+  }, [getDonator, getAdress]);
 
   return (
     <div className={styles.container}>

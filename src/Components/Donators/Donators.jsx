@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { donatorContext } from "../../Context/DonatorContext";
 import Nav from "../Nav/Nav";
@@ -10,25 +10,25 @@ const Donators = () => {
   const { setDonatorRg } = useContext(donatorContext);
   const token = sessionStorage.getItem("token");
 
+  const getDonators = useCallback(async () => {
+    const response = await fetch(
+      "https://app-node-api-test.herokuapp.com/donator",
+      {
+        method: "get",
+        headers: new Headers({
+          Authorization: `Bearer ${JSON.parse(token)}`,
+          "Content-type": "application/json",
+        }),
+      }
+    );
+    const data = await response.json();
+
+    setDonators(data);
+  }, [token]);
+
   useEffect(() => {
-    const getDonators = async () => {
-      const response = await fetch(
-        "https://app-node-api-test.herokuapp.com/donator",
-        {
-          method: "get",
-          headers: new Headers({
-            Authorization: `Bearer ${JSON.parse(token)}`,
-            "Content-type": "application/json",
-          }),
-        }
-      );
-      const data = await response.json();
-
-      if (response.ok) setDonators(data);
-    };
-
     getDonators();
-  }, [token, setDonators]);
+  }, [getDonators]);
 
   return (
     <div className={styles.container}>
@@ -64,6 +64,7 @@ const Donators = () => {
                     </td>
                   );
                 })}
+
                 {donators.map((value, index) => {
                   return (
                     <td key={index} className={styles.td3}>
