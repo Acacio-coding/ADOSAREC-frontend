@@ -1,15 +1,15 @@
-@import "../styles/Variables.scss";
-@import "../styles/Mixins.scss";
-
 .navContainer {
   width: 20vw;
   height: 100vh;
-  background: $red;
+  background: #670000;
 
   .nav {
     width: 100%;
-    height: 80%;
-    @include dFlex(column, space-evenly, flex-start);
+    height: 92%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-start;
 
     .imgContainer {
       width: 100%;
@@ -17,13 +17,19 @@
       padding: 1em 0;
       padding-top: 2.5em;
       margin-bottom: 2em;
-      @include dFlex(column, center, center);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
 
       div {
-        background: $white;
+        background: #fff;
         border-radius: 50%;
         padding: 0.5em;
-        @include dFlex(column, center, center);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
 
         img {
           max-width: 160px;
@@ -35,7 +41,10 @@
     .navList {
       width: 100%;
       height: 100%;
-      @include dFlex(column, flex-start, center);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
 
       .navItem {
         width: 100%;
@@ -45,11 +54,13 @@
         a {
           width: 100%;
           height: 100%;
-          color: $white;
+          color: #fff;
           padding-left: 20px;
-          font-size: 21px;
+          font-size: 20px;
           text-decoration: none;
-          @include dFlex(row, flex-start, center);
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
         }
 
         #ic {
@@ -57,46 +68,24 @@
         }
 
         .activeLink {
-          background: $darkRed;
+          background: #410000;
           pointer-events: none;
           cursor: default;
         }
       }
 
       .navItem:hover {
-        background: $darkRed;
+        background: #410000;
       }
     }
-  }
-}
-
-.buttonContainer {
-  width: 100%;
-  height: 12%;
-  @include dFlex(row, center, center);
-
-  button {
-    width: 7em;
-    padding: 0.75em 2em;
-    font-size: 1.1em;
-    font-weight: 600;
-    border-radius: 50px;
-    color: $white;
-    background: $darkRed;
-    transition: 100ms ease-in-out;
-  }
-
-  button:hover {
-    $black: hsla(0, 0%, 0%, 0.3);
-    transform: scale(1.1);
-    background: hsl(0, 58%, 40%);
-    box-shadow: 0px 8px 15px $black;
   }
 }
 
 .copyrightContainer {
   width: 100%;
   height: 8%;
-  border-top: solid 1px $white;
-  @include dFlex(row, center, center);
+  border-top: solid 1px #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

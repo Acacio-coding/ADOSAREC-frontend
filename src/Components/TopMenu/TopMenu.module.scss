@@ -1,140 +1,140 @@
-@import "../styles/Variables.scss";
-@import "../styles/Mixins.scss";
-
-.menuContainer {
+.fullContainer {
   width: 100%;
-  height: 185px;
-  @include dFlex(column, center, center);
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
 
-  .buttonsContainer {
+  .titleContainer {
     width: 95%;
-    height: 50px;
-  }
+    padding: 0.5em 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-  .topContainer {
-    width: 95%;
-    height: 100px;
-    padding-bottom: 0.25em;
-    border-bottom: solid 1px $black40;
-    @include dFlex(row, center, flex-end);
+    .inputContainer {
+      display: flex;
+      align-items: center;
 
-    .topPlacer {
-      width: 100%;
-      @include dFlex(row, space-between, center);
-
-      #textRegister {
-        padding-bottom: 0.125em;
-      }
-
-      .inputContainer {
-        width: 270px;
-        height: 40px;
-        margin-bottom: 0.75em;
-        @include dFlex(row, center, center);
-        input {
-          $black40: hsla(0, 0%, 0%, 0.1);
-          width: 100%;
-          height: 100%;
-          font-size: 16px;
-          border-radius: 30px 0 0 30px;
-          padding: 0 20px 0 20px;
-          border-top: solid 1px $black40;
-          box-shadow: 0 4px 4px $black40;
-        }
-        .searchContainer {
-          $black40: hsla(0, 0%, 0%, 0.2);
-          width: 60px;
-          height: 40px;
-          background: $red;
-          border-radius: 0 5px 5px 0;
-          box-shadow: 0 4px 4px $black40;
-          transition: 100ms ease-in-out;
-          @include dFlex(row, center, center);
-
-          button {
-            width: 100%;
-            height: 100%;
-            font-size: 20px;
-            color: $white;
-            background: none;
-            @include dFlex(row, center, center);
-          }
-        }
-
-        .searchContainer:hover {
-          background: $darkRed;
-        }
-      }
-    }
-  }
-
-  .optionsContainer {
-    width: 95%;
-    height: 45px;
-    border-bottom: solid 1px $black40;
-    @include dFlex(row, flex-end, center);
-
-    .optionsPlacerRegister {
-      width: 100%;
-      height: 100%;
-      @include dFlex(row, space-between, center);
-
-      .optionsContainerDetails {
-        @include dFlex(row, space-around, center);
-
-        a {
-          color: $red;
-          text-decoration: none;
-          font-size: 2em;
-          transition: 100ms ease-in-out;
-        }
-
-        a:hover {
-          transform: scale(1.1);
-          color: $darkRed;
-        }
-
-        .paddedIcons {
-          margin-right: 0.75em;
-        }
+      input {
+        padding: 0.5em 0.5em;
+        font-size: 16px;
+        border-radius: 5px 0 0 5px;
+        box-shadow: 0 4px 8px hsla(0, 0%, 0%, 0.2);
       }
 
       button {
-        background: $red;
-        color: $white;
-        width: 40px;
-        height: 32px;
-        font-size: 1.25em;
-        border-radius: 5px;
-        @include dFlex(row, center, center);
-        transition: 100ms ease-in-out;
+        padding: 0.58em 0.75em;
+        font-size: 18px;
+        border-radius: 0 5px 5px 0;
+        box-shadow: 0 4px 8px hsla(0, 0%, 0%, 0.2);
+        color: #fff;
+        background: #670000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 150ms ease;
       }
 
       button:hover {
-        transform: scale(1.1);
-        background: $darkRed;
+        background: #410000;
       }
     }
+  }
 
-    .optionsPlacer {
-      height: 100%;
-      @include dFlex(row, flex-start, center);
+  .functionsContainerRegister {
+    width: 95%;
+    height: 40px;
+    border-top: solid 1px hsla(0, 0%, 0%, 0.2);
+    border-bottom: solid 1px hsla(0, 0%, 0%, 0.2);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 
+    button {
+      width: 45px;
+      height: 28px;
+      font-size: 30px;
+      border-radius: 5px;
+      color: #fff;
+      background: #670000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: 150ms ease;
+    }
+
+    button:hover {
+      background: #410000;
+    }
+  }
+
+  .functionsContainerDetails {
+    width: 95%;
+    height: 40px;
+    border-top: solid 1px hsla(0, 0%, 0%, 0.2);
+    border-bottom: solid 1px hsla(0, 0%, 0%, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    button {
+      width: 45px;
+      height: 28px;
+      font-size: 30px;
+      border-radius: 5px;
+      color: #fff;
+      background: #670000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: 150ms ease;
+    }
+
+    button:hover {
+      background: #410000;
+    }
+
+    .iconsContainer {
+      display: flex;
       a {
-        color: $red;
-        text-decoration: none;
-        font-size: 2em;
-        transition: 100ms ease-in-out;
+        font-size: 32px;
+        color: #670000;
+        display: flex;
+        align-items: center;
+        transition: 150ms ease;
       }
 
       a:hover {
-        transform: scale(1.1);
-        color: $darkRed;
+        color: #410000;
       }
 
-      .paddedIcons {
-        margin-right: 0.75em;
+      #paddedIcons {
+        padding-right: 0.25em;
       }
+    }
+  }
+
+  .functionsContainer {
+    width: 95%;
+    height: 40px;
+    border-top: solid 1px hsla(0, 0%, 0%, 0.2);
+    border-bottom: solid 1px hsla(0, 0%, 0%, 0.2);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    a {
+      font-size: 32px;
+      color: #670000;
+      display: flex;
+      align-items: center;
+      transition: 150ms ease;
+    }
+
+    a:hover {
+      color: #410000;
     }
   }
 }

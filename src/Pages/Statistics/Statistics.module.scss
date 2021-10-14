@@ -1,0 +1,10 @@
+.fullContainer {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+
+  .contentContainer {
+    width: 60vw;
+    height: 100vh;
+  }
+}
