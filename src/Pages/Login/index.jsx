@@ -13,7 +13,6 @@ import Copyright from "../../Components/Copyright";
 const Login = () => {
   const { register, handleSubmit } = useForm();
   const history = useHistory();
-
   const handleSentData = async ({ user, password }) => {
     try {
       const response = await axios.get(

@@ -58,13 +58,14 @@ const EditD = () => {
     data.numero_residencia = parseInt(data.numero_residencia);
     data.status = true;
 
+    const header = {
+      Authorization: `Bearer ${JSON.parse(token)}`,
+      "Content-Type": "application/json",
+    };
+
     try {
-      await Axios.put("https://app-node-api-test.herokuapp.com/donator", {
-        headers: new Headers({
-          Authorization: `Bearer ${JSON.parse(token)}`,
-          "Content-type": "application/json",
-        }),
-        body: JSON.stringify(data),
+      await Axios.put("https://app-node-api-test.herokuapp.com/donator", data, {
+        headers: header,
       });
       history.push("/doadores");
     } catch (error) {
@@ -412,7 +413,7 @@ const EditD = () => {
             <br />
 
             <div className={styles.buttonContainer}>
-              <input type="submit" value="Cadastrar" />
+              <input type="submit" value="Editar" />
             </div>
           </form>
         </div>

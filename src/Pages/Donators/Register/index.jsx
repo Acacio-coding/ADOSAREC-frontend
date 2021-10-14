@@ -53,14 +53,19 @@ const RegisterD = () => {
     data.numero_residencia = parseInt(data.numero_residencia);
     data.status = true;
 
+    const header = {
+      Authorization: `Bearer ${JSON.parse(token)}`,
+      "Content-Type": "application/json",
+    };
+
     try {
-      await Axios.post("https://app-node-api-test.herokuapp.com/donator", {
-        headers: new Headers({
-          Authorization: `Bearer ${JSON.parse(token)}`,
-          "Content-type": "application/json",
-        }),
-        body: JSON.stringify(data),
-      });
+      await Axios.post(
+        "https://app-node-api-test.herokuapp.com/donator",
+        data,
+        {
+          headers: header,
+        }
+      );
       history.push("/doadores");
     } catch (error) {
       console.log(error);
@@ -97,9 +102,7 @@ const RegisterD = () => {
             <label htmlFor="genero">Gênero</label>
             <br />
             <select {...register("genero")} id="genero">
-              <option selected value="masculino">
-                Masculino
-              </option>
+              <option defaultValue="masculino">Masculino</option>
               <option value="feminino">Feminino</option>
               <option value="outro">Outro</option>
             </select>
@@ -214,7 +217,6 @@ const RegisterD = () => {
               type="checkbox"
               value="true"
               id="doador_de_medula"
-              required={true}
               {...register("doador_de_medula")}
             />
             <label htmlFor="doador_de_medula">Doador de medula óssea?</label>

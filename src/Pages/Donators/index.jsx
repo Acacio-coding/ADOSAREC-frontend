@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo, useCallback } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { Link } from "react-router-dom";
 import Axios from "axios";
 
@@ -11,22 +11,17 @@ const Donators = () => {
   const [donators, setDonators] = useState([{}]);
 
   useEffect(() => {
-    if (sessionStorage.getItem("donator")) {
-      sessionStorage.removeItem("donator");
-    }
-
-    if (sessionStorage.getItem("donatorAdress")) {
-      sessionStorage.removeItem("donatorAdress");
-    }
+    const header = {
+      Authorization: `Bearer ${JSON.parse(token)}`,
+      "Content-Type": "application/json",
+    };
 
     (async () => {
       try {
         const response = await Axios.get(
           "https://app-node-api-test.herokuapp.com/donator",
           {
-            headers: {
-              Authorization: `Bearer ${JSON.parse(token)}`,
-            },
+            headers: header,
           }
         );
         setDonators(response.data);
@@ -36,9 +31,14 @@ const Donators = () => {
     })();
   }, [token]);
 
-  const getDonator = useCallback((donator) => {
+  const getDonator = (donator) => {
+    if (sessionStorage.getItem("donator")) sessionStorage.removeItem("donator");
+
+    if (sessionStorage.getItem("donatorAdress"))
+      sessionStorage.removeItem("donatorAdress");
+
     sessionStorage.setItem("donator", JSON.stringify(donator));
-  }, []);
+  };
 
   return (
     <div className={styles.fullContainer}>
@@ -66,10 +66,11 @@ const Donators = () => {
                 if (index < donators.length - 1)
                   return (
                     <tr key={index}>
-                      <td className={styles.BottomRight}>
-                        <Link to="/detalhes_doador" onClick={getDonator(value)}>
-                          {value.nome}
-                        </Link>
+                      <td
+                        className={styles.BottomRight}
+                        onClick={() => getDonator(value)}
+                      >
+                        <Link to="/detalhes_doador">{value.nome}</Link>
                       </td>
 
                       <td className={styles.BottomRight}>
@@ -86,10 +87,11 @@ const Donators = () => {
                 else
                   return (
                     <tr key={index}>
-                      <td className={styles.Right}>
-                        <Link to="/detalhes_doador" onClick={getDonator(value)}>
-                          {value.nome}
-                        </Link>
+                      <td
+                        className={styles.Right}
+                        onClick={() => getDonator(value)}
+                      >
+                        <Link to="/detalhes_doador">{value.nome}</Link>
                       </td>
 
                       <td className={styles.Right}>{value.grupo_sanguineo}</td>
