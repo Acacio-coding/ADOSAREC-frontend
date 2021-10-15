@@ -11,7 +11,7 @@ import {
 import { IoMdTrash as RemoveIcon } from "react-icons/io";
 import styles from "./TopMenu.module.scss";
 
-const TopMenu = ({ page, typePage, title, placeholder }) => {
+const TopMenu = ({ page, typePage, title, placeholder, handleRemove }) => {
   const history = useHistory();
 
   if (typePage === "general")
@@ -53,9 +53,7 @@ const TopMenu = ({ page, typePage, title, placeholder }) => {
               <EditIcon />
             </Link>
 
-            <Link to={`remover_${page}`}>
-              <RemoveIcon />
-            </Link>
+            <RemoveIcon id={styles.removeIcon} onClick={handleRemove} />
           </div>
         </div>
       </div>

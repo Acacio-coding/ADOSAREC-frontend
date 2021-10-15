@@ -1,0 +1,99 @@
+.hide {
+  width: 100vw;
+  height: 100vh;
+  background: hsla(0, 0%, 0%, 0.7);
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+
+  .hideRemove {
+    width: 500px;
+    height: 300px;
+    display: none;
+    pointer-events: none;
+  }
+}
+
+.show {
+  width: 100vw;
+  height: 100vh;
+  background: hsla(0, 0%, 0%, 0.7);
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .showRemove {
+    width: 500px;
+    height: 270px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: dropIn 0.4s ease;
+
+    @keyframes dropIn {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0%);
+        opacity: 1;
+      }
+    }
+
+    .removeMessageTop {
+      width: 500px;
+      height: 100px;
+      background: #670000;
+      border-radius: 10px 10px 0 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      #attentionIcon {
+        color: #fff;
+        font-size: 50px;
+      }
+    }
+
+    .removeMessageBottom {
+      width: 500px;
+      height: 170px;
+      padding: 1em;
+      border-radius: 0 0 10px 10px;
+      background-color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      p {
+        font-size: 18px;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      button {
+        margin: 0 2em;
+        padding: 0.6em 1.2em;
+        border-radius: 5px;
+        border: solid 2px #670000;
+        background: #670000;
+        color: #fff;
+        font-size: 18px;
+        transition: 100ms ease;
+      }
+
+      button:hover {
+        border: solid 2px #670000;
+        color: #670000;
+        background: #fff;
+      }
+    }
+  }
+}

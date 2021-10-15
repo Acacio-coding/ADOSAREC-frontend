@@ -114,7 +114,7 @@ const EditD = () => {
           headers: header,
         }
       );
-      history.push("/doadores");
+      history.push("/detalhes_doador");
     } catch (error) {
       console.log(error);
     }

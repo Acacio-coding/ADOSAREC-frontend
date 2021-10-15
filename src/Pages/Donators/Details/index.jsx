@@ -1,14 +1,42 @@
 import React, { useEffect, useState, memo } from "react";
+import { useHistory } from "react-router";
 import Axios from "axios";
 
 import Nav from "../../../Components/Nav";
 import TopMenu from "../../../Components/TopMenu";
 import styles from "./Details.module.scss";
+import RemoveAnimation from "../../../Components/Animation/Remove";
 
 const DetailsD = () => {
   const token = sessionStorage.getItem("token");
   const donator = JSON.parse(sessionStorage.getItem("donator"));
   const [donatorAdress, setDonatorAdress] = useState({});
+  const [remove, setRemove] = useState(false);
+  const history = useHistory();
+
+  const handleRemove = () => {
+    if (remove) setRemove(false);
+    else setRemove(true);
+  };
+
+  const handleRemoveDonator = async () => {
+    (async () => {
+      try {
+        await Axios.delete(
+          `https://app-node-api-test.herokuapp.com/donator/${donator.rg}`,
+          {
+            headers: {
+              Authorization: `Bearer ${JSON.parse(token)}`,
+            },
+          }
+        );
+        setRemove(false);
+        history.push("/doadores");
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  };
 
   useEffect(() => {
     if (donator.cep)
@@ -57,6 +85,14 @@ const DetailsD = () => {
           page="doador"
           typePage="details"
           title={`Detalhes do doador `}
+          handleRemove={handleRemove}
+        />
+
+        <RemoveAnimation
+          remove={remove}
+          handleRemoveDonator={handleRemoveDonator}
+          handleRemove={handleRemove}
+          donatorNome={donator.nome}
         />
 
         <div className={styles.tableContainer}>

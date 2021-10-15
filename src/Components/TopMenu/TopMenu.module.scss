@@ -110,6 +110,19 @@
         color: #410000;
       }
 
+      #removeIcon {
+        font-size: 32px;
+        cursor: pointer;
+        color: #670000;
+        display: flex;
+        align-items: center;
+        transition: 150ms ease;
+      }
+
+      #removeIcon:hover {
+        color: #410000;
+      }
+
       #paddedIcons {
         padding-right: 0.25em;
       }
