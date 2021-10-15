@@ -44,18 +44,61 @@ const EditD = () => {
       })();
   }, [cep, token]);
 
+  let rg = donator.rg;
+
   const handleData = async (data) => {
-    data.doador_de_medula === "true"
-      ? (data.doador_de_medula = true)
-      : (data.doador_de_medula = false);
+    if (!data.nome) data.nome = donator.nome;
 
-    data.rh_sanguineo === "+"
-      ? (data.rh_sanguineo = true)
-      : (data.rh_sanguineo = false);
+    if (!data.genero) data.nome = donator.genero;
 
-    data.cep = parseInt(data.cep);
-    data.rg = parseInt(data.rg);
-    data.numero_residencia = parseInt(data.numero_residencia);
+    if (!data.data_de_nascimento)
+      data.data_de_nascimento = donator.data_de_nascimento;
+
+    if (!data.rg) data.rg = donator.rg;
+    else data.rg = parseInt(data.rg);
+
+    if (!data.orgao_expeditor_rg)
+      data.orgao_expeditor_rg = donator.orgao_expeditor_rg;
+
+    if (!data.data_de_expedicao)
+      data.data_de_expedicao = donator.data_de_expedicao;
+
+    if (!data.naturalidade) data.naturalidade = donator.naturalidade;
+
+    if (!data.estado_civil) data.estado_civil = donator.estado_civil;
+
+    if (!data.profissao) data.profissao = donator.profissao;
+
+    if (!data.grupo_sanguineo) data.grupo_sanguineo = donator.grupo_sanguineo;
+
+    if (!data.rh_sanguineo) data.rh_sanguineo = donator.rh_sanguineo;
+    else
+      data.rh_sanguineo === "+"
+        ? (data.rh_sanguineo = true)
+        : (data.rh_sanguineo = false);
+
+    if (!data.doador_de_medula)
+      data.doador_de_medula = donator.doador_de_medula;
+    else
+      data.doador_de_medula === "true"
+        ? (data.doador_de_medula = true)
+        : (data.doador_de_medula = false);
+
+    if (!data.cep) data.cep = donator.cep;
+    else data.cep = parseInt(data.cep);
+
+    if (!data.numero_residencia)
+      data.numero_residencia = donator.numero_residencia;
+    else data.numero_residencia = parseInt(data.numero_residencia);
+
+    if (!data.email) data.email = donator.email;
+
+    if (!data.telefone1) data.telefone1 = donator.telefone1;
+
+    if (!data.telefone2) data.telefone2 = donator.telefone2;
+
+    if (!data.telefone3) data.telefone3 = donator.telefone3;
+
     data.status = true;
 
     const header = {
@@ -64,9 +107,13 @@ const EditD = () => {
     };
 
     try {
-      await Axios.put("https://app-node-api-test.herokuapp.com/donator", data, {
-        headers: header,
-      });
+      await Axios.put(
+        `https://app-node-api-test.herokuapp.com/donator/${rg}`,
+        data,
+        {
+          headers: header,
+        }
+      );
       history.push("/doadores");
     } catch (error) {
       console.log(error);
@@ -256,7 +303,7 @@ const EditD = () => {
               type="text"
               id="rh_sanguineo"
               required={true}
-              defaultValue={donator.rh_sanguineo}
+              defaultValue={donator.rh_sanguineo === 0 ? "-" : "+"}
               {...register("rh_sanguineo")}
             />
             <br />
