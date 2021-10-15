@@ -11,6 +11,7 @@ import { HiLocationMarker as AddressIcon } from "react-icons/hi";
 
 import Nav from "../../../Components/Nav";
 import TopMenu from "../../../Components/TopMenu";
+import LoadingAnimation from "../../../Components/Animation/Loading/index";
 import styles from "./Edit.module.scss";
 
 const EditD = () => {
@@ -18,6 +19,7 @@ const EditD = () => {
   const [donator, setDonator] = useState({});
   const [cep, setCep] = useState("");
   const [address, setAddress] = useState({});
+  const [loading, setLoading] = useState(false);
   const token = sessionStorage.getItem("token");
   const history = useHistory();
 
@@ -25,7 +27,8 @@ const EditD = () => {
     setDonator(JSON.parse(sessionStorage.getItem("donator")));
     setAddress(JSON.parse(sessionStorage.getItem("donatorAdress")));
 
-    if (cep.length === 8)
+    if (cep.length === 8) {
+      setLoading(true);
       (async () => {
         try {
           const response = await Axios.get(
@@ -37,11 +40,16 @@ const EditD = () => {
             }
           );
 
-          setAddress(response.data);
+          if (response) {
+            setAddress(response.data);
+            setLoading(false);
+          }
         } catch (error) {
           console.log(error);
+          setLoading(false);
         }
       })();
+    }
   }, [cep, token]);
 
   let rg = donator.rg;
@@ -137,6 +145,7 @@ const EditD = () => {
 
   return (
     <div className={styles.fullContainer}>
+      <LoadingAnimation loading={loading} />
       <Nav />
       <div className={styles.contentContainer}>
         <TopMenu typePage="edit" title="Editar doador" />

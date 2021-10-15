@@ -1,0 +1,46 @@
+.hide {
+  width: 100vw;
+  height: 100vh;
+  background: hsla(0, 0%, 0%, 0.7);
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+
+  .hideRemove {
+    width: 500px;
+    height: 300px;
+    display: none;
+    pointer-events: none;
+  }
+}
+
+.show {
+  width: 100vw;
+  height: 100vh;
+  background: hsla(0, 0%, 0%, 0.7);
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  div {
+    width: 200px;
+    height: 200px;
+    svg {
+      animation: fadeIn 0.2s ease;
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+
+        to {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

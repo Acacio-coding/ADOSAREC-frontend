@@ -3,14 +3,17 @@ import { Link } from "react-router-dom";
 import Axios from "axios";
 
 import Nav from "../../Components/Nav";
-import styles from "./Donators.module.scss";
 import TopMenu from "../../Components/TopMenu";
+import LoadingAnimation from "../../Components/Animation/Loading";
+import styles from "./Donators.module.scss";
 
 const Donators = () => {
   const token = sessionStorage.getItem("token");
   const [donators, setDonators] = useState([{}]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     const header = {
       Authorization: `Bearer ${JSON.parse(token)}`,
       "Content-Type": "application/json",
@@ -24,9 +27,14 @@ const Donators = () => {
             headers: header,
           }
         );
-        setDonators(response.data);
+
+        if (response) {
+          setDonators(response.data);
+          setLoading(false);
+        }
       } catch (error) {
         console.log(error);
+        setLoading(false);
       }
     })();
   }, [token]);
@@ -42,6 +50,7 @@ const Donators = () => {
 
   return (
     <div className={styles.fullContainer}>
+      <LoadingAnimation loading={loading} />
       <Nav />
       <div className={styles.contentContainer}>
         <TopMenu

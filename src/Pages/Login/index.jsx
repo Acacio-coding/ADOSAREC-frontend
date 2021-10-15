@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router";
@@ -9,24 +9,35 @@ import user from "../../Assets/Images/user.png";
 import password from "../../Assets/Images/password.png";
 import styles from "./Login.module.scss";
 import Copyright from "../../Components/Copyright";
+import LoadingAnimation from "../../Components/Animation/Loading";
 
 const Login = () => {
   const { register, handleSubmit } = useForm();
+  const [loading, setLoading] = useState(false);
   const history = useHistory();
+
   const handleSentData = async ({ user, password }) => {
+    setLoading(true);
+
     try {
       const response = await axios.get(
         `https://app-node-api-test.herokuapp.com/admin/${user}&${password}`
       );
-      sessionStorage.setItem("token", JSON.stringify(response.data));
-      history.push("/doadores");
+
+      if (response) {
+        sessionStorage.setItem("token", JSON.stringify(response.data));
+        setLoading(false);
+        history.push("/doadores");
+      }
     } catch (error) {
       console.log(error.response.status);
+      setLoading(false);
     }
   };
 
   return (
     <div className={styles.fullContainer}>
+      <LoadingAnimation loading={loading} />
       <div className={styles.loginContainer}>
         <div className={styles.topLogin}>
           <h1>Login</h1>
