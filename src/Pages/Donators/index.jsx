@@ -64,10 +64,30 @@ const Donators = () => {
           <table>
             <thead>
               <tr>
-                <th className={styles.BottomRight}>Nome</th>
-                <th className={styles.BottomRight}>Grupo Sanguíneo</th>
-                <th className={styles.BottomRight}>RH</th>
-                <th className={styles.Bottom}>Cidade</th>
+                <th
+                  className={
+                    donators.length < 1 ? styles.Right : styles.BottomRight
+                  }
+                >
+                  Nome
+                </th>
+                <th
+                  className={
+                    donators.length < 1 ? styles.Right : styles.BottomRight
+                  }
+                >
+                  Grupo Sanguíneo
+                </th>
+                <th
+                  className={
+                    donators.length < 1 ? styles.Right : styles.BottomRight
+                  }
+                >
+                  RH
+                </th>
+                <th className={donators.length < 1 ? null : styles.Bottom}>
+                  Cidade
+                </th>
               </tr>
             </thead>
             <tbody>

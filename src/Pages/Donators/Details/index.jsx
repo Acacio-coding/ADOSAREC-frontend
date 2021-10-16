@@ -4,14 +4,16 @@ import Axios from "axios";
 
 import Nav from "../../../Components/Nav";
 import TopMenu from "../../../Components/TopMenu";
-import styles from "./Details.module.scss";
+import LoadingAnimation from "../../../Components/Animation/Loading";
 import RemoveAnimation from "../../../Components/Animation/Remove";
+import styles from "./Details.module.scss";
 
 const DetailsD = () => {
   const token = sessionStorage.getItem("token");
   const donator = JSON.parse(sessionStorage.getItem("donator"));
   const [donatorAdress, setDonatorAdress] = useState({});
   const [remove, setRemove] = useState(false);
+  const [loading, setLoading] = useState(false);
   const history = useHistory();
 
   const handleRemove = () => {
@@ -39,6 +41,7 @@ const DetailsD = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     if (donator.cep)
       (async () => {
         try {
@@ -50,13 +53,18 @@ const DetailsD = () => {
               },
             }
           );
-          setDonatorAdress(response.data);
-          sessionStorage.setItem(
-            "donatorAdress",
-            JSON.stringify(response.data)
-          );
+
+          if (response) {
+            setDonatorAdress(response.data);
+            sessionStorage.setItem(
+              "donatorAdress",
+              JSON.stringify(response.data)
+            );
+            setLoading(false);
+          }
         } catch (error) {
           console.log(error);
+          setLoading(true);
         }
       })();
   }, [token, donator.cep]);
@@ -78,6 +86,7 @@ const DetailsD = () => {
 
   return (
     <div className={styles.fullContainer}>
+      <LoadingAnimation loading={loading} />
       <Nav />
 
       <div className={styles.contentContainer}>
