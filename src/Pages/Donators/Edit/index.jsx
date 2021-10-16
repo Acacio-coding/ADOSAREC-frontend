@@ -25,7 +25,7 @@ const EditD = () => {
 
   useEffect(() => {
     setDonator(JSON.parse(sessionStorage.getItem("donator")));
-    setAddress(JSON.parse(sessionStorage.getItem("donatorAdress")));
+    setAddress(JSON.parse(sessionStorage.getItem("donatorAddress")));
 
     if (cep.length === 8) {
       setLoading(true);

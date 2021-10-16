@@ -42,8 +42,8 @@ const Donators = () => {
   const getDonator = (donator) => {
     if (sessionStorage.getItem("donator")) sessionStorage.removeItem("donator");
 
-    if (sessionStorage.getItem("donatorAdress"))
-      sessionStorage.removeItem("donatorAdress");
+    if (sessionStorage.getItem("donatorAddress"))
+      sessionStorage.removeItem("donatorAddress");
 
     sessionStorage.setItem("donator", JSON.stringify(donator));
   };

@@ -48,9 +48,16 @@
 
         .BottomRight {
           border-right: solid 1px #670000;
+          border-bottom: solid 1px #670000;
         }
 
-        
+        .Bottom {
+          border-bottom: solid 1px #670000;
+        }
+
+        .Right {
+          border-right: solid 1px #670000;
+        }
       }
     }
   }

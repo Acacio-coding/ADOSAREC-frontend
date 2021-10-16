@@ -14,6 +14,9 @@ import Donations from "./Pages/Donations";
 import RegisterDo from "./Pages/Donations/Register";
 
 import Unities from "./Pages/Unities";
+import RegisterU from "./Pages/Unities/Register";
+import DetailsU from "./Pages/Unities/Details";
+import EditU from "./Pages/Unities/Edit";
 
 const CustomRoute = ({ isPrivate, ...rest }) => {
   const history = useHistory();
@@ -42,6 +45,8 @@ const Routes = () => {
 
       <CustomRoute isPrivate path="/unidades" component={Unities} />
       <CustomRoute isPrivate path="/registrar_unidade" component={RegisterU} />
+      <CustomRoute isPrivate path="/detalhes_unidade" component={DetailsU} />
+      <CustomRoute isPrivate path="/editar_unidade" component={EditU} />
     </Switch>
   );
 };

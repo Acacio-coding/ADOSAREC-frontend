@@ -11,7 +11,7 @@ import styles from "./Details.module.scss";
 const DetailsD = () => {
   const token = sessionStorage.getItem("token");
   const donator = JSON.parse(sessionStorage.getItem("donator"));
-  const [donatorAdress, setDonatorAdress] = useState({});
+  const [donatorAddress, setDonatorAddress] = useState({});
   const [remove, setRemove] = useState(false);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -55,9 +55,9 @@ const DetailsD = () => {
           );
 
           if (response) {
-            setDonatorAdress(response.data);
+            setDonatorAddress(response.data);
             sessionStorage.setItem(
-              "donatorAdress",
+              "donatorAddress",
               JSON.stringify(response.data)
             );
             setLoading(false);
@@ -93,7 +93,7 @@ const DetailsD = () => {
         <TopMenu
           page="doador"
           typePage="details"
-          title={`Detalhes do doador `}
+          title={`Detalhes do doador ${donator.nome}`}
           handleRemove={handleRemove}
         />
 
@@ -123,37 +123,37 @@ const DetailsD = () => {
               </tr>
 
               <tr>
-                <th className={styles.th}>RG</th>
+                <th className={styles.th}>RG:</th>
                 <td className={styles.td}>{donator.rg}</td>
               </tr>
 
               <tr>
-                <th className={styles.th}>Orgão expedidor</th>
+                <th className={styles.th}>Orgão expedidor:</th>
                 <td className={styles.td}>{donator.orgao_expeditor_rg}</td>
               </tr>
 
               <tr>
-                <th className={styles.th}>Data de expedição</th>
+                <th className={styles.th}>Data de expedição:</th>
                 <td className={styles.td}>{donator.data_de_expedicao}</td>
               </tr>
 
               <tr>
-                <th className={styles.th}>Naturalidade</th>
+                <th className={styles.th}>Naturalidade:</th>
                 <td className={styles.td}>{donator.naturalidade}</td>
               </tr>
 
               <tr>
-                <th className={styles.th}>Estado cívil</th>
+                <th className={styles.th}>Estado cívil:</th>
                 <td className={styles.td}>{donator.estado_civil}</td>
               </tr>
 
               <tr>
-                <th className={styles.th}>Profissão</th>
+                <th className={styles.th}>Profissão:</th>
                 <td className={styles.td}>{donator.profissao}</td>
               </tr>
 
               <tr>
-                <th className={styles.th}>Grupo sanguíneo / RH</th>
+                <th className={styles.th}>Grupo sanguíneo / RH:</th>
                 <td className={styles.td}>
                   {donator.grupo_sanguineo}
                   {donator.rh_sanguineo === "0" ? "-" : "+"}
@@ -168,52 +168,52 @@ const DetailsD = () => {
               </tr>
 
               <tr>
-                <th className={styles.th}>Logradouro</th>
-                <td className={styles.td}>{donatorAdress.address}</td>
+                <th className={styles.th}>Logradouro:</th>
+                <td className={styles.td}>{donatorAddress.address}</td>
               </tr>
 
               <tr>
-                <th className={styles.th}>Bairro</th>
-                <td className={styles.td}>{donatorAdress.district}</td>
-              </tr>
-
-              <tr>
-                <th className={styles.th}>Número residencial</th>
+                <th className={styles.th}>Número residencial:</th>
                 <td className={styles.td}>{donator.numero_residencia}</td>
               </tr>
 
               <tr>
-                <th className={styles.th}>Cidade</th>
-                <td className={styles.td}>{donatorAdress.city}</td>
+                <th className={styles.th}>Bairro:</th>
+                <td className={styles.td}>{donatorAddress.district}</td>
               </tr>
 
               <tr>
-                <th className={styles.th}>Estado</th>
-                <td className={styles.td}>{donatorAdress.state}</td>
+                <th className={styles.th}>Cidade:</th>
+                <td className={styles.td}>{donatorAddress.city}</td>
               </tr>
 
               <tr>
-                <th className={styles.th}>CEP</th>
+                <th className={styles.th}>Estado:</th>
+                <td className={styles.td}>{donatorAddress.state}</td>
+              </tr>
+
+              <tr>
+                <th className={styles.th}>CEP:</th>
                 <td className={styles.td}>{donator.cep}</td>
               </tr>
 
               <tr>
-                <th className={styles.th}>Email</th>
+                <th className={styles.th}>Email:</th>
                 <td className={styles.td}>{donator.email}</td>
               </tr>
 
               <tr>
-                <th className={styles.th}>Telefone1</th>
+                <th className={styles.th}>Telefone1:</th>
                 <td className={styles.td}>{donator.telefone1}</td>
               </tr>
 
               <tr>
-                <th className={styles.th}>Telefone2</th>
+                <th className={styles.th}>Telefone2:</th>
                 <td className={styles.td}>{donator.telefone2}</td>
               </tr>
 
               <tr>
-                <th className={styles.lastTh}>Telefone3</th>
+                <th className={styles.lastTh}>Telefone3:</th>
                 <td className={styles.lastTd}>{donator.telefone3}</td>
               </tr>
             </tbody>

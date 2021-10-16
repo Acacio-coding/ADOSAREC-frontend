@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState, memo } from "react";
+import Axios from "axios";
 import { useHistory } from "react-router";
 import { useForm } from "react-hook-form";
-import Axios from "axios";
 
 import {
   BsFillInfoCircleFill as InfoIcon,
@@ -11,17 +11,24 @@ import { HiLocationMarker as AddressIcon } from "react-icons/hi";
 
 import Nav from "../../../Components/Nav";
 import TopMenu from "../../../Components/TopMenu";
-import styles from "./Register.module.scss";
+import LoadingAnimation from "../../../Components/Animation/Loading/index";
+import styles from "./Edit.module.scss";
 
-const RegisterU = () => {
+const DetailsU = () => {
   const { register, handleSubmit } = useForm();
+  const [unity, setUnity] = useState({});
   const [cep, setCep] = useState("");
   const [address, setAddress] = useState({});
+  const [loading, setLoading] = useState(false);
   const token = sessionStorage.getItem("token");
   const history = useHistory();
 
   useEffect(() => {
-    if (cep.length === 8)
+    setUnity(JSON.parse(sessionStorage.getItem("unity")));
+    setAddress(JSON.parse(sessionStorage.getItem("unityAddress")));
+
+    if (cep.length === 8) {
+      setLoading(true);
       (async () => {
         try {
           const response = await Axios.get(
@@ -32,15 +39,32 @@ const RegisterU = () => {
               },
             }
           );
-          setAddress(response.data);
+
+          if (response) {
+            setAddress(response.data);
+            setLoading(false);
+          }
         } catch (error) {
           console.log(error);
+          setLoading(false);
         }
       })();
+    }
   }, [cep, token]);
 
   const handleData = async (data) => {
-    data.cep = parseInt(data.cep);
+    if (!data.nome) data.nome = unity.nome;
+
+    if (!data.cep) data.cep = unity.cep;
+    else data.cep = parseInt(data.cep);
+
+    if (!data.numero_residencia)
+      data.numero_residencia = unity.numero_residencia;
+
+    if (!data.email) data.email = unity.email;
+
+    if (!data.telefone) data.telefone = unity.telefone;
+
     data.status = true;
 
     const header = {
@@ -49,8 +73,8 @@ const RegisterU = () => {
     };
 
     try {
-      await Axios.post(
-        "https://app-node-api-test.herokuapp.com/collector",
+      await Axios.put(
+        `https://app-node-api-test.herokuapp.com/collector/${unity.id}`,
         data,
         {
           headers: header,
@@ -64,15 +88,16 @@ const RegisterU = () => {
 
   return (
     <div className={styles.fullContainer}>
+      <LoadingAnimation loading={loading} />
       <Nav />
       <div className={styles.contentContainer}>
-        <TopMenu typePage="register" title="Cadastrar Unidades Coletoras" />
+        <TopMenu typePage="edit" title="Editar unidade coletora" />
 
         <div className={styles.formContainer}>
           <form onSubmit={handleSubmit(handleData)}>
             <div className={styles.subTitleContainer}>
               <div className={styles.iconContainer}>
-                <InfoIcon style={{ fontSize: "31px" }} />
+                <InfoIcon style={{ fontSize: "32px" }} />
               </div>
               <span>Informações básicas</span>
             </div>
@@ -84,6 +109,7 @@ const RegisterU = () => {
               type="text"
               id="name"
               required={true}
+              defaultValue={unity.nome}
               {...register("nome")}
             />
             <br />
@@ -103,6 +129,7 @@ const RegisterU = () => {
               type="number"
               id="cep"
               required={true}
+              defaultValue={unity.cep}
               {...register("cep", { minLength: 8, maxLength: 8 })}
               onChange={(event) => setCep(event.target.value)}
             />
@@ -126,6 +153,7 @@ const RegisterU = () => {
               type="text"
               id="numero_residencia"
               required={true}
+              defaultValue={unity.numero_residencia}
               {...register("numero_residencia")}
             />
             <br />
@@ -175,7 +203,12 @@ const RegisterU = () => {
 
             <label htmlFor="email">Email</label>
             <br />
-            <input type="email" id="email" {...register("email")} />
+            <input
+              type="email"
+              id="email"
+              defaultValue={unity.email}
+              {...register("email")}
+            />
             <br />
             <br />
 
@@ -185,6 +218,7 @@ const RegisterU = () => {
               type="text"
               id="telefone"
               required={true}
+              defaultValue={unity.telefone}
               {...register("telefone")}
             />
             <br />
@@ -200,4 +234,5 @@ const RegisterU = () => {
     </div>
   );
 };
-export default RegisterU;
+
+export default memo(DetailsU);
