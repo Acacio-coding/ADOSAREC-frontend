@@ -86,6 +86,16 @@ const Donations = () => {
             </thead>
             <tbody>
               {donations.map((value, index) => {
+                let stringDate;
+
+                if (value.data) {
+                  const string = JSON.stringify(value.data);
+                  const year = string.slice(1, 5);
+                  const month = string.slice(6, 8) + "-";
+                  const day = string.slice(9, 11) + "-";
+                  stringDate = day + month + year;
+                }
+
                 if (index < donations.length - 1)
                   return (
                     <tr key={index}>
@@ -93,12 +103,12 @@ const Donations = () => {
                         className={styles.BottomRight}
                         onClick={() => getDonator(value)}
                       >
-                        <Link to="/detalhes_doador">Nome</Link>
+                        <Link to="/detalhes_doador">{value.nome_doador}</Link>
                       </td>
 
-                      <td className={styles.BottomRight}>{value.data}</td>
+                      <td className={styles.BottomRight}>{stringDate}</td>
 
-                      <td className={styles.BottomRight}>{value.volume}</td>
+                      <td className={styles.BottomRight}>{value.volume} ml</td>
 
                       <td className={styles.BottomRight}>Unidade</td>
                     </tr>
@@ -110,12 +120,12 @@ const Donations = () => {
                         className={styles.Right}
                         onClick={() => getDonator(value)}
                       >
-                        <Link to="/detalhes_doador">Nome</Link>
+                        <Link to="/detalhes_doador">{value.nome_doador}</Link>
                       </td>
 
-                      <td className={styles.Right}>{value.data}</td>
+                      <td className={styles.Right}>{stringDate}</td>
 
-                      <td className={styles.Right}>{value.volume}</td>
+                      <td className={styles.Right}>{value.volume} ml</td>
 
                       <td>Unidade</td>
                     </tr>

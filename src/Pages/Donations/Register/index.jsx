@@ -68,11 +68,15 @@ const RegisterDo = () => {
             <label htmlFor="donatorName">Doador</label>
             <br />
             <select {...register("nome")} id="donatorName">
-              <option disabled selected hidden>
+              <option defaultValue hidden>
                 Selecione um doador...
               </option>
               {donators.map((value, index) => {
-                return <option key={index}>{value.nome}</option>;
+                return (
+                  <option value={value.id} key={index}>
+                    {value.nome}
+                  </option>
+                );
               })}
             </select>
             <br />
@@ -104,9 +108,12 @@ const RegisterDo = () => {
             <label htmlFor="unityColector">Unidade coletora</label>
             <br />
             <select {...register("unidade")} id="unityColector">
-              <option disabled selected hidden>
+              <option defaultValue hidden>
                 Selecione a unidade coletora...
               </option>
+              {donators.map((value, index) => {
+                return <option key={index}>{value.nome}</option>;
+              })}
             </select>
             <br />
             <br />

@@ -174,10 +174,7 @@ const EditD = () => {
 
             <label htmlFor="genero">Gênero</label>
             <br />
-            <select
-              {...register("genero")}
-              placeholder="Selecione o gênero do doador"
-            >
+            <select {...register("genero")} id="genero">
               <option
                 value="masculino"
                 defaultValue={donator.genero === "masculino" ? true : false}

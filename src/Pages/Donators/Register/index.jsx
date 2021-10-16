@@ -102,7 +102,7 @@ const RegisterD = () => {
             <label htmlFor="genero">Gênero</label>
             <br />
             <select {...register("genero")} id="genero">
-              <option disabled selected hidden>
+              <option defaultValue hidden>
                 Selecione um gênero...
               </option>
               <option value="masculino">Masculino</option>

@@ -11,9 +11,9 @@ import DetailsD from "./Pages/Donators/Details";
 import EditD from "./Pages/Donators/Edit";
 
 import Donations from "./Pages/Donations";
+import RegisterDo from "./Pages/Donations/Register";
 
 import Unities from "./Pages/Unities";
-import RegisterDo from "./Pages/Donations/Register";
 
 const CustomRoute = ({ isPrivate, ...rest }) => {
   const history = useHistory();
