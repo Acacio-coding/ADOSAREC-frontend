@@ -55,8 +55,6 @@ const Login = () => {
             />
           </div>
 
-          <br />
-
           <div className={styles.inputContainer}>
             <div className={styles.iconContainer}>
               <img src={password} alt="Ícone de usuário" />
@@ -68,8 +66,6 @@ const Login = () => {
               {...register("password", { required: true })}
             />
           </div>
-
-          <br />
 
           <Button>Entrar</Button>
         </form>

@@ -13,6 +13,7 @@ import EditD from "./Pages/Donators/Edit";
 import Donations from "./Pages/Donations";
 
 import Unities from "./Pages/Unities";
+import RegisterDo from "./Pages/Donations/Register";
 
 const CustomRoute = ({ isPrivate, ...rest }) => {
   const history = useHistory();
@@ -37,6 +38,7 @@ const Routes = () => {
       <CustomRoute isPrivate path="/editar_doador" component={EditD} />
 
       <CustomRoute isPrivate path="/doacoes" component={Donations} />
+      <CustomRoute isPrivate path="/registrar_doacao" component={RegisterDo} />
 
       <CustomRoute isPrivate path="/unidades" component={Unities} />
     </Switch>
