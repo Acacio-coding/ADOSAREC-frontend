@@ -41,6 +41,7 @@ const Routes = () => {
       <CustomRoute isPrivate path="/registrar_doacao" component={RegisterDo} />
 
       <CustomRoute isPrivate path="/unidades" component={Unities} />
+      <CustomRoute isPrivate path="/registrar_unidade" component={RegisterU} />
     </Switch>
   );
 };
