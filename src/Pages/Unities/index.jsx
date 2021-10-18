@@ -91,7 +91,7 @@ const Unities = () => {
             </thead>
             <tbody>
               {unities.map((value, index) => {
-                if (index < unities.length - 1)
+                if (index < unities.length - 1) {
                   return (
                     <tr key={index}>
                       <td
@@ -108,7 +108,7 @@ const Unities = () => {
                       <td className={styles.Bottom}>{value.email}</td>
                     </tr>
                   );
-                else
+                } else {
                   return (
                     <tr key={index}>
                       <td
@@ -125,6 +125,7 @@ const Unities = () => {
                       <td>{value.email}</td>
                     </tr>
                   );
+                }
               })}
             </tbody>
           </table>

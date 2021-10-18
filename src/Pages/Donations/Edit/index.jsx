@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import Axios from "axios";
 import { useHistory } from "react-router";
 import { useForm } from "react-hook-form";
@@ -10,72 +10,128 @@ import TopMenu from "../../../Components/TopMenu";
 import LoadingAnimation from "../../../Components/Animation/Loading";
 import styles from "./Edit.module.scss";
 
-const EditDonation =() => {
-    const { register, handleSubmit } = useForm();
-    const token = sessionStorage.getItem("token");
-    const [donation, setDonation] = useState({});
-    const [loading, setLoading] = useState(false);
-    const history = useHistory();
-    
-    useEffect(() => {
-        setDonation(JSON.parse(sessionStorage.getItem("donation")));
+const EditDonation = () => {
+  const { register, handleSubmit } = useForm();
+  const token = sessionStorage.getItem("token");
+  const [donators, setDonators] = useState([{}]);
+  const [unities, setUnities] = useState([{}]);
+  const [unityName, setUnityName] = useState();
+  const [donation, setDonation] = useState({});
+  const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
-        setLoading(true);
-        if(donation) setLoading(false);
-      });
+  useEffect(() => {
+    setLoading(true);
+    setDonation(JSON.parse(sessionStorage.getItem("donation")));
 
-      {/*  let stringDate = JSON.stringify(donation.data);
-
-        if (stringDate) {
-            let year = stringDate.slice(1, 5) + "-";
-            let month = stringDate.slice(6, 8) + "-";
-            let day = stringDate.slice(9, 11);
-            donation.date = year + month + day;
-        }
-      */} 
-
-      
-    const handleData = async (data) => {
-        if(!data.nome_doador) data.nome_doador = donation.nome_doador;
-
-        if(!data.data) data.data = donation.data;
-
-        if(!data.volume) data.volume = donation.volume;
-
-        if(!data.unidade) data.unidade = donation.unidade;
-        
-        const header = {
-            Authorization: `Bearer ${JSON.parse(token)}`,
-            "Content-Type": "application/json",
-          };
-      
-          try {
-            await Axios.put(
-              `https://app-node-api-test.herokuapp.com`,
-              data,
-              {
-                headers: header,
-              }
-            );
-            history.push("/detalhes_doacao");
-          } catch (error) {
-            console.log(error);
-          }
-
+    const header = {
+      Authorization: `Bearer ${JSON.parse(token)}`,
+      "Content-Type": "application/json",
     };
 
+    (async () => {
+      try {
+        const response = await Axios.get(
+          "https://app-node-api-test.herokuapp.com/donator",
+          {
+            headers: header,
+          }
+        );
 
-    return(
-        <div className={styles.fullContainer}>
+        if (response) {
+          const data = response.data.filter((value) => {
+            if (value.nome.includes(donation.nome_doador)) return null;
+            return value;
+          });
+          setDonators(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+
+    (async () => {
+      try {
+        const response = await Axios.get(
+          "https://app-node-api-test.herokuapp.com/collector",
+          {
+            headers: header,
+          }
+        );
+
+        if (response) {
+          const data = response.data.filter((value) => {
+            if (value.id.includes(donation.orgao_coletor_id)) {
+              setUnityName(value.nome);
+              return null;
+            }
+
+            return value;
+          });
+          setUnities(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+    setLoading(false);
+  }, [token, donation.nome_doador, donation.orgao_coletor_id]);
+
+  let stringDate = JSON.stringify(donation.data);
+
+  if (stringDate) {
+    let year = stringDate.slice(1, 5) + "-";
+    let month = stringDate.slice(6, 8) + "-";
+    let day = stringDate.slice(9, 11);
+    donation.date = year + month + day;
+  }
+
+  const handleData = async (data) => {
+    if (data.doador_rg) {
+      let rg = parseInt(data.doador_rg.slice(0, 1));
+      let name = data.doador_rg.slice(3, data.doador_rg.length);
+      data.doador_rg = rg;
+      data.nome_doador = name;
+    } else {
+      data.doador_rg = donation.doador_rg;
+      data.nome_doador = donation.nome_doador;
+    }
+
+    if (!data.data) data.data = donation.data;
+
+    if (!data.volume) data.volume = donation.volume;
+
+    if (!data.orgao_coletor_id)
+      data.orgao_coletor_id = donation.orgao_coletor_id;
+
+    const header = {
+      Authorization: `Bearer ${JSON.parse(token)}`,
+      "Content-Type": "application/json",
+    };
+
+    try {
+      await Axios.put(
+        `https://app-node-api-test.herokuapp.com/donation/${donation.id}`,
+        data,
+        {
+          headers: header,
+        }
+      );
+      history.push("/doacoes");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <div className={styles.fullContainer}>
       <LoadingAnimation loading={loading} />
       <Nav />
       <div className={styles.contentContainer}>
         <TopMenu typePage="edit" title="Editar doação" />
 
         <div className={styles.formContainer}>
-          <form
-            onSubmit={handleSubmit(handleData)}
-          >
+          <form onSubmit={handleSubmit(handleData)}>
             <div className={styles.subTitleContainer}>
               <div className={styles.iconContainer}>
                 <InfoIcon style={{ fontSize: "32px" }} />
@@ -86,11 +142,17 @@ const EditDonation =() => {
             <br />
             <label htmlFor="donatorName">Doador</label>
             <br />
-            <select {...register("nome")} id="donatorName">
+            <select {...register("doador_rg")} id="donatorName">
               <option defaultValue hidden>
-                Selecione um doador...
+                {donation.nome_doador}
               </option>
-              
+              {donators.map((value, index) => {
+                return (
+                  <option value={`${value.rg}, ${value.nome}`} key={index}>
+                    {value.nome}
+                  </option>
+                );
+              })}
             </select>
             <br />
 
@@ -100,6 +162,7 @@ const EditDonation =() => {
             <input
               type="date"
               id="donationData"
+              defaultValue={donation.date}
               required={true}
               {...register("data")}
             />
@@ -112,6 +175,7 @@ const EditDonation =() => {
               type="number"
               step="0.01"
               id="donationVolume"
+              defaultValue={donation.volume}
               required={true}
               {...register("volume")}
             />
@@ -120,11 +184,17 @@ const EditDonation =() => {
             <br />
             <label htmlFor="unityColector">Unidade coletora</label>
             <br />
-            <select {...register("unidade")} id="unityColector">
+            <select {...register("orgao_coletor_id")} id="unityColector">
               <option defaultValue hidden>
-                Selecione a unidade coletora...
+                {unityName}
               </option>
-              
+              {unities.map((value, index) => {
+                return (
+                  <option key={index} value={value.id}>
+                    {value.nome}
+                  </option>
+                );
+              })}
             </select>
             <br />
             <br />
@@ -137,7 +207,7 @@ const EditDonation =() => {
         </div>
       </div>
     </div>
-    );
+  );
 };
 
-export default EditDonation;
+export default memo(EditDonation);

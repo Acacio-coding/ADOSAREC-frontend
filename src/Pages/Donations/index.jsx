@@ -68,7 +68,9 @@ const Donations = () => {
 
     if (sessionStorage.getItem("donation"))
       sessionStorage.removeItem("donation");
-    else sessionStorage.setItem("donation", JSON.stringify(donation));
+
+    if (donation)
+      sessionStorage.setItem("donation", JSON.stringify(donationData));
 
     setChecked(true);
   };
@@ -79,7 +81,6 @@ const Donations = () => {
   };
 
   const handleRemoveDonation = async () => {
-    console.log(donation.id);
     if (donation)
       try {
         await Axios.delete(

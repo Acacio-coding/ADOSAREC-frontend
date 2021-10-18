@@ -11,7 +11,8 @@ import styles from "./Register.module.scss";
 
 const RegisterDo = () => {
   const { register, handleSubmit } = useForm();
-  const [donations, setDonations] = useState([{}]);
+  const [donators, setDonators] = useState([{}]);
+  const [unities, setUnities] = useState([{}]);
   const [loading, setLoading] = useState(false);
   const token = sessionStorage.getItem("token");
   const history = useHistory();
@@ -34,7 +35,7 @@ const RegisterDo = () => {
         );
 
         if (response) {
-          setDonations(response.data);
+          setDonators(response.data);
           setLoading(false);
         }
       } catch (error) {
@@ -97,7 +98,7 @@ const RegisterDo = () => {
 
         <div className={styles.formContainer}>
           <form
-            onSubmit={donations.length < 1 ? null : handleSubmit(handleData)}
+            onSubmit={donators.length < 1 ? null : handleSubmit(handleData)}
           >
             <div className={styles.subTitleContainer}>
               <div className={styles.iconContainer}>
@@ -113,7 +114,7 @@ const RegisterDo = () => {
               <option defaultValue="" hidden>
                 Selecione um doador...
               </option>
-              {donations.map((value, index) => {
+              {donators.map((value, index) => {
                 return (
                   <option value={`${value.rg}, ${value.nome}`} key={index}>
                     {value.nome}
@@ -153,8 +154,12 @@ const RegisterDo = () => {
               <option defaultValue hidden>
                 Selecione a unidade coletora...
               </option>
-              {donations.map((value, index) => {
-                return <option key={index}>{value.nome}</option>;
+              {unities.map((value, index) => {
+                return (
+                  <option key={index} value={value.id}>
+                    {value.nome}
+                  </option>
+                );
               })}
             </select>
             <br />
