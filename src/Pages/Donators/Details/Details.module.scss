@@ -16,37 +16,94 @@
       margin: 1em 0;
       overflow-y: auto;
       display: flex;
-      justify-content: center;
+      justify-content: space-evenly;
 
-      table {
-        border: solid 1px #670000;
-        border-radius: 5px;
-        border-spacing: 0;
-        text-align: justify;
-        box-shadow: 0 4px 8px hsla(0, 0%, 0%, 0.2);
+      #donator {
+        table {
+          border: solid 1px #670000;
+          border-radius: 5px;
+          border-spacing: 0;
+          text-align: justify;
+          box-shadow: 0 4px 8px hsla(0, 0%, 0%, 0.2);
+
+          caption {
+            font-size: 20px;
+            padding-bottom: 0.5em;
+            color: #670000;
+          }
+
+          th {
+            color: #670000;
+            font-weight: 600;
+          }
+
+          th,
+          td {
+            padding: 0.5em 2em;
+          }
+
+          .th {
+            border-right: solid 1px #670000;
+            border-bottom: solid 1px #670000;
+          }
+
+          .lastTh {
+            border-right: solid 1px #670000;
+          }
+
+          .td {
+            border-bottom: solid 1px #670000;
+          }
+        }
       }
 
-      th {
-        color: #670000;
-        font-weight: 600;
-      }
+      #donation {
+        table {
+          border: solid 1px #670000;
+          border-radius: 5px;
+          border-spacing: 0;
+          text-align: center;
+          box-shadow: 0 4px 8px hsla(0, 0%, 0%, 0.2);
 
-      th,
-      td {
-        padding: 0.5em 2em;
-      }
+          caption {
+            font-size: 20px;
+            padding-bottom: 0.5em;
+            color: #670000;
+          }
 
-      .th {
-        border-right: solid 1px #670000;
-        border-bottom: solid 1px #670000;
-      }
+          th {
+            color: #670000;
+            font-weight: 600;
+          }
 
-      .lastTh {
-        border-right: solid 1px #670000;
-      }
+          th,
+          td {
+            padding: 0.5em 2em;
 
-      .td {
-        border-bottom: solid 1px #670000;
+            a {
+              cursor: pointer;
+              text-decoration: none;
+              color: #000;
+            }
+
+            a:hover {
+              color: #670000;
+            }
+          }
+
+          .BottomRight {
+            border-right: solid 1px #670000;
+            border-bottom: solid 1px #670000;
+          }
+
+          .Bottom {
+            border-bottom: solid 1px #670000;
+          }
+
+          .Right {
+            border-right: solid 1px #670000;
+          }
+        }
       }
     }
   }

@@ -39,12 +39,54 @@ const RegisterDo = () => {
         }
       } catch (error) {
         console.log(error);
-        setLoading(false);
       }
     })();
+
+    (async () => {
+      try {
+        const response = await Axios.get(
+          "https://app-node-api-test.herokuapp.com/collector",
+          {
+            headers: header,
+          }
+        );
+
+        if (response) {
+          setUnities(response.data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+    setLoading(false);
   }, [token]);
 
-  const handleData = async () => {};
+  const handleData = async (data) => {
+    if (data) {
+      let rg = parseInt(data.doador_rg.slice(0, 1));
+      let name = data.doador_rg.slice(3, data.doador_rg.length);
+      data.doador_rg = rg;
+      data.nome_doador = name;
+    }
+
+    const header = {
+      Authorization: `Bearer ${JSON.parse(token)}`,
+      "Content-Type": "application/json",
+    };
+
+    try {
+      await Axios.post(
+        "https://app-node-api-test.herokuapp.com/donation",
+        data,
+        {
+          headers: header,
+        }
+      );
+      history.push("/doacoes");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className={styles.fullContainer}>
@@ -67,13 +109,13 @@ const RegisterDo = () => {
             <br />
             <label htmlFor="donatorName">Doador</label>
             <br />
-            <select {...register("nome")} id="donatorName">
-              <option defaultValue hidden>
+            <select id="donatorName" {...register("doador_rg")}>
+              <option defaultValue="" hidden>
                 Selecione um doador...
               </option>
               {donations.map((value, index) => {
                 return (
-                  <option value={value.id} key={index}>
+                  <option value={`${value.rg}, ${value.nome}`} key={index}>
                     {value.nome}
                   </option>
                 );
@@ -107,7 +149,7 @@ const RegisterDo = () => {
             <br />
             <label htmlFor="unityColector">Unidade coletora</label>
             <br />
-            <select {...register("unidade")} id="unityColector">
+            <select {...register("orgao_coletor_id")} id="unityColector">
               <option defaultValue hidden>
                 Selecione a unidade coletora...
               </option>
