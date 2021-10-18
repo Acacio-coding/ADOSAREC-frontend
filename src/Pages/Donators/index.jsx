@@ -39,7 +39,7 @@ const Donators = () => {
     })();
   }, [token]);
 
-  const getDonator = (donator) => {
+  const setDonator = (donator) => {
     if (sessionStorage.getItem("donator")) sessionStorage.removeItem("donator");
 
     if (sessionStorage.getItem("donatorAddress"))
@@ -97,7 +97,7 @@ const Donators = () => {
                     <tr key={index}>
                       <td
                         className={styles.BottomRight}
-                        onClick={() => getDonator(value)}
+                        onClick={() => setDonator(value)}
                       >
                         <Link to="/detalhes_doador">{value.nome}</Link>
                       </td>
@@ -118,7 +118,7 @@ const Donators = () => {
                     <tr key={index}>
                       <td
                         className={styles.Right}
-                        onClick={() => getDonator(value)}
+                        onClick={() => setDonator(value)}
                       >
                         <Link to="/detalhes_doador">{value.nome}</Link>
                       </td>

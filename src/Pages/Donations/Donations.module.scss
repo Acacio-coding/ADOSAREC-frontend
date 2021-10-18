@@ -34,15 +34,11 @@
         th,
         td {
           padding: 0.5em 2em;
+        }
 
-          a {
-            cursor: pointer;
-            text-decoration: none;
-            color: #000;
-          }
-
-          a:hover {
-            color: #670000;
+        td {
+          .checkbox:checked:before {
+            background-color: #670000;
           }
         }
 

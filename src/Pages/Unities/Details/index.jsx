@@ -85,7 +85,7 @@ const DetailsU = () => {
         <RemoveAnimation
           page="unity"
           remove={remove}
-          handleRemoveDonator={handleRemoveUnity}
+          handleRemovePage={handleRemoveUnity}
           handleRemove={handleRemove}
           unityNome={unity.nome}
         />

@@ -36,6 +36,34 @@ const TopMenu = ({ page, typePage, title, placeholder, handleRemove }) => {
       </div>
     );
 
+  if (typePage === "generalD")
+    return (
+      <div className={styles.fullContainer}>
+        <div className={styles.titleContainer}>
+          <h1>{title}</h1>
+
+          <div className={styles.inputContainer}>
+            <input type="text" placeholder={placeholder} />
+            <button type="submit">
+              <SearchIcon />
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.functionsContainer}>
+          <Link to={`registrar_${page}`} className={styles.paddedIcons}>
+            <AddIcon />
+          </Link>
+
+          <Link to={`/editar_${page}`} className={styles.paddedIcons}>
+            <EditIcon />
+          </Link>
+
+          <RemoveIcon id={styles.removeIcon} onClick={handleRemove} />
+        </div>
+      </div>
+    );
+
   if (typePage === "details")
     return (
       <div className={styles.fullContainer}>
@@ -49,7 +77,7 @@ const TopMenu = ({ page, typePage, title, placeholder, handleRemove }) => {
           </button>
 
           <div className={styles.iconsContainer}>
-            <Link to={`/editar_${page}`} id={styles.paddedIcons}>
+            <Link to={`/editar_${page}`} className={styles.paddedIcons}>
               <EditIcon />
             </Link>
 
