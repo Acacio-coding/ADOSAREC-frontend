@@ -1,61 +1,80 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import Axios from "axios";
 import { useHistory } from "react-router";
 import { useForm } from "react-hook-form";
-import Axios from "axios";
 
 import { BsFillInfoCircleFill as InfoIcon } from "react-icons/bs";
+
 import Nav from "../../../Components/Nav";
 import TopMenu from "../../../Components/TopMenu";
 import LoadingAnimation from "../../../Components/Animation/Loading";
-import styles from "./Register.module.scss";
+import styles from "./Edit.module.scss";
 
-const RegisterDo = () => {
-  const { register, handleSubmit } = useForm();
-  const [donations, setDonations] = useState([{}]);
-  const [loading, setLoading] = useState(false);
-  const token = sessionStorage.getItem("token");
-  const history = useHistory();
+const EditDonation =() => {
+    const { register, handleSubmit } = useForm();
+    const token = sessionStorage.getItem("token");
+    const [donation, setDonation] = useState({});
+    const [loading, setLoading] = useState(false);
+    const history = useHistory();
+    
+    useEffect(() => {
+        setDonation(JSON.parse(sessionStorage.getItem("donation")));
 
-  useEffect(() => {
-    setLoading(true);
+        setLoading(true);
+        if(donation) setLoading(false);
+      });
 
-    const header = {
-      Authorization: `Bearer ${JSON.parse(token)}`,
-      "Content-Type": "application/json",
+      {/*  let stringDate = JSON.stringify(donation.data);
+
+        if (stringDate) {
+            let year = stringDate.slice(1, 5) + "-";
+            let month = stringDate.slice(6, 8) + "-";
+            let day = stringDate.slice(9, 11);
+            donation.date = year + month + day;
+        }
+      */} 
+
+      
+    const handleData = async (data) => {
+        if(!data.nome_doador) data.nome_doador = donation.nome_doador;
+
+        if(!data.data) data.data = donation.data;
+
+        if(!data.volume) data.volume = donation.volume;
+
+        if(!data.unidade) data.unidade = donation.unidade;
+        
+        const header = {
+            Authorization: `Bearer ${JSON.parse(token)}`,
+            "Content-Type": "application/json",
+          };
+      
+          try {
+            await Axios.put(
+              `https://app-node-api-test.herokuapp.com`,
+              data,
+              {
+                headers: header,
+              }
+            );
+            history.push("/detalhes_doacao");
+          } catch (error) {
+            console.log(error);
+          }
+
     };
 
-    (async () => {
-      try {
-        const response = await Axios.get(
-          "https://app-node-api-test.herokuapp.com/donator",
-          {
-            headers: header,
-          }
-        );
 
-        if (response) {
-          setDonations(response.data);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-      }
-    })();
-  }, [token]);
-
-  const handleData = async () => {};
-
-  return (
-    <div className={styles.fullContainer}>
+    return(
+        <div className={styles.fullContainer}>
       <LoadingAnimation loading={loading} />
       <Nav />
       <div className={styles.contentContainer}>
-        <TopMenu typePage="register" title="Cadastrar doação" />
+        <TopMenu typePage="edit" title="Editar doação" />
 
         <div className={styles.formContainer}>
           <form
-            onSubmit={donations.length < 1 ? null : handleSubmit(handleData)}
+            onSubmit={handleSubmit(handleData)}
           >
             <div className={styles.subTitleContainer}>
               <div className={styles.iconContainer}>
@@ -71,13 +90,7 @@ const RegisterDo = () => {
               <option defaultValue hidden>
                 Selecione um doador...
               </option>
-              {donations.map((value, index) => {
-                return (
-                  <option value={value.id} key={index}>
-                    {value.nome}
-                  </option>
-                );
-              })}
+              
             </select>
             <br />
 
@@ -111,22 +124,20 @@ const RegisterDo = () => {
               <option defaultValue hidden>
                 Selecione a unidade coletora...
               </option>
-              {donations.map((value, index) => {
-                return <option key={index}>{value.nome}</option>;
-              })}
+              
             </select>
             <br />
             <br />
             <br />
 
             <div className={styles.buttonContainer}>
-              <input type="submit" value="Cadastrar" />
+              <input type="submit" value="Editar" />
             </div>
           </form>
         </div>
       </div>
     </div>
-  );
+    );
 };
 
-export default RegisterDo;
+export default EditDonation;

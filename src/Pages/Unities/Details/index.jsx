@@ -104,7 +104,7 @@ const DetailsU = () => {
               </tr>
 
               <tr>
-                <th className={styles.th}>Número residencial</th>
+                <th className={styles.th}>Número residencial:</th>
                 <td className={styles.td}>{unity.numero_residencia}</td>
               </tr>
 
