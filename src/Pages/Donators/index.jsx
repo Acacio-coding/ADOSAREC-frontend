@@ -30,9 +30,11 @@ const Donators = () => {
 
         if (response) {
           setDonators(response.data);
+          setLoading(false);
         }
       } catch (error) {
         console.log(error);
+        setLoading(false);
       }
     })();
   }, [token]);
