@@ -123,6 +123,11 @@ const EditDonation = () => {
     }
   };
 
+  const date = new Date();
+  const maxDate = `${date.getFullYear()}-${
+    date.getMonth() + 1
+  }-${date.getDate()}`;
+
   return (
     <div className={styles.fullContainer}>
       <LoadingAnimation loading={loading} />
@@ -164,6 +169,7 @@ const EditDonation = () => {
               id="donationData"
               defaultValue={donation.date}
               required={true}
+              max={maxDate}
               {...register("data")}
             />
             <br />

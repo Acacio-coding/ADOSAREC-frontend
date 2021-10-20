@@ -219,7 +219,7 @@ const Donations = () => {
 
                       <td className={styles.Right}>{stringDate}</td>
 
-                      <td className={styles.Right}>{value.volume} </td>
+                      <td className={styles.Right}>{value.volume} ml</td>
 
                       <td>{unityName}</td>
                     </tr>

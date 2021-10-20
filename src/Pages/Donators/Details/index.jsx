@@ -12,7 +12,9 @@ const DetailsD = () => {
   const token = sessionStorage.getItem("token");
   const donator = JSON.parse(sessionStorage.getItem("donator"));
   const [donatorAddress, setDonatorAddress] = useState({});
+  const [job, setJob] = useState([{}]);
   const [donations, setDonations] = useState([{}]);
+  const [unities, setUnities] = useState([{}]);
   const [remove, setRemove] = useState(false);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -41,15 +43,19 @@ const DetailsD = () => {
 
   useEffect(() => {
     setLoading(true);
+
+    const header = {
+      Authorization: `Bearer ${JSON.parse(token)}`,
+      "Content-Type": "application/json",
+    };
+
     if (donator.cep)
       (async () => {
         try {
           const response = await Axios.get(
             `https://app-node-api-test.herokuapp.com/cep/${donator.cep}`,
             {
-              headers: {
-                Authorization: `Bearer ${JSON.parse(token)}`,
-              },
+              headers: header,
             }
           );
 
@@ -68,11 +74,33 @@ const DetailsD = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          "https://app-node-api-test.herokuapp.com/donation",
+          `https://app-node-api-test.herokuapp.com/profissao`,
           {
             headers: {
               Authorization: `Bearer ${JSON.parse(token)}`,
             },
+          }
+        );
+        const data = response.data;
+        data.filter((value) => {
+          if (value.id === donator.profissao_id) return value;
+          return null;
+        });
+
+        setJob(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    })();
+
+    (async () => {
+      try {
+        const response = await Axios.get(
+          "https://app-node-api-test.herokuapp.com/donation",
+          {
+            headers: header,
           }
         );
 
@@ -82,13 +110,28 @@ const DetailsD = () => {
             return null;
           });
           setDonations(data);
-          setLoading(false);
         }
       } catch (error) {
         console.log(error);
       }
     })();
-  }, [token, donator.cep, donator.nome]);
+
+    (async () => {
+      try {
+        const response = await Axios.get(
+          `https://app-node-api-test.herokuapp.com/collector`,
+          {
+            headers: header,
+          }
+        );
+
+        if (response) setUnities(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, [token, donator.cep, donator.nome, donator.profissao_id]);
 
   let stringDate = JSON.stringify(donator.data_de_nascimento);
 
@@ -172,14 +215,14 @@ const DetailsD = () => {
 
                 <tr>
                   <th className={styles.th}>Profissão:</th>
-                  <td className={styles.td}>{donator.profissao}</td>
+                  <td className={styles.td}>{job.nome}</td>
                 </tr>
 
                 <tr>
                   <th className={styles.th}>Grupo sanguíneo / RH:</th>
                   <td className={styles.td}>
                     {donator.grupo_sanguineo}
-                    {donator.rh_sanguineo === "0" ? "-" : "+"}
+                    {!donator.rh_sanguineo ? "-" : "+"}
                   </td>
                 </tr>
 
@@ -280,6 +323,16 @@ const DetailsD = () => {
                     stringDate = day + month + year;
                   }
 
+                  let unityId = value.orgao_coletor_id;
+                  let unityName;
+
+                  if (unities) {
+                    unityName = unities.map((value) => {
+                      if (value.id === unityId) return value.nome;
+                      return null;
+                    });
+                  }
+
                   if (index < donations.length - 1)
                     return (
                       <tr key={index}>
@@ -289,7 +342,7 @@ const DetailsD = () => {
                           {value.volume} ml
                         </td>
 
-                        <td className={styles.Bottom}>Unidade</td>
+                        <td className={styles.Bottom}>{unityName}</td>
                       </tr>
                     );
                   else
@@ -299,7 +352,7 @@ const DetailsD = () => {
 
                         <td className={styles.Right}>{value.volume} ml</td>
 
-                        <td>Unidade</td>
+                        <td>{unityName}</td>
                       </tr>
                     );
                 })}

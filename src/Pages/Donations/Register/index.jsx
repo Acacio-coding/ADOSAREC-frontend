@@ -64,8 +64,8 @@ const RegisterDo = () => {
 
   const handleData = async (data) => {
     if (data) {
-      let rg = parseInt(data.doador_rg.slice(0, 1));
-      let name = data.doador_rg.slice(3, data.doador_rg.length);
+      let rg = parseInt(data.doador_rg.slice(0, 8));
+      let name = data.doador_rg.slice(9, data.doador_rg.length);
       data.doador_rg = rg;
       data.nome_doador = name;
     }
@@ -88,6 +88,11 @@ const RegisterDo = () => {
       console.log(error);
     }
   };
+
+  const date = new Date();
+  const maxDate = `${date.getFullYear()}-${
+    date.getMonth() + 1
+  }-${date.getDate()}`;
 
   return (
     <div className={styles.fullContainer}>
@@ -131,6 +136,7 @@ const RegisterDo = () => {
               type="date"
               id="donationData"
               required={true}
+              max={maxDate}
               {...register("data")}
             />
             <br />

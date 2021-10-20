@@ -17,53 +17,34 @@ import styles from "./Edit.module.scss";
 const DetailsU = () => {
   const { register, handleSubmit } = useForm();
   const [unity, setUnity] = useState({});
-  const [cep, setCep] = useState("");
-  const [address, setAddress] = useState({});
   const [loading, setLoading] = useState(false);
   const token = sessionStorage.getItem("token");
   const history = useHistory();
 
   useEffect(() => {
+    setLoading(true);
     setUnity(JSON.parse(sessionStorage.getItem("unity")));
-    setAddress(JSON.parse(sessionStorage.getItem("unityAddress")));
-
-    if (cep.length === 8) {
-      setLoading(true);
-      (async () => {
-        try {
-          const response = await Axios.get(
-            `https://app-node-api-test.herokuapp.com/cep/${cep}`,
-            {
-              headers: {
-                Authorization: `Bearer ${JSON.parse(token)}`,
-              },
-            }
-          );
-
-          if (response) {
-            setAddress(response.data);
-            setLoading(false);
-          }
-        } catch (error) {
-          console.log(error);
-          setLoading(false);
-        }
-      })();
-    }
-  }, [cep, token]);
+    setLoading(false);
+  }, [token]);
 
   const handleData = async (data) => {
     if (!data.nome) data.nome = unity.nome;
 
-    if (!data.cep) data.cep = unity.cep;
-    else data.cep = parseInt(data.cep);
-
-    if (!data.numero_residencia)
-      data.numero_residencia = unity.numero_residencia;
+    if (!data.cidade) data.cidade = unity.cidade;
 
     if (!data.email) data.email = unity.email;
 
     if (!data.telefone) data.telefone = unity.telefone;
+
+    if (data) {
+      data.nome =
+        data.cidade.charAt(0).toUpperCase() +
+        data.cidade.slice(1).toLowerCase();
+
+      data.cidade =
+        data.cidade.charAt(0).toUpperCase() +
+        data.cidade.slice(1).toLowerCase();
+    }
 
     data.status = true;
 
@@ -109,6 +90,7 @@ const DetailsU = () => {
               type="text"
               id="name"
               required={true}
+              placeholder="Digite o nome da unidade coletora..."
               defaultValue={unity.nome}
               {...register("nome")}
             />
@@ -123,71 +105,14 @@ const DetailsU = () => {
               <span>Endereço</span>
             </div>
 
-            <label htmlFor="cep">CEP</label>
-            <br />
-            <input
-              type="number"
-              id="cep"
-              required={true}
-              defaultValue={unity.cep}
-              {...register("cep", { minLength: 8, maxLength: 8 })}
-              onChange={(event) => setCep(event.target.value)}
-            />
-            <br />
-            <br />
-
-            <label htmlFor="logra">Logradouro</label>
-            <br />
-            <input
-              type="text"
-              id="logra"
-              disabled={true}
-              defaultValue={address.address}
-            />
-            <br />
-            <br />
-
-            <label htmlFor="numero_residencia">Número</label>
-            <br />
-            <input
-              type="text"
-              id="numero_residencia"
-              required={true}
-              defaultValue={unity.numero_residencia}
-              {...register("numero_residencia")}
-            />
-            <br />
-            <br />
-
-            <label htmlFor="bairro">Bairro</label>
-            <br />
-            <input
-              type="text"
-              id="bairro"
-              disabled={true}
-              defaultValue={address.district}
-            />
-            <br />
-            <br />
-
             <label htmlFor="cidade">Cidade</label>
             <br />
             <input
               type="text"
               id="cidade"
+              placeholder="Digite a cidade da unidade coletora..."
               disabled={true}
-              defaultValue={address.city}
-            />
-            <br />
-            <br />
-
-            <label htmlFor="estado">Estado</label>
-            <br />
-            <input
-              type="text"
-              id="estado"
-              disabled={true}
-              defaultValue={address.state}
+              defaultValue={unity.cidade}
             />
             <br />
             <br />
@@ -197,19 +122,8 @@ const DetailsU = () => {
               <div className={styles.iconContainer}>
                 <ContactIcon style={{ fontSize: "32px" }} />
               </div>
-              <span>Contato</span>
+              <span>Contato (opcional)</span>
             </div>
-            <br />
-
-            <label htmlFor="email">Email</label>
-            <br />
-            <input
-              type="email"
-              id="email"
-              defaultValue={unity.email}
-              {...register("email")}
-            />
-            <br />
             <br />
 
             <label htmlFor="telefone">Telefone</label>
@@ -218,6 +132,9 @@ const DetailsU = () => {
               type="text"
               id="telefone"
               required={true}
+              minLength="10"
+              maxLength="11"
+              placeholder="0000000000"
               defaultValue={unity.telefone}
               {...register("telefone")}
             />

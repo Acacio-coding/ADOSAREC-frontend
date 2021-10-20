@@ -40,10 +40,6 @@ const Unities = () => {
 
   const getUnity = (unity) => {
     if (sessionStorage.getItem("unity")) sessionStorage.removeItem("unity");
-
-    if (sessionStorage.getItem("unityAddress"))
-      sessionStorage.removeItem("unityAdress");
-
     sessionStorage.setItem("unity", JSON.stringify(unity));
   };
 

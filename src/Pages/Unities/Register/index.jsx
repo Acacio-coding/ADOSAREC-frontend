@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useHistory } from "react-router";
 import { useForm } from "react-hook-form";
 import Axios from "axios";
@@ -15,32 +15,16 @@ import styles from "./Register.module.scss";
 
 const RegisterU = () => {
   const { register, handleSubmit } = useForm();
-  const [cep, setCep] = useState("");
-  const [address, setAddress] = useState({});
   const token = sessionStorage.getItem("token");
   const history = useHistory();
 
-  useEffect(() => {
-    if (cep.length === 8)
-      (async () => {
-        try {
-          const response = await Axios.get(
-            `https://app-node-api-test.herokuapp.com/cep/${cep}`,
-            {
-              headers: {
-                Authorization: `Bearer ${JSON.parse(token)}`,
-              },
-            }
-          );
-          setAddress(response.data);
-        } catch (error) {
-          console.log(error);
-        }
-      })();
-  }, [cep, token]);
-
   const handleData = async (data) => {
-    data.cep = parseInt(data.cep);
+    data.nome =
+      data.cidade.charAt(0).toUpperCase() + data.cidade.slice(1).toLowerCase();
+
+    data.cidade =
+      data.cidade.charAt(0).toUpperCase() + data.cidade.slice(1).toLowerCase();
+
     data.status = true;
 
     const header = {
@@ -78,12 +62,13 @@ const RegisterU = () => {
             </div>
 
             <br />
-            <label htmlFor="name">Nome</label>
+            <label htmlFor="name">Unidade</label>
             <br />
             <input
               type="text"
               id="name"
               required={true}
+              placeholder="Digite o nome da unidade coletora..."
               {...register("nome")}
             />
             <br />
@@ -97,69 +82,14 @@ const RegisterU = () => {
               <span>Endereço</span>
             </div>
 
-            <label htmlFor="cep">CEP</label>
-            <br />
-            <input
-              type="number"
-              id="cep"
-              required={true}
-              {...register("cep", { minLength: 8, maxLength: 8 })}
-              onChange={(event) => setCep(event.target.value)}
-            />
-            <br />
-            <br />
-
-            <label htmlFor="logra">Logradouro</label>
-            <br />
-            <input
-              type="text"
-              id="logra"
-              disabled={true}
-              defaultValue={address.address}
-            />
-            <br />
-            <br />
-
-            <label htmlFor="numero_residencia">Número</label>
-            <br />
-            <input
-              type="text"
-              id="numero_residencia"
-              required={true}
-              {...register("numero_residencia")}
-            />
-            <br />
-            <br />
-
-            <label htmlFor="bairro">Bairro</label>
-            <br />
-            <input
-              type="text"
-              id="bairro"
-              disabled={true}
-              defaultValue={address.district}
-            />
-            <br />
-            <br />
-
             <label htmlFor="cidade">Cidade</label>
             <br />
             <input
               type="text"
               id="cidade"
-              disabled={true}
-              defaultValue={address.city}
-            />
-            <br />
-            <br />
-
-            <label htmlFor="estado">Estado</label>
-            <br />
-            <input
-              type="text"
-              id="estado"
-              disabled={true}
-              defaultValue={address.state}
+              placeholder="Digite a cidade da unidade coletora..."
+              required={true}
+              {...register("cidade")}
             />
             <br />
             <br />
@@ -169,23 +99,19 @@ const RegisterU = () => {
               <div className={styles.iconContainer}>
                 <ContactIcon style={{ fontSize: "32px" }} />
               </div>
-              <span>Contato</span>
+              <span>Contato (opcional)</span>
             </div>
-            <br />
-
-            <label htmlFor="email">Email</label>
-            <br />
-            <input type="email" id="email" {...register("email")} />
-            <br />
             <br />
 
             <label htmlFor="telefone">Telefone</label>
             <br />
             <input
-              type="text"
+              type="number"
               id="telefone"
-              required={true}
               {...register("telefone")}
+              minLength="10"
+              maxLength="11"
+              placeholder="0000000000"
             />
             <br />
             <br />
