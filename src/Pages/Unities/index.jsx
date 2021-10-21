@@ -11,6 +11,7 @@ const Unities = () => {
   const token = sessionStorage.getItem("token");
   const [unities, setUnities] = useState([{}]);
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     setLoading(true);
@@ -43,6 +44,18 @@ const Unities = () => {
     sessionStorage.setItem("unity", JSON.stringify(unity));
   };
 
+  const handleSearch = (term) => {
+    let string = JSON.stringify(term.term);
+
+    if (!string.length === 12)
+      string =
+        string.charAt(0) +
+        string.charAt(1).toUpperCase() +
+        string.slice(2).toLowerCase();
+
+    setSearch(string);
+  };
+
   return (
     <div className={styles.fullContainer}>
       <LoadingAnimation loading={loading} />
@@ -53,6 +66,7 @@ const Unities = () => {
           title="Unidades Coletoras"
           placeholder="Buscar Unidade..."
           page="unidade"
+          func={handleSearch}
         />
 
         <div className={styles.tableContainer}>
@@ -73,56 +87,58 @@ const Unities = () => {
                 >
                   Cidade
                 </th>
-                <th
-                  className={
-                    unities.length < 1 ? styles.Right : styles.BottomRight
-                  }
-                >
-                  Telefone
-                </th>
                 <th className={unities.length < 1 ? null : styles.Bottom}>
-                  Email
+                  Telefone
                 </th>
               </tr>
             </thead>
             <tbody>
-              {unities.map((value, index) => {
-                if (index < unities.length - 1) {
-                  return (
-                    <tr key={index}>
-                      <td
-                        className={styles.BottomRight}
-                        onClick={() => getUnity(value)}
-                      >
-                        <Link to="/detalhes_unidade">{value.nome}</Link>
-                      </td>
+              {unities
+                .filter((value) => {
+                  if (search) {
+                    const val = JSON.stringify(value);
+                    if (val.includes(search)) return value;
+                    return null;
+                  }
+                  return value;
+                })
+                .map((value, index) => {
+                  if (index < unities.length - 1) {
+                    return (
+                      <tr key={index}>
+                        <td
+                          className={styles.BottomRight}
+                          onClick={() => getUnity(value)}
+                        >
+                          <Link to="/detalhes_unidade">{value.nome}</Link>
+                        </td>
 
-                      <td className={styles.BottomRight}>Missing</td>
+                        <td className={styles.BottomRight}>{value.cidade}</td>
 
-                      <td className={styles.BottomRight}>{value.telefone}</td>
+                        <td className={styles.Bottom}>
+                          {value.telefone ? value.telefone : "Não informado"}
+                        </td>
+                      </tr>
+                    );
+                  } else {
+                    return (
+                      <tr key={index}>
+                        <td
+                          className={styles.Right}
+                          onClick={() => getUnity(value)}
+                        >
+                          <Link to="/detalhes_unidade">{value.nome}</Link>
+                        </td>
 
-                      <td className={styles.Bottom}>{value.email}</td>
-                    </tr>
-                  );
-                } else {
-                  return (
-                    <tr key={index}>
-                      <td
-                        className={styles.Right}
-                        onClick={() => getUnity(value)}
-                      >
-                        <Link to="/detalhes_unidade">{value.nome}</Link>
-                      </td>
+                        <td className={styles.Right}>{value.cidade}</td>
 
-                      <td className={styles.Right}>Missing</td>
-
-                      <td className={styles.Right}>{value.telefone}</td>
-
-                      <td>{value.email}</td>
-                    </tr>
-                  );
-                }
-              })}
+                        <td>
+                          {value.telefone ? value.telefone : "Não informado"}
+                        </td>
+                      </tr>
+                    );
+                  }
+                })}
             </tbody>
           </table>
         </div>

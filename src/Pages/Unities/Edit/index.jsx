@@ -111,7 +111,6 @@ const DetailsU = () => {
               type="text"
               id="cidade"
               placeholder="Digite a cidade da unidade coletora..."
-              disabled={true}
               defaultValue={unity.cidade}
             />
             <br />

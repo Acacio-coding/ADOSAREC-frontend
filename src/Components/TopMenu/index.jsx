@@ -10,8 +10,17 @@ import {
 } from "react-icons/md";
 import { IoMdTrash as RemoveIcon } from "react-icons/io";
 import styles from "./TopMenu.module.scss";
+import { useForm } from "react-hook-form";
 
-const TopMenu = ({ page, typePage, title, placeholder, handleRemove }) => {
+const TopMenu = ({
+  page,
+  typePage,
+  title,
+  placeholder,
+  handleRemove,
+  func,
+}) => {
+  const { register, handleSubmit } = useForm();
   const history = useHistory();
 
   if (typePage === "general")
@@ -21,10 +30,16 @@ const TopMenu = ({ page, typePage, title, placeholder, handleRemove }) => {
           <h1>{title}</h1>
 
           <div className={styles.inputContainer}>
-            <input type="text" placeholder={placeholder} />
-            <button type="submit">
-              <SearchIcon />
-            </button>
+            <form onSubmit={handleSubmit(func)}>
+              <input
+                type="text"
+                placeholder={placeholder}
+                {...register("term")}
+              />
+              <button type="submit">
+                <SearchIcon />
+              </button>
+            </form>
           </div>
         </div>
 
@@ -43,10 +58,16 @@ const TopMenu = ({ page, typePage, title, placeholder, handleRemove }) => {
           <h1>{title}</h1>
 
           <div className={styles.inputContainer}>
-            <input type="text" placeholder={placeholder} />
-            <button type="submit">
-              <SearchIcon />
-            </button>
+            <form onSubmit={handleSubmit(func)}>
+              <input
+                type="text"
+                placeholder={placeholder}
+                {...register("term")}
+              />
+              <button type="submit">
+                <SearchIcon />
+              </button>
+            </form>
           </div>
         </div>
 

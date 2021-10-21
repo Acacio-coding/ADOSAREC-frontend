@@ -15,6 +15,7 @@ const Donations = () => {
   const [remove, setRemove] = useState(false);
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     setLoading(true);
@@ -99,6 +100,22 @@ const Donations = () => {
       }
   };
 
+  const handleSearch = (term) => {
+    let string = JSON.stringify(term.term);
+
+    if (string.length === 12 && string.includes("/")) {
+      string = string.replaceAll("/", "-");
+      string = string.slice(7, 11) + string.slice(3, 7) + string.slice(1, 3);
+    } else if (isNaN(string)) {
+      string =
+        string.charAt(0) +
+        string.charAt(1).toUpperCase() +
+        string.slice(2).toLowerCase();
+    }
+
+    setSearch(string);
+  };
+
   return (
     <div className={styles.fullContainer}>
       <LoadingAnimation loading={loading} />
@@ -111,6 +128,7 @@ const Donations = () => {
           placeholder="Buscar doação..."
           page="doacao"
           handleRemove={handleRemove}
+          func={handleSearch}
         />
 
         <RemoveAnimation
@@ -158,73 +176,86 @@ const Donations = () => {
               </tr>
             </thead>
             <tbody>
-              {donations.map((value, index) => {
-                let stringDate;
+              {donations
+                .filter((value) => {
+                  if (search.length > 2) {
+                    const val = JSON.stringify(value);
+                    if (val.includes(search)) return value;
+                    else return null;
+                  }
+                  return value;
+                })
+                .map((value, index) => {
+                  let stringDate;
 
-                if (value.data) {
-                  const string = JSON.stringify(value.data);
-                  const year = string.slice(1, 5);
-                  const month = string.slice(6, 8) + "-";
-                  const day = string.slice(9, 11) + "-";
-                  stringDate = day + month + year;
-                }
+                  if (value.data) {
+                    const string = JSON.stringify(value.data);
+                    const year = string.slice(1, 5);
+                    const month = string.slice(6, 8) + "-";
+                    const day = string.slice(9, 11) + "-";
+                    stringDate = day + month + year;
+                  }
 
-                let unityId = value.orgao_coletor_id;
-                let unityName;
+                  let unityId = value.orgao_coletor_id;
+                  let unityName;
 
-                if (unities) {
-                  unityName = unities.map((value) => {
-                    if (value.id === unityId) return value.nome;
-                    return null;
-                  });
-                }
+                  if (unities) {
+                    unityName = unities.map((value) => {
+                      if (value.id === unityId) {
+                        return value.nome;
+                      }
+                      return null;
+                    });
+                  }
 
-                if (index < donations.length - 1)
-                  return (
-                    <tr key={index}>
-                      <td className={styles.BottomRight}>
-                        <input
-                          type="checkbox"
-                          defaultChecked={checked}
-                          onClick={() => handleDonation(value)}
-                        />
-                      </td>
-
-                      <td className={styles.BottomRight}>
-                        {value.nome_doador}
-                      </td>
-
-                      <td className={styles.BottomRight}>{stringDate}</td>
-
-                      <td className={styles.BottomRight}>{value.volume} ml</td>
-
-                      <td className={styles.Bottom}>{unityName}</td>
-                    </tr>
-                  );
-                else
-                  return (
-                    <tr key={index}>
-                      <td className={styles.Right}>
-                        <label>
+                  if (index < donations.length - 1)
+                    return (
+                      <tr key={index}>
+                        <td className={styles.BottomRight}>
                           <input
                             type="checkbox"
                             defaultChecked={checked}
                             onClick={() => handleDonation(value)}
                           />
-                          <span></span>
-                        </label>
-                      </td>
+                        </td>
 
-                      <td className={styles.Right}>{value.nome_doador}</td>
+                        <td className={styles.BottomRight}>
+                          {value.nome_doador}
+                        </td>
 
-                      <td className={styles.Right}>{stringDate}</td>
+                        <td className={styles.BottomRight}>{stringDate}</td>
 
-                      <td className={styles.Right}>{value.volume} ml</td>
+                        <td className={styles.BottomRight}>
+                          {value.volume} ml
+                        </td>
 
-                      <td>{unityName}</td>
-                    </tr>
-                  );
-              })}
+                        <td className={styles.Bottom}>{unityName}</td>
+                      </tr>
+                    );
+                  else
+                    return (
+                      <tr key={index}>
+                        <td className={styles.Right}>
+                          <label>
+                            <input
+                              type="checkbox"
+                              defaultChecked={checked}
+                              onClick={() => handleDonation(value)}
+                            />
+                            <span></span>
+                          </label>
+                        </td>
+
+                        <td className={styles.Right}>{value.nome_doador}</td>
+
+                        <td className={styles.Right}>{stringDate}</td>
+
+                        <td className={styles.Right}>{value.volume} ml</td>
+
+                        <td>{unityName}</td>
+                      </tr>
+                    );
+                })}
             </tbody>
           </table>
         </div>

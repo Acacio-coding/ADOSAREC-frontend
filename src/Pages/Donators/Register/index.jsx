@@ -20,6 +20,7 @@ const RegisterD = () => {
   const [jobs, setJobs] = useState([{}]);
   const [others, setOthers] = useState(false);
   const [job, setJob] = useState("");
+  const [jobId, setJobId] = useState();
   const token = sessionStorage.getItem("token");
   const history = useHistory();
 
@@ -63,41 +64,82 @@ const RegisterD = () => {
     const anoExpedicao = data.data_de_expedicao.slice(0, 4);
 
     if (date.getFullYear() - anoNascimento < 18) alert("Menor de idade!");
-    else if (anoExpedicao < anoNascimento)
+    else if (anoExpedicao - anoNascimento < 6)
       alert(
-        "Ano de expedição do RG inválido, o mesmo é menor que a data de nascimento!"
+        "Ano de expedição do RG inválido, é necessário ter no mínimo 6 anos de idade para fazê-lo!"
       );
     else {
-      if (data.profissao === "Outros")
-        data.profissao =
-          job.charAt(0).toUpperCase() + job.slice(1).toLowerCase();
+      if (data.profissao_id === "Outros") {
+        (async () => {
+          const body = {
+            nome: job,
+          };
 
-      data.orgao_expeditor_rg = data.orgao_expeditor_rg.toUpperCase();
-
-      data.naturalidade =
-        data.naturalidade.charAt(0).toUpperCase() +
-        data.naturalidade.slice(1).toLowerCase();
-
-      data.cep = data.cep.slice(0, 5) + "-" + data.cep.slice(5);
-
-      data.status = true;
-
-      const header = {
-        Authorization: `Bearer ${JSON.parse(token)}`,
-        "Content-Type": "application/json",
-      };
-
-      try {
-        await Axios.post(
-          "https://app-node-api-test.herokuapp.com/donator",
-          data,
-          {
-            headers: header,
+          try {
+            const response = await Axios.post(
+              `https://app-node-api-test.herokuapp.com/profissao`,
+              body,
+              {
+                headers: {
+                  Authorization: `Bearer ${JSON.parse(token)}`,
+                },
+              }
+            );
+            console.log(response);
+          } catch (error) {
+            console.log(error);
           }
-        );
-        history.push("/doadores");
-      } catch (error) {
-        console.log(error);
+        })();
+
+        try {
+          const response = await Axios.get(
+            `https://app-node-api-test.herokuapp.com/profissao`,
+            {
+              headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+              },
+            }
+          );
+          const data = response.data;
+          data.filter((value) => {
+            if (value.nome === job) setJobId(value.id);
+            return null;
+          });
+        } catch (error) {
+          console.log(error);
+        }
+
+        data.profissao_id = jobId;
+      }
+
+      if (data.profissao_id === jobId) {
+        data.orgao_expeditor_rg = data.orgao_expeditor_rg.toUpperCase();
+
+        data.naturalidade =
+          data.naturalidade.charAt(0).toUpperCase() +
+          data.naturalidade.slice(1).toLowerCase();
+
+        data.cep = data.cep.slice(0, 5) + "-" + data.cep.slice(5);
+
+        data.status = true;
+
+        const header = {
+          Authorization: `Bearer ${JSON.parse(token)}`,
+          "Content-Type": "application/json",
+        };
+
+        try {
+          await Axios.post(
+            "https://app-node-api-test.herokuapp.com/donator",
+            data,
+            {
+              headers: header,
+            }
+          );
+          history.push("/doadores");
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
   };
@@ -242,7 +284,7 @@ const RegisterD = () => {
             <select
               id="profissao"
               required={true}
-              {...register("profissao")}
+              {...register("profissao_id")}
               onChange={(event) => handleOthers(event.target.value)}
             >
               <option defaultValue hidden>
@@ -258,6 +300,7 @@ const RegisterD = () => {
                     </option>
                   );
               })}
+              <option value="Outros">Outros</option>
             </select>
             <br />
             <br />
@@ -266,7 +309,6 @@ const RegisterD = () => {
               required={true}
               disabled={others ? false : true}
               value={!others ? "" : job}
-              pattern="[a-zA-Z]+"
               placeholder={others ? "Digite a profissão do doador..." : ""}
               onChange={(event) => setJob(event.target.value)}
             />

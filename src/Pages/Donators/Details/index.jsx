@@ -12,7 +12,7 @@ const DetailsD = () => {
   const token = sessionStorage.getItem("token");
   const donator = JSON.parse(sessionStorage.getItem("donator"));
   const [donatorAddress, setDonatorAddress] = useState({});
-  const [job, setJob] = useState([{}]);
+  const [job, setJob] = useState();
   const [donations, setDonations] = useState([{}]);
   const [unities, setUnities] = useState([{}]);
   const [remove, setRemove] = useState(false);
@@ -49,11 +49,12 @@ const DetailsD = () => {
       "Content-Type": "application/json",
     };
 
-    if (donator.cep)
+    if (donator.cep) {
+      const cep = donator.cep.slice(0, 5) + donator.cep.slice(6);
       (async () => {
         try {
           const response = await Axios.get(
-            `https://app-node-api-test.herokuapp.com/cep/${donator.cep}`,
+            `https://app-node-api-test.herokuapp.com/cep/${cep}`,
             {
               headers: header,
             }
@@ -61,6 +62,7 @@ const DetailsD = () => {
 
           if (response) {
             setDonatorAddress(response.data);
+
             sessionStorage.setItem(
               "donatorAddress",
               JSON.stringify(response.data)
@@ -70,6 +72,7 @@ const DetailsD = () => {
           console.log(error);
         }
       })();
+    }
 
     (async () => {
       try {
@@ -83,11 +86,9 @@ const DetailsD = () => {
         );
         const data = response.data;
         data.filter((value) => {
-          if (value.id === donator.profissao_id) return value;
+          if (value.id === donator.profissao_id) setJob(value.nome);
           return null;
         });
-
-        setJob(response.data);
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -215,7 +216,7 @@ const DetailsD = () => {
 
                 <tr>
                   <th className={styles.th}>Profissão:</th>
-                  <td className={styles.td}>{job.nome}</td>
+                  <td className={styles.td}>{job}</td>
                 </tr>
 
                 <tr>
@@ -235,7 +236,11 @@ const DetailsD = () => {
 
                 <tr>
                   <th className={styles.th}>Logradouro:</th>
-                  <td className={styles.td}>{donatorAddress.address}</td>
+                  <td className={styles.td}>
+                    {donatorAddress.address
+                      ? donatorAddress.address
+                      : "Não encontrado"}
+                  </td>
                 </tr>
 
                 <tr>
@@ -245,7 +250,11 @@ const DetailsD = () => {
 
                 <tr>
                   <th className={styles.th}>Bairro:</th>
-                  <td className={styles.td}>{donatorAddress.district}</td>
+                  <td className={styles.td}>
+                    {donatorAddress.district
+                      ? donatorAddress.district
+                      : "Não encontrado"}
+                  </td>
                 </tr>
 
                 <tr>
@@ -275,12 +284,16 @@ const DetailsD = () => {
 
                 <tr>
                   <th className={styles.th}>Telefone2:</th>
-                  <td className={styles.td}>{donator.telefone2}</td>
+                  <td className={styles.td}>
+                    {donator.telefone2 ? donator.telefone2 : "Não informado"}
+                  </td>
                 </tr>
 
                 <tr>
                   <th className={styles.lastTh}>Telefone3:</th>
-                  <td className={styles.lastTd}>{donator.telefone3}</td>
+                  <td className={styles.lastTd}>
+                    {donator.telefone3 ? donator.telefone3 : "Não informado"}
+                  </td>
                 </tr>
               </tbody>
             </table>

@@ -72,7 +72,9 @@ const DetailsU = () => {
 
               <tr>
                 <th className={styles.lastTh}>Telefone:</th>
-                <td className={styles.lastTd}>{unity.telefone}</td>
+                <td className={styles.lastTd}>
+                  {unity.telefone ? unity.telefone : "Não informado"}
+                </td>
               </tr>
             </tbody>
           </table>

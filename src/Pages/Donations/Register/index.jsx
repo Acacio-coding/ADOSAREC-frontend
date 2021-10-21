@@ -64,10 +64,11 @@ const RegisterDo = () => {
 
   const handleData = async (data) => {
     if (data) {
-      let rg = parseInt(data.doador_rg.slice(0, 8));
-      let name = data.doador_rg.slice(9, data.doador_rg.length);
+      let rg = parseInt(data.doador_rg.slice(0, 9));
+      let name = data.doador_rg.slice(11, data.doador_rg.length);
       data.doador_rg = rg;
       data.nome_doador = name;
+      data.volume = parseInt(data.volume);
     }
 
     const header = {
