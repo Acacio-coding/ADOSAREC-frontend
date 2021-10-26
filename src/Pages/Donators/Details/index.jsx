@@ -60,33 +60,6 @@ const DetailsD = () => {
       "Content-Type": "application/json",
     };
 
-    if (donator.cep) {
-      (async () => {
-        try {
-          const response = await Axios.get(
-            `https://app-node-api-test.herokuapp.com/v1/cep/${donator.cep}`,
-            {
-              headers: header,
-            }
-          );
-
-          if (response) {
-            setDonatorAddress(response.data);
-
-            sessionStorage.setItem(
-              "donatorAddress",
-              JSON.stringify(response.data)
-            );
-          }
-        } catch (error) {
-          setMessage(
-            "Não foi possível encontrar o endereço do doador, contate os desenvolvedores ou tente novamente mais tarde!"
-          );
-          setError(true);
-        }
-      })();
-    }
-
     (async () => {
       try {
         const response = await Axios.get(
@@ -264,9 +237,7 @@ const DetailsD = () => {
                 <tr>
                   <th className={styles.th}>Logradouro:</th>
                   <td className={styles.td}>
-                    {donatorAddress.address
-                      ? donatorAddress.address
-                      : "Não encontrado"}
+                    {donator.rua ? donator.rua : "Não informado"}
                   </td>
                 </tr>
 
@@ -278,20 +249,22 @@ const DetailsD = () => {
                 <tr>
                   <th className={styles.th}>Bairro:</th>
                   <td className={styles.td}>
-                    {donatorAddress.district
-                      ? donatorAddress.district
-                      : "Não encontrado"}
+                    {donator.bairro ? donator.bairro : "Não informado"}
                   </td>
                 </tr>
 
                 <tr>
                   <th className={styles.th}>Cidade:</th>
-                  <td className={styles.td}>{donatorAddress.city}</td>
+                  <td className={styles.td}>
+                    {donator.cidade ? donator.cidade : "Não informado"}
+                  </td>
                 </tr>
 
                 <tr>
                   <th className={styles.th}>Estado:</th>
-                  <td className={styles.td}>{donatorAddress.state}</td>
+                  <td className={styles.td}>
+                    {donator.estado ? donator.estado : "Não informado"}
+                  </td>
                 </tr>
 
                 <tr>

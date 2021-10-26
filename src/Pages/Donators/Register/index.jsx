@@ -92,8 +92,7 @@ const RegisterD = () => {
 
       data.cep = parseInt(data.cep);
 
-      data.rua =
-        data.rua.charAt(0).toUpperCase() + data.rua.slice(1).toLowerCase();
+      data.rua = data.rua.charAt(0).toUpperCase() + data.rua.slice(1);
 
       data.bairro =
         data.bairro.charAt(0).toUpperCase() +
@@ -398,7 +397,7 @@ const RegisterD = () => {
               id="cidade"
               placeholder="Cidade do doador..."
               {...register("cidade")}
-              defaultValue={address.city}
+              value={address.city}
             />
             <br />
             <br />
@@ -409,7 +408,7 @@ const RegisterD = () => {
               id="estado"
               placeholder="Estado do doador..."
               {...register("estado")}
-              defaultValue={address.state}
+              value={address.state}
             />
             <br />
             <br />

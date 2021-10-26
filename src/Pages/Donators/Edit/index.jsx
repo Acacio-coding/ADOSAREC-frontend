@@ -164,8 +164,7 @@ const EditD = () => {
 
         data.cep = parseInt(data.cep);
 
-        data.rua =
-          data.rua.charAt(0).toUpperCase() + data.rua.slice(1).toLowerCase();
+        data.rua = data.rua.charAt(0).toUpperCase() + data.rua.slice(1);
 
         data.bairro =
           data.bairro.charAt(0).toUpperCase() +
@@ -510,7 +509,7 @@ const EditD = () => {
               id="cidade"
               placeholder="Cidade do doador..."
               {...register("cidade")}
-              defaultValue={!address.city ? donator.cidade : address.city}
+              value={!address.city ? donator.cidade : address.city}
             />
             <br />
             <br />
@@ -522,7 +521,7 @@ const EditD = () => {
               id="estado"
               placeholder="Estado do doador..."
               {...register("estado")}
-              defaultValue={!address.state ? donator.estado : address.state}
+              value={!address.state ? donator.estado : address.state}
             />
             <br />
             <br />
