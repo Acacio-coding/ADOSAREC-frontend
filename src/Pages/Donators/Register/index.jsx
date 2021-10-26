@@ -92,6 +92,9 @@ const RegisterD = () => {
 
       data.cep = parseInt(data.cep);
 
+      data.rua =
+        data.rua.charAt(0).toUpperCase() + data.rua.slice(1).toLowerCase();
+
       data.bairro =
         data.bairro.charAt(0).toUpperCase() +
         data.bairro.slice(1).toLowerCase();
@@ -291,7 +294,6 @@ const RegisterD = () => {
                     </option>
                   );
               })}
-              <option value="Outros">Outros</option>
             </select>
             <br />
             <br />
@@ -442,7 +444,7 @@ const RegisterD = () => {
             />
             <br />
             <br />
-            <label htmlFor="telefone2">Telefone2</label>
+            <label htmlFor="telefone2">Telefone2 (opcional)</label>
             <br />
             <input
               type="text"
@@ -454,7 +456,7 @@ const RegisterD = () => {
             />
             <br />
             <br />
-            <label htmlFor="telefone3">Telefone3</label>
+            <label htmlFor="telefone3">Telefone3 (opcional)</label>
             <br />
             <input
               type="text"

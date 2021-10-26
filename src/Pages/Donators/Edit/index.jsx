@@ -163,6 +163,23 @@ const EditD = () => {
           data.naturalidade.slice(1).toLowerCase();
 
         data.cep = parseInt(data.cep);
+
+        data.rua =
+          data.rua.charAt(0).toUpperCase() + data.rua.slice(1).toLowerCase();
+
+        data.bairro =
+          data.bairro.charAt(0).toUpperCase() +
+          data.bairro.slice(1).toLowerCase();
+
+        data.cidade =
+          data.cidade.charAt(0).toUpperCase() +
+          data.cidade.slice(1).toLowerCase();
+
+        data.estado =
+          data.estado.charAt(0).toUpperCase() +
+          data.estado.slice(1).toLowerCase();
+
+        data.cep = parseInt(data.cep);
       }
     }
 
@@ -378,7 +395,6 @@ const EditD = () => {
                   </option>
                 );
               })}
-              <option value="Outros">Outros</option>
             </select>
             <br />
             <br />
@@ -547,7 +563,7 @@ const EditD = () => {
             <br />
             <br />
 
-            <label htmlFor="telefone2">Telefone2</label>
+            <label htmlFor="telefone2">Telefone2 (opcional)</label>
             <br />
             <input
               type="text"
@@ -561,7 +577,7 @@ const EditD = () => {
             <br />
             <br />
 
-            <label htmlFor="telefone3">Telefone3</label>
+            <label htmlFor="telefone3">Telefone3 (opcional)</label>
             <br />
             <input
               type="text"
