@@ -90,6 +90,12 @@ const RegisterD = () => {
     } else {
       data.orgao_expeditor_rg = data.orgao_expeditor_rg.toUpperCase();
 
+      data.rg = parseInt(data.rg);
+
+      data.numero_residencia = parseInt(data.numero_residencia);
+
+      data.doador_de_medula = data.doador_de_medula === "true" ? true : false;
+
       data.naturalidade =
         data.naturalidade.charAt(0).toUpperCase() +
         data.naturalidade.slice(1).toLowerCase();
@@ -166,7 +172,7 @@ const RegisterD = () => {
             <input
               type="text"
               id="name"
-              required={true}
+              required
               placeholder="Digite o nome do doador..."
               {...register("nome")}
             />
@@ -189,7 +195,7 @@ const RegisterD = () => {
             <input
               type="date"
               id="data_de_nascimento"
-              required={true}
+              required
               max={maxDate}
               {...register("data_de_nascimento")}
             />
@@ -198,9 +204,10 @@ const RegisterD = () => {
             <label htmlFor="rg">Identidade</label>
             <br />
             <input
-              type="number"
+              type="text"
+              pattern="\d*"
               id="rg"
-              required={true}
+              required
               placeholder="000000000"
               minLength="9"
               maxLength="9"
@@ -215,7 +222,7 @@ const RegisterD = () => {
               {...register("orgao_expeditor_rg")}
               id="orgao_expeditor_rg"
               placeholder="Digite o orgão expedidor..."
-              required={true}
+              required
             />
             <br />
             <br />
@@ -224,7 +231,7 @@ const RegisterD = () => {
             <input
               type="date"
               id="data_de_expedicao"
-              required={true}
+              required
               max={maxDate}
               {...register("data_de_expedicao")}
             />
@@ -257,18 +264,14 @@ const RegisterD = () => {
               type="text"
               id="naturalidade"
               placeholder="Digite a naturalidade do doador"
-              required={true}
+              required
               {...register("naturalidade")}
             />
             <br />
             <br />
             <label htmlFor="estado_civil">Estado cívil</label>
             <br />
-            <select
-              {...register("estado_civil")}
-              id="estado_civil"
-              required={true}
-            >
+            <select {...register("estado_civil")} id="estado_civil" required>
               <option defaultValue hidden>
                 Selecione um estado cívil...
               </option>
@@ -283,11 +286,7 @@ const RegisterD = () => {
 
             <label htmlFor="profissao">Profissão</label>
             <br />
-            <select
-              id="profissao"
-              required={true}
-              {...register("profissao_id")}
-            >
+            <select id="profissao" required {...register("profissao_id")}>
               <option defaultValue hidden>
                 Selecione uma profissão...
               </option>
@@ -320,11 +319,7 @@ const RegisterD = () => {
             <br />
             <label htmlFor="rh_sanguineo">RH</label>
             <br />
-            <select
-              {...register("rh_sanguineo")}
-              required={true}
-              id="rh_sanguineo"
-            >
+            <select {...register("rh_sanguineo")} required id="rh_sanguineo">
               <option defaultValue hidden>
                 Selecione o RH...
               </option>
@@ -352,9 +347,10 @@ const RegisterD = () => {
             <label htmlFor="cep">CEP</label>
             <br />
             <input
-              type="number"
+              type="text"
               id="cep"
-              required={true}
+              pattern="\d*"
+              required
               minLength="8"
               maxLength="8"
               placeholder="00000000"
@@ -377,11 +373,12 @@ const RegisterD = () => {
             <label htmlFor="numero_residencia">Número</label>
             <br />
             <input
-              type="number"
+              type="text"
               id="numero_residencia"
-              min="0"
+              pattern="\d*"
               placeholder="0000"
-              required={true}
+              minLength="1"
+              required
               {...register("numero_residencia")}
             />
             <br />
@@ -415,7 +412,7 @@ const RegisterD = () => {
               type="text"
               id="estado"
               placeholder="Estado do doador..."
-              {...register("estado")}
+              {...register("estado", { minLength: 2, maxLength: 2 })}
               defaultValue={address.state}
             />
             <br />
@@ -443,7 +440,7 @@ const RegisterD = () => {
             <input
               type="text"
               id="telefone1"
-              required={true}
+              required
               minLength="13"
               maxLength="14"
               placeholder="(00) 0000-0000"

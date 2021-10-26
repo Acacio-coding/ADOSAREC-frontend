@@ -125,9 +125,9 @@ const RegisterU = () => {
               type="number"
               id="telefone"
               {...register("telefone")}
-              minLength="10"
-              maxLength="11"
-              placeholder="0000000000"
+              minLength="13"
+              maxLength="14"
+              placeholder="(00) 0000-0000"
             />
             <br />
             <br />

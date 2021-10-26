@@ -167,6 +167,14 @@ const EditD = () => {
       } else {
         data.orgao_expeditor_rg = data.orgao_expeditor_rg.toUpperCase();
 
+        data.doador_de_medula = data.doador_de_medula === "true" ? true : false;
+
+        data.rg = parseInt(data.rg);
+
+        data.cep = parseInt(data.cep);
+
+        data.numero_residencia = parseInt(data.numero_residencia);
+
         data.naturalidade =
           data.naturalidade.charAt(0).toUpperCase() +
           data.naturalidade.slice(1).toLowerCase();
