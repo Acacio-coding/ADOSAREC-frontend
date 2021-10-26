@@ -1,8 +1,11 @@
 import React, { useEffect, useState, memo } from "react";
+import { Link } from "react-router-dom";
 import Axios from "axios";
 
 import Nav from "../../Components/Nav";
 import TopMenu from "../../Components/TopMenu";
+import { RiPencilFill as EditIcon } from "react-icons/ri";
+import { IoMdTrash as RemoveIcon } from "react-icons/io";
 import LoadingAnimation from "../../Components/Animation/Loading";
 import RemoveAnimation from "../../Components/Animation/Remove";
 import ErrorAnimation from "../../Components/Animation/Error";
@@ -11,10 +14,8 @@ import styles from "./Donations.module.scss";
 const Donations = () => {
   const token = sessionStorage.getItem("token");
   const [donations, setDonations] = useState([{}]);
-  const [donation, setDonation] = useState({});
   const [unities, setUnities] = useState([{}]);
   const [remove, setRemove] = useState(false);
-  const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
@@ -27,6 +28,7 @@ const Donations = () => {
 
   useEffect(() => {
     setLoading(true);
+
     const header = {
       Authorization: `Bearer ${JSON.parse(token)}`,
       "Content-Type": "application/json",
@@ -78,16 +80,24 @@ const Donations = () => {
     })();
   }, [token]);
 
-  const handleDonation = (donationData) => {
-    setDonation(donationData);
+  const setDonation = (donationData, arg) => {
+    if (arg === "edit") {
+      if (sessionStorage.getItem("donation"))
+        sessionStorage.removeItem("donation");
 
-    if (sessionStorage.getItem("donation"))
-      sessionStorage.removeItem("donation");
+      sessionStorage.setItem("donation", JSON.stringify(donationData));
+    }
 
-    if (donation)
+    if (arg === "remove") {
+      if (sessionStorage.getItem("donation"))
+        sessionStorage.removeItem("donation");
+
       sessionStorage.setItem("donation", JSON.stringify(donationData));
 
-    setChecked(true);
+      handleRemove();
+    }
+
+    console.log(sessionStorage.getItem("donation"));
   };
 
   const handleRemove = () => {
@@ -96,7 +106,8 @@ const Donations = () => {
   };
 
   const handleRemoveDonation = async () => {
-    if (donation)
+    if (sessionStorage.getItem("donation")) {
+      const donation = JSON.parse(sessionStorage.getItem("donation"));
       try {
         await Axios.delete(
           `https://app-node-api-test.herokuapp.com/v1/donation/${donation.id}`,
@@ -107,7 +118,6 @@ const Donations = () => {
           }
         );
         setRemove(false);
-        setChecked(false);
         window.location.reload();
       } catch (error) {
         setMessage(
@@ -115,6 +125,7 @@ const Donations = () => {
         );
         setError(true);
       }
+    }
   };
 
   const handleSearch = (term) => {
@@ -152,7 +163,6 @@ const Donations = () => {
           title="Doações"
           placeholder="Buscar doação..."
           page="doacao"
-          handleRemove={handleRemove}
           func={handleSearch}
         />
 
@@ -249,11 +259,19 @@ const Donations = () => {
                     return (
                       <tr key={index}>
                         <td className={styles.BottomRight}>
-                          <input
-                            type="checkbox"
-                            defaultChecked={checked}
-                            onClick={() => handleDonation(value)}
-                          />
+                          <div>
+                            <Link
+                              to={`/editar_doacao`}
+                              onClick={() => setDonation(value, "edit")}
+                            >
+                              <EditIcon id={styles.editIcon} />
+                            </Link>
+
+                            <RemoveIcon
+                              id={styles.removeIcon}
+                              onClick={() => setDonation(value, "remove")}
+                            />
+                          </div>
                         </td>
 
                         <td className={styles.BottomRight}>
@@ -273,11 +291,19 @@ const Donations = () => {
                     return (
                       <tr key={index}>
                         <td className={styles.Right}>
-                          <input
-                            type="checkbox"
-                            defaultChecked={checked}
-                            onClick={() => handleDonation(value)}
-                          />
+                          <div>
+                            <Link
+                              to={`/editar_doacao`}
+                              onClick={() => setDonation(value, "edit")}
+                            >
+                              <EditIcon id={styles.editIcon} />
+                            </Link>
+
+                            <RemoveIcon
+                              id={styles.removeIcon}
+                              onClick={() => setDonation(value, "remove")}
+                            />
+                          </div>
                         </td>
 
                         <td className={styles.Right}>{value.nome_doador}</td>

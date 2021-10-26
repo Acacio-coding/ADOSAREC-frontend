@@ -12,7 +12,6 @@ import styles from "./Details.module.scss";
 const DetailsD = () => {
   const token = sessionStorage.getItem("token");
   const donator = JSON.parse(sessionStorage.getItem("donator"));
-  const [donatorAddress, setDonatorAddress] = useState({});
   const [job, setJob] = useState();
   const [donations, setDonations] = useState([{}]);
   const [unities, setUnities] = useState([{}]);
@@ -217,6 +216,16 @@ const DetailsD = () => {
                 <tr>
                   <th className={styles.th}>Profissão:</th>
                   <td className={styles.td}>{job}</td>
+                </tr>
+
+                <tr>
+                  <th className={styles.th}>Nome do pai:</th>
+                  <td className={styles.td}>{donator.filiacao_pai}</td>
+                </tr>
+
+                <tr>
+                  <th className={styles.th}>Nome da mãe:</th>
+                  <td className={styles.td}>{donator.filiacao_mae}</td>
                 </tr>
 
                 <tr>

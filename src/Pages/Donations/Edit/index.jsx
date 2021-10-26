@@ -71,15 +71,12 @@ const EditDonation = () => {
         );
 
         if (response) {
-          const data = response.data.filter((value) => {
-            if (value.id.includes(donation.orgao_coletor_id)) {
+          response.data.filter((value) => {
+            if (value.id === donation.orgao_coletor_id)
               setUnityName(value.nome);
-              return null;
-            }
-
-            return value;
+            return null;
           });
-          setUnities(data);
+          setUnities(response.data);
         }
       } catch (error) {
         setMessage(
@@ -125,7 +122,7 @@ const EditDonation = () => {
 
     try {
       await Axios.put(
-        `https://app-node-api-test.herokuapp.com/donation/${donation.id}`,
+        `https://app-node-api-test.herokuapp.com/v1/donation/${donation.id}`,
         data,
         {
           headers: header,
@@ -212,10 +209,11 @@ const EditDonation = () => {
             <br />
             <label htmlFor="unityColector">Unidade coletora</label>
             <br />
-            <select {...register("orgao_coletor_id")} id="unityColector">
-              <option defaultValue hidden>
-                {unityName}
-              </option>
+            <select
+              {...register("orgao_coletor_id")}
+              id="unityColector"
+              value={unityName}
+            >
               {unities.map((value, index) => {
                 return (
                   <option key={index} value={value.id}>

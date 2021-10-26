@@ -53,10 +53,6 @@ const Donators = () => {
 
   const setDonator = (donator) => {
     if (sessionStorage.getItem("donator")) sessionStorage.removeItem("donator");
-
-    if (sessionStorage.getItem("donatorAddress"))
-      sessionStorage.removeItem("donatorAddress");
-
     sessionStorage.setItem("donator", JSON.stringify(donator));
   };
 

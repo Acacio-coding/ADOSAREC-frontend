@@ -36,7 +36,7 @@ const RegisterDo = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          "https://app-node-api-test.herokuapp.com/donator",
+          "https://app-node-api-test.herokuapp.com/v1/donator",
           {
             headers: header,
           }
@@ -56,7 +56,7 @@ const RegisterDo = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          "https://app-node-api-test.herokuapp.com/collector",
+          "https://app-node-api-test.herokuapp.com/v1/collector",
           {
             headers: header,
           }
@@ -91,7 +91,7 @@ const RegisterDo = () => {
 
     try {
       await Axios.post(
-        "https://app-node-api-test.herokuapp.com/donation",
+        "https://app-node-api-test.herokuapp.com/v1/donation",
         data,
         {
           headers: header,

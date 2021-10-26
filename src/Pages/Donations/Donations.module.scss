@@ -37,22 +37,30 @@
         }
 
         td {
-          position: relative;
-          input[type="checkbox"] {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            box-sizing: borer-box;
-            position: absolute;
-            top: 30%;
-            left: 43%;
-            width: 15px;
-            height: 15px;
-            cursor: pointer;
-            background: none;
-            border: solid 1px #670000;
-          }
-          input[type="checkbox"]:checked {
-            background: #670000;
+          div {
+            margin-top: 1px;
+            a {
+              #editIcon {
+                font-size: 25px;
+                margin-right: 5px;
+                color: #670000;
+                text-decoration: none;
+              }
+
+              #editIcon:hover {
+                color: #3b0000;
+              }
+            }
+
+            #removeIcon {
+              font-size: 25px;
+              color: #670000;
+              cursor: pointer;
+            }
+
+            #removeIcon:hover {
+              color: #3b0000;
+            }
           }
         }
 

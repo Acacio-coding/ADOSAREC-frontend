@@ -25,6 +25,8 @@ const EditD = () => {
   const [jobs, setJobs] = useState([{}]);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [estado, setEstado] = useState("");
   const token = sessionStorage.getItem("token");
   const history = useHistory();
 
@@ -35,17 +37,14 @@ const EditD = () => {
 
   useEffect(() => {
     setDonator(JSON.parse(sessionStorage.getItem("donator")));
-    setAddress(JSON.parse(sessionStorage.getItem("donatorAddress")));
     setMedule(donator.doador_de_medula);
 
-    if (cep.length === 9) {
-      let cep2 = cep.replace("-", "");
-
+    if (cep.length === 8) {
       setLoading(true);
       (async () => {
         try {
           const response = await Axios.get(
-            `https://app-node-api-test.herokuapp.com/cep/${cep2}`,
+            `https://app-node-api-test.herokuapp.com/cep/${cep}`,
             {
               headers: {
                 Authorization: `Bearer ${JSON.parse(token)}`,
@@ -53,8 +52,11 @@ const EditD = () => {
             }
           );
 
+          console.log(response.data);
           if (response) {
             setAddress(response.data);
+            setEstado(address.state);
+            setCidade(address.city);
           }
         } catch (error) {
           setMessage(
@@ -68,7 +70,7 @@ const EditD = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          `https://app-node-api-test.herokuapp.com/profissao`,
+          `https://app-node-api-test.herokuapp.com/v1/profissao`,
           {
             headers: {
               Authorization: `Bearer ${JSON.parse(token)}`,
@@ -84,7 +86,14 @@ const EditD = () => {
         setError(true);
       }
     })();
-  }, [cep, token, donator.doador_de_medula, donator.cep]);
+  }, [
+    cep,
+    token,
+    donator.doador_de_medula,
+    donator.cep,
+    address.city,
+    address.state,
+  ]);
 
   let rg = donator.rg;
 
@@ -170,13 +179,17 @@ const EditD = () => {
           data.bairro.charAt(0).toUpperCase() +
           data.bairro.slice(1).toLowerCase();
 
-        data.cidade =
-          data.cidade.charAt(0).toUpperCase() +
-          data.cidade.slice(1).toLowerCase();
+        if (data.cidade)
+          data.cidade =
+            data.cidade.charAt(0).toUpperCase() +
+            data.cidade.slice(1).toLowerCase();
+        else data.cidade = cidade;
 
-        data.estado =
-          data.estado.charAt(0).toUpperCase() +
-          data.estado.slice(1).toLowerCase();
+        if (data.estado)
+          data.estado =
+            data.estado.charAt(0).toUpperCase() +
+            data.estado.slice(1).toLowerCase();
+        else data.estado = estado;
 
         data.cep = parseInt(data.cep);
       }
@@ -469,7 +482,7 @@ const EditD = () => {
               id="logra"
               placeholder="Logradouro do doador..."
               {...register("rua")}
-              defaultValue={!address.address ? donator.rua : address.address}
+              defaultValue={!donator.rua ? address.address : donator.rua}
             />
             <br />
             <br />
@@ -496,7 +509,7 @@ const EditD = () => {
               placeholder="Bairro do doador..."
               {...register("bairro")}
               defaultValue={
-                !address.district ? donator.bairro : address.district
+                donator.bairro === "" ? address.district : donator.bairro
               }
             />
             <br />
@@ -509,7 +522,7 @@ const EditD = () => {
               id="cidade"
               placeholder="Cidade do doador..."
               {...register("cidade")}
-              value={!address.city ? donator.cidade : address.city}
+              defaultValue={donator.cidade === "" ? cidade : donator.cidade}
             />
             <br />
             <br />
@@ -521,7 +534,7 @@ const EditD = () => {
               id="estado"
               placeholder="Estado do doador..."
               {...register("estado")}
-              value={!address.state ? donator.estado : address.state}
+              defaultValue={donator.estado === "" ? estado : donator.estado}
             />
             <br />
             <br />

@@ -72,15 +72,9 @@ const TopMenu = ({
         </div>
 
         <div className={styles.functionsContainer}>
-          <Link to={`registrar_${page}`} className={styles.paddedIcons}>
+          <Link to={`registrar_${page}`}>
             <AddIcon />
           </Link>
-
-          <Link to={`/editar_${page}`} className={styles.paddedIcons}>
-            <EditIcon />
-          </Link>
-
-          <RemoveIcon id={styles.removeIcon} onClick={handleRemove} />
         </div>
       </div>
     );

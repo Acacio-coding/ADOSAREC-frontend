@@ -31,7 +31,6 @@ const Login = () => {
         history.push("/doadores");
       }
     } catch (error) {
-      console.log(error.response.status);
       setError(true);
       setLoading(false);
     }

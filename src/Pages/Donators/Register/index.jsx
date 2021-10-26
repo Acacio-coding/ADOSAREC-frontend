@@ -21,6 +21,8 @@ const RegisterD = () => {
   const [jobs, setJobs] = useState([{}]);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [estado, setEstado] = useState("");
   const token = sessionStorage.getItem("token");
   const history = useHistory();
 
@@ -42,6 +44,8 @@ const RegisterD = () => {
             }
           );
           setAddress(response.data);
+          setEstado(address.state);
+          setCidade(address.city);
         } catch (error) {
           setMessage(
             "Não foi possível encontrar o endereço, contate os desenvolvedores ou tente novamente mais tarde!"
@@ -69,7 +73,7 @@ const RegisterD = () => {
         setError(true);
       }
     })();
-  }, [cep, token]);
+  }, [cep, token, address.city, address.state]);
 
   const handleData = async (data) => {
     const anoNascimento = data.data_de_nascimento.slice(0, 4);
@@ -98,13 +102,17 @@ const RegisterD = () => {
         data.bairro.charAt(0).toUpperCase() +
         data.bairro.slice(1).toLowerCase();
 
-      data.cidade =
-        data.cidade.charAt(0).toUpperCase() +
-        data.cidade.slice(1).toLowerCase();
+      if (data.cidade)
+        data.cidade =
+          data.cidade.charAt(0).toUpperCase() +
+          data.cidade.slice(1).toLowerCase();
+      else data.cidade = cidade;
 
-      data.estado =
-        data.estado.charAt(0).toUpperCase() +
-        data.estado.slice(1).toLowerCase();
+      if (data.estado)
+        data.estado =
+          data.estado.charAt(0).toUpperCase() +
+          data.estado.slice(1).toLowerCase();
+      else data.estado = estado;
 
       data.status = true;
 
@@ -229,7 +237,7 @@ const RegisterD = () => {
               type="text"
               id="parent"
               placeholder="Nome do pai..."
-              {...register("filiacao_pai", { required: true })}
+              {...register("filiacao_pai")}
             />
             <br />
             <br />
@@ -238,7 +246,7 @@ const RegisterD = () => {
               type="text"
               id="parent"
               placeholder="Nome da mãe..."
-              {...register("filiacao_mae", { required: true })}
+              {...register("filiacao_mae")}
             />
             <br />
             <br />
@@ -397,7 +405,7 @@ const RegisterD = () => {
               id="cidade"
               placeholder="Cidade do doador..."
               {...register("cidade")}
-              value={address.city}
+              defaultValue={address.city}
             />
             <br />
             <br />
@@ -408,7 +416,7 @@ const RegisterD = () => {
               id="estado"
               placeholder="Estado do doador..."
               {...register("estado")}
-              value={address.state}
+              defaultValue={address.state}
             />
             <br />
             <br />
@@ -436,8 +444,8 @@ const RegisterD = () => {
               type="text"
               id="telefone1"
               required={true}
-              minLength="10"
-              maxLength="12"
+              minLength="13"
+              maxLength="14"
               placeholder="(00) 0000-0000"
               {...register("telefone1")}
             />
@@ -448,8 +456,8 @@ const RegisterD = () => {
             <input
               type="text"
               id="telefone2"
-              minLength="10"
-              maxLength="12"
+              minLength="13"
+              maxLength="14"
               placeholder="(00) 0000-0000"
               {...register("telefone2")}
             />
@@ -460,8 +468,8 @@ const RegisterD = () => {
             <input
               type="text"
               id="telefone3"
-              minLength="10"
-              maxLength="12"
+              minLength="13"
+              maxLength="14"
               placeholder="(00) 0000-0000"
               {...register("telefone3")}
             />
