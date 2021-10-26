@@ -5,6 +5,7 @@ import Nav from "../../Components/Nav";
 import TopMenu from "../../Components/TopMenu";
 import LoadingAnimation from "../../Components/Animation/Loading";
 import RemoveAnimation from "../../Components/Animation/Remove";
+import ErrorAnimation from "../../Components/Animation/Error";
 import styles from "./Donations.module.scss";
 
 const Donations = () => {
@@ -15,7 +16,14 @@ const Donations = () => {
   const [remove, setRemove] = useState(false);
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState(false);
   const [search, setSearch] = useState("");
+
+  const handleError = () => {
+    if (error) setError(false);
+    else setError(true);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -27,7 +35,7 @@ const Donations = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          "https://app-node-api-test.herokuapp.com/donation",
+          "https://app-node-api-test.herokuapp.com/v1/donation",
           {
             headers: header,
           }
@@ -38,7 +46,10 @@ const Donations = () => {
           setLoading(false);
         }
       } catch (error) {
-        console.log(error);
+        setMessage(
+          "Não foi possível encontrar as doações, contate os desenvolvedores ou tente novamente mais tarde!"
+        );
+        setError(true);
       }
     })();
 
@@ -50,7 +61,7 @@ const Donations = () => {
 
       try {
         const response = await Axios.get(
-          `https://app-node-api-test.herokuapp.com/collector`,
+          `https://app-node-api-test.herokuapp.com/v1/collector`,
           {
             headers: header,
           }
@@ -59,7 +70,10 @@ const Donations = () => {
         if (response) setUnities(response.data);
         setLoading(false);
       } catch (error) {
-        console.log(error);
+        setMessage(
+          "Não foi possível encontrar as unidades coletoras, contate os desenvolvedores ou tente novamente mais tarde!"
+        );
+        setError(true);
       }
     })();
   }, [token]);
@@ -85,7 +99,7 @@ const Donations = () => {
     if (donation)
       try {
         await Axios.delete(
-          `https://app-node-api-test.herokuapp.com/donation/${donation.id}`,
+          `https://app-node-api-test.herokuapp.com/v1/donation/${donation.id}`,
           {
             headers: {
               Authorization: `Bearer ${JSON.parse(token)}`,
@@ -96,21 +110,27 @@ const Donations = () => {
         setChecked(false);
         window.location.reload();
       } catch (error) {
-        console.log(error);
+        setMessage(
+          "Não foi possível remover a doação, contate os desenvolvedores ou tente novamente mais tarde!"
+        );
+        setError(true);
       }
   };
 
   const handleSearch = (term) => {
     let string = JSON.stringify(term.term);
+    string = string.slice(1, string.length - 1);
 
-    if (string.length === 12 && string.includes("/")) {
+    if (string.length === 10 && string.includes("/")) {
       string = string.replaceAll("/", "-");
-      string = string.slice(7, 11) + string.slice(3, 7) + string.slice(1, 3);
-    } else if (isNaN(string)) {
       string =
-        string.charAt(0) +
-        string.charAt(1).toUpperCase() +
-        string.slice(2).toLowerCase();
+        string.slice(6, 10) +
+        "-" +
+        string.slice(3, 5) +
+        "-" +
+        string.slice(0, 2);
+    } else if (isNaN(string)) {
+      string = string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
     }
 
     setSearch(string);
@@ -122,6 +142,11 @@ const Donations = () => {
       <Nav />
 
       <div className={styles.contentContainer}>
+        <ErrorAnimation
+          error={error}
+          handleError={handleError}
+          text={message}
+        />
         <TopMenu
           typePage="generalD"
           title="Doações"
@@ -178,9 +203,21 @@ const Donations = () => {
             <tbody>
               {donations
                 .filter((value) => {
-                  if (search.length > 2) {
+                  if (search) {
+                    let foundUnity = false;
+                    let id;
                     const val = JSON.stringify(value);
+
+                    unities.map((value, index) => {
+                      if (value.nome === search) {
+                        foundUnity = true;
+                        id = value.id;
+                      }
+                      return null;
+                    });
+
                     if (val.includes(search)) return value;
+                    else if (foundUnity && val.includes(id)) return value;
                     else return null;
                   }
                   return value;
@@ -236,14 +273,11 @@ const Donations = () => {
                     return (
                       <tr key={index}>
                         <td className={styles.Right}>
-                          <label>
-                            <input
-                              type="checkbox"
-                              defaultChecked={checked}
-                              onClick={() => handleDonation(value)}
-                            />
-                            <span></span>
-                          </label>
+                          <input
+                            type="checkbox"
+                            defaultChecked={checked}
+                            onClick={() => handleDonation(value)}
+                          />
                         </td>
 
                         <td className={styles.Right}>{value.nome_doador}</td>

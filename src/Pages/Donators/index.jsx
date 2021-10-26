@@ -5,13 +5,21 @@ import Axios from "axios";
 import Nav from "../../Components/Nav";
 import TopMenu from "../../Components/TopMenu";
 import LoadingAnimation from "../../Components/Animation/Loading";
+import ErrorAnimation from "../../Components/Animation/Error";
 import styles from "./Donators.module.scss";
 
 const Donators = () => {
   const token = sessionStorage.getItem("token");
   const [donators, setDonators] = useState([{}]);
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState(false);
   const [search, setSearch] = useState("");
+
+  const handleError = () => {
+    if (error) setError(false);
+    else setError(true);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -23,7 +31,7 @@ const Donators = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          "https://app-node-api-test.herokuapp.com/donator",
+          "https://app-node-api-test.herokuapp.com/v1/donator",
           {
             headers: header,
           }
@@ -34,7 +42,10 @@ const Donators = () => {
           setLoading(false);
         }
       } catch (error) {
-        console.log(error);
+        setMessage(
+          "Não foi possível encontrar os doadores, contate os desenvolvedores ou tente novamente mais tarde!"
+        );
+        setError(true);
         setLoading(false);
       }
     })();
@@ -51,16 +62,15 @@ const Donators = () => {
 
   const handleSearch = (term) => {
     let string = JSON.stringify(term.term);
+    string = string.slice(1, string.length - 1);
 
-    if (string.length <= 4 && !isNaN(string)) string = string.toUpperCase();
-    else if (!isNaN(string))
-      string =
-        string.charAt(0) +
-        string.charAt(1).toUpperCase() +
-        string.slice(2).toLowerCase();
+    if (string.length >= 1 && string.length <= 3 && isNaN(string))
+      string = string.toUpperCase();
+
+    if (isNaN(string) && string.length > 3)
+      string = string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 
     setSearch(string);
-    console.log(!search);
   };
 
   return (
@@ -68,6 +78,11 @@ const Donators = () => {
       <LoadingAnimation loading={loading} />
       <Nav />
       <div className={styles.contentContainer}>
+        <ErrorAnimation
+          error={error}
+          handleError={handleError}
+          text={message}
+        />
         <TopMenu
           typePage="general"
           title="Doadores"
@@ -109,10 +124,56 @@ const Donators = () => {
             <tbody>
               {donators
                 .filter((value) => {
-                  if (search.length > 2) {
+                  if (search) {
                     const val = JSON.stringify(value);
-                    if (val.includes(search)) return value;
-                    else return null;
+
+                    if (search.length === 1) {
+                      let gs = value.grupo_sanguineo;
+                      if (gs.charAt(1)) return null;
+                      else return value;
+                    }
+
+                    if (search.length === 2) {
+                      if (
+                        search.charAt(1) !== "+" ||
+                        search.charAt(1) !== "-"
+                      ) {
+                        if (value.grupo_sanguineo === search) return value;
+                      }
+
+                      if (
+                        search.charAt(1) === "+" ||
+                        search.charAt(1) === "-"
+                      ) {
+                        let rh = search.charAt(1) === "+" ? true : false;
+
+                        if (
+                          value.grupo_sanguineo === search.charAt(0) &&
+                          value.rh_sanguineo === rh
+                        ) {
+                          return value;
+                        }
+                      }
+                    }
+
+                    if (search.length === 3) {
+                      if (
+                        search.charAt(2) === "+" ||
+                        search.charAt(2) === "-"
+                      ) {
+                        let gs = search.slice(0, 2);
+                        let rh = search.slice(2) === "+" ? true : false;
+                        if (
+                          value.grupo_sanguineo === gs &&
+                          value.rh_sanguineo === rh
+                        )
+                          return value;
+                        else return null;
+                      }
+                    } else {
+                      if (val.includes(search)) return value;
+                      else return null;
+                    }
                   }
                   return value;
                 })
@@ -132,10 +193,10 @@ const Donators = () => {
                         </td>
 
                         <td className={styles.BottomRight}>
-                          {value.rh_sanguineo === "0" ? "-" : "+"}
+                          {value.rh_sanguineo === true ? "+" : "-"}
                         </td>
 
-                        <td className={styles.Bottom}>Missing</td>
+                        <td className={styles.Bottom}>{value.cidade}</td>
                       </tr>
                     );
                   else
@@ -153,10 +214,10 @@ const Donators = () => {
                         </td>
 
                         <td className={styles.Right}>
-                          {value.rh_sanguineo === "0" ? "-" : "+"}
+                          {value.rh_sanguineo === true ? "+" : "-"}
                         </td>
 
-                        <td>Missing</td>
+                        <td>{value.cidade}</td>
                       </tr>
                     );
                 })}

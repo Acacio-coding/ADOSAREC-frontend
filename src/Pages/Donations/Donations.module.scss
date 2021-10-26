@@ -37,8 +37,22 @@
         }
 
         td {
-          .checkbox:checked:before {
-            background-color: #670000;
+          position: relative;
+          input[type="checkbox"] {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            box-sizing: borer-box;
+            position: absolute;
+            top: 30%;
+            left: 43%;
+            width: 15px;
+            height: 15px;
+            cursor: pointer;
+            background: none;
+            border: solid 1px #670000;
+          }
+          input[type="checkbox"]:checked {
+            background: #670000;
           }
         }
 

@@ -14,14 +14,15 @@ import LoadingAnimation from "../../Components/Animation/Loading";
 const Login = () => {
   const { register, handleSubmit } = useForm();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const history = useHistory();
 
-  const handleSentData = async ({ user, password }) => {
+  const handleSentData = async (data) => {
     setLoading(true);
 
     try {
       const response = await axios.get(
-        `https://app-node-api-test.herokuapp.com/admin/${user}&${password}`
+        `https://app-node-api-test.herokuapp.com/v1/admin/${data.user}&${data.password}`
       );
 
       if (response) {
@@ -31,6 +32,7 @@ const Login = () => {
       }
     } catch (error) {
       console.log(error.response.status);
+      setError(true);
       setLoading(false);
     }
   };
@@ -43,6 +45,9 @@ const Login = () => {
           <h1>Login</h1>
         </div>
         <form onSubmit={handleSubmit(handleSentData)}>
+          <div className={error ? styles.show : styles.hide}>
+            <p>Usuário não encontrado!</p>
+          </div>
           <div className={styles.inputContainer}>
             <div className={styles.iconContainer}>
               <img src={user} alt="Ícone de usuário" />

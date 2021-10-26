@@ -7,7 +7,7 @@ const Statistics = () => {
   return (
     <div className={styles.fullContainer}>
       <Nav />
-      <div className={styles.contentContainer}>teste</div>
+      <div className={styles.contentContainer}>EM DESENVOLVIMENTO</div>
     </div>
   );
 };

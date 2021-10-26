@@ -6,6 +6,7 @@ import Nav from "../../../Components/Nav";
 import TopMenu from "../../../Components/TopMenu";
 import LoadingAnimation from "../../../Components/Animation/Loading";
 import RemoveAnimation from "../../../Components/Animation/Remove";
+import ErrorAnimation from "../../../Components/Animation/Error";
 import styles from "./Details.module.scss";
 
 const DetailsD = () => {
@@ -16,6 +17,8 @@ const DetailsD = () => {
   const [donations, setDonations] = useState([{}]);
   const [unities, setUnities] = useState([{}]);
   const [remove, setRemove] = useState(false);
+  const [error, setError] = useState(false);
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
@@ -24,10 +27,15 @@ const DetailsD = () => {
     else setRemove(true);
   };
 
+  const handleError = () => {
+    if (error) setError(false);
+    else setError(true);
+  };
+
   const handleRemoveDonator = async () => {
     try {
       await Axios.delete(
-        `https://app-node-api-test.herokuapp.com/donator/${donator.rg}`,
+        `https://app-node-api-test.herokuapp.com/v1/donator/${donator.rg}`,
         {
           headers: {
             Authorization: `Bearer ${JSON.parse(token)}`,
@@ -37,7 +45,10 @@ const DetailsD = () => {
       setRemove(false);
       history.push("/doadores");
     } catch (error) {
-      console.log(error);
+      setMessage(
+        "Não foi possível remover o doador, contate os desenvolvedores ou tente novamente mais tarde!"
+      );
+      setError(true);
     }
   };
 
@@ -50,11 +61,10 @@ const DetailsD = () => {
     };
 
     if (donator.cep) {
-      const cep = donator.cep.slice(0, 5) + donator.cep.slice(6);
       (async () => {
         try {
           const response = await Axios.get(
-            `https://app-node-api-test.herokuapp.com/cep/${cep}`,
+            `https://app-node-api-test.herokuapp.com/v1/cep/${donator.cep}`,
             {
               headers: header,
             }
@@ -69,7 +79,10 @@ const DetailsD = () => {
             );
           }
         } catch (error) {
-          console.log(error);
+          setMessage(
+            "Não foi possível encontrar o endereço do doador, contate os desenvolvedores ou tente novamente mais tarde!"
+          );
+          setError(true);
         }
       })();
     }
@@ -77,7 +90,7 @@ const DetailsD = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          `https://app-node-api-test.herokuapp.com/profissao`,
+          `https://app-node-api-test.herokuapp.com/v1/profissao`,
           {
             headers: {
               Authorization: `Bearer ${JSON.parse(token)}`,
@@ -91,7 +104,10 @@ const DetailsD = () => {
         });
         setLoading(false);
       } catch (error) {
-        console.log(error);
+        setMessage(
+          "Não foi possível encontrar as profissões, contate os desenvolvedores ou tente novamente mais tarde!"
+        );
+        setError(true);
         setLoading(false);
       }
     })();
@@ -99,7 +115,7 @@ const DetailsD = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          "https://app-node-api-test.herokuapp.com/donation",
+          "https://app-node-api-test.herokuapp.com/v1/donation",
           {
             headers: header,
           }
@@ -113,14 +129,17 @@ const DetailsD = () => {
           setDonations(data);
         }
       } catch (error) {
-        console.log(error);
+        setMessage(
+          "Não foi possível encontrar as doações do doador, contate os desenvolvedores ou tente novamente mais tarde!"
+        );
+        setError(true);
       }
     })();
 
     (async () => {
       try {
         const response = await Axios.get(
-          `https://app-node-api-test.herokuapp.com/collector`,
+          `https://app-node-api-test.herokuapp.com/v1/collector`,
           {
             headers: header,
           }
@@ -129,7 +148,10 @@ const DetailsD = () => {
         if (response) setUnities(response.data);
         setLoading(false);
       } catch (error) {
-        console.log(error);
+        setMessage(
+          "Não foi possível encontrar a unidade coletora das doações, contate os desenvolvedores ou tente novamente mais tarde!"
+        );
+        setError(true);
       }
     })();
   }, [token, donator.cep, donator.nome, donator.profissao_id]);
@@ -155,6 +177,11 @@ const DetailsD = () => {
       <Nav />
 
       <div className={styles.contentContainer}>
+        <ErrorAnimation
+          error={error}
+          handleError={handleError}
+          text={message}
+        />
         <TopMenu
           page="doador"
           typePage="details"
@@ -223,7 +250,7 @@ const DetailsD = () => {
                   <th className={styles.th}>Grupo sanguíneo / RH:</th>
                   <td className={styles.td}>
                     {donator.grupo_sanguineo}
-                    {!donator.rh_sanguineo ? "-" : "+"}
+                    {donator.rh_sanguineo === true ? "+" : "-"}
                   </td>
                 </tr>
 

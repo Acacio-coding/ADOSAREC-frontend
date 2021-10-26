@@ -12,6 +12,7 @@ import { HiLocationMarker as AddressIcon } from "react-icons/hi";
 import Nav from "../../../Components/Nav";
 import TopMenu from "../../../Components/TopMenu";
 import LoadingAnimation from "../../../Components/Animation/Loading/index";
+import ErrorAnimation from "../../../Components/Animation/Error";
 import styles from "./Edit.module.scss";
 
 const EditD = () => {
@@ -22,22 +23,29 @@ const EditD = () => {
   const [loading, setLoading] = useState(false);
   const [medule, setMedule] = useState();
   const [jobs, setJobs] = useState([{}]);
-  const [others, setOthers] = useState(false);
-  const [job, setJob] = useState("");
+  const [error, setError] = useState(false);
+  const [message, setMessage] = useState("");
   const token = sessionStorage.getItem("token");
   const history = useHistory();
+
+  const handleError = () => {
+    if (error) setError(false);
+    else setError(true);
+  };
 
   useEffect(() => {
     setDonator(JSON.parse(sessionStorage.getItem("donator")));
     setAddress(JSON.parse(sessionStorage.getItem("donatorAddress")));
     setMedule(donator.doador_de_medula);
 
-    if (cep.length === 8) {
+    if (cep.length === 9) {
+      let cep2 = cep.replace("-", "");
+
       setLoading(true);
       (async () => {
         try {
           const response = await Axios.get(
-            `https://app-node-api-test.herokuapp.com/cep/${cep}`,
+            `https://app-node-api-test.herokuapp.com/cep/${cep2}`,
             {
               headers: {
                 Authorization: `Bearer ${JSON.parse(token)}`,
@@ -49,28 +57,34 @@ const EditD = () => {
             setAddress(response.data);
           }
         } catch (error) {
-          console.log(error);
-        }
-      })();
-
-      (async () => {
-        try {
-          const response = await Axios.get(
-            `https://app-node-api-test.herokuapp.com/profissao`,
-            {
-              headers: {
-                Authorization: `Bearer ${JSON.parse(token)}`,
-              },
-            }
+          setMessage(
+            "Não foi possível encontrar o endereço com o cep informado, contate os desenvolvedores ou tente novamente mais tarde!"
           );
-          setJobs(response.data);
-          setLoading(false);
-        } catch (error) {
-          console.log(error);
+          setError(true);
         }
       })();
     }
-  }, [cep, token, donator.doador_de_medula]);
+
+    (async () => {
+      try {
+        const response = await Axios.get(
+          `https://app-node-api-test.herokuapp.com/profissao`,
+          {
+            headers: {
+              Authorization: `Bearer ${JSON.parse(token)}`,
+            },
+          }
+        );
+        setJobs(response.data);
+        setLoading(false);
+      } catch (error) {
+        setMessage(
+          "Não foi possível encontrar as profissões, contate os desenvolvedores ou tente novamente mais tarde!"
+        );
+        setError(true);
+      }
+    })();
+  }, [cep, token, donator.doador_de_medula, donator.cep]);
 
   let rg = donator.rg;
 
@@ -90,6 +104,10 @@ const EditD = () => {
     if (!data.data_de_expedicao)
       data.data_de_expedicao = donator.data_de_expedicao;
 
+    if (!data.filiacao_pai) data.filiacao_pai = donator.data.filiacao_pai;
+
+    if (!data.filiacao_mae) data.filiacao_mae = donator.data.filiacao_mae;
+
     if (!data.naturalidade) data.naturalidade = donator.naturalidade;
 
     if (!data.estado_civil) data.estado_civil = donator.estado_civil;
@@ -106,6 +124,14 @@ const EditD = () => {
 
     if (!data.cep) data.cep = donator.cep;
 
+    if (!data.rua) data.rua = donator.rua;
+
+    if (!data.bairro) data.bairro = donator.bairro;
+
+    if (!data.cidade) data.cidade = donator.cidade;
+
+    if (!data.estado) data.estado = donator.estado;
+
     if (!data.numero_residencia)
       data.numero_residencia = donator.numero_residencia;
 
@@ -121,23 +147,22 @@ const EditD = () => {
       const anoNascimento = data.data_de_nascimento.slice(0, 4);
       const anoExpedicao = data.data_de_expedicao.slice(0, 4);
 
-      if (date.getFullYear() - anoNascimento < 18) alert("Menor de idade!");
-      else if (anoExpedicao < anoNascimento)
-        alert(
-          "Ano de expedição do RG inválido, o mesmo é menor que a data de nascimento!"
+      if (date.getFullYear() - anoNascimento < 18) {
+        setMessage("Menor de idade!");
+        setError(true);
+      } else if (anoExpedicao < anoNascimento) {
+        setMessage(
+          "Ano de expedição do RG inválido, é necessário ter no mínimo 6 anos de idade para fazê-lo!"
         );
-      else {
-        if (data.profissao === "Outros")
-          data.profissao =
-            job.charAt(0).toUpperCase() + job.slice(1).toLowerCase();
-
+        setError(true);
+      } else {
         data.orgao_expeditor_rg = data.orgao_expeditor_rg.toUpperCase();
 
         data.naturalidade =
           data.naturalidade.charAt(0).toUpperCase() +
           data.naturalidade.slice(1).toLowerCase();
 
-        data.cep = data.cep.slice(0, 5) + "-" + data.cep.slice(5);
+        data.cep = parseInt(data.cep);
       }
     }
 
@@ -150,7 +175,7 @@ const EditD = () => {
 
     try {
       await Axios.put(
-        `https://app-node-api-test.herokuapp.com/donator/${rg}`,
+        `https://app-node-api-test.herokuapp.com/v1/donator/${rg}`,
         data,
         {
           headers: header,
@@ -160,13 +185,11 @@ const EditD = () => {
       sessionStorage.setItem("donator", JSON.stringify(data));
       history.push("/detalhes_doador");
     } catch (error) {
-      console.log(error);
+      setMessage(
+        "Não foi possível alterar os dados do doador, contate os desenvolvedores ou tente novamente mais tarde!"
+      );
+      setError(true);
     }
-  };
-
-  const handleOthers = (option) => {
-    if (option === "Outros") setOthers(true);
-    else setOthers(false);
   };
 
   let stringDate = JSON.stringify(donator.data_de_nascimento);
@@ -194,6 +217,11 @@ const EditD = () => {
       <LoadingAnimation loading={loading} />
       <Nav />
       <div className={styles.contentContainer}>
+        <ErrorAnimation
+          error={error}
+          handleError={handleError}
+          text={message}
+        />
         <TopMenu typePage="edit" title="Editar doador" />
 
         <div className={styles.formContainer}>
@@ -283,15 +311,27 @@ const EditD = () => {
             <br />
             <br />
 
-            {/* <label htmlFor="parent">Filiação</label>
+            <label htmlFor="parent">Filiação</label>
             <br />
             <input
               type="text"
               id="parent"
-              {...register("parent", { required: true })}
+              placeholder="Nome do pai..."
+              {...register("filiacao_pai", { required: true })}
+              defaultValue={donator.filiacao_pai}
             />
             <br />
-            <br /> */}
+            <br />
+
+            <input
+              type="text"
+              id="parent"
+              placeholder="Nome da mãe..."
+              {...register("filiacao_mae", { required: true })}
+              defaultValue={donator.filiacao_mae}
+            />
+            <br />
+            <br />
 
             <label htmlFor="naturalidade">Naturalidade</label>
             <br />
@@ -329,32 +369,17 @@ const EditD = () => {
               id="profissao"
               required={true}
               {...register("profissao")}
-              value={donator.profissao}
-              onChange={(event) => handleOthers(event.target.value)}
+              value={donator.profissao_id}
             >
               {jobs.map((value, index) => {
-                if (value.nome === "Outros")
-                  return <option key={index}>{value.nome}</option>;
-                else
-                  return (
-                    <option key={index} value={value.id}>
-                      {value.nome}
-                    </option>
-                  );
+                return (
+                  <option key={index} value={value.id}>
+                    {value.nome}
+                  </option>
+                );
               })}
+              <option value="Outros">Outros</option>
             </select>
-            <br />
-            <br />
-            <input
-              type="text"
-              required={true}
-              disabled={others ? false : true}
-              value={!others ? "" : job}
-              pattern="[a-zA-Z]+"
-              defaultValue={donator.profissao}
-              placeholder={others ? "Digite a profissão do doador..." : ""}
-              onChange={(event) => setJob(event.target.value)}
-            />
             <br />
             <br />
 
@@ -416,7 +441,7 @@ const EditD = () => {
               maxLength="8"
               placeholder="00000000"
               defaultValue={donator.cep}
-              {...register("cep", { minLength: 8, maxLength: 8 })}
+              {...register("cep")}
               onChange={(event) => setCep(event.target.value)}
             />
             <br />
@@ -427,8 +452,9 @@ const EditD = () => {
             <input
               type="text"
               id="logra"
-              disabled={true}
-              defaultValue={address.address}
+              placeholder="Logradouro do doador..."
+              {...register("rua")}
+              defaultValue={!address.address ? donator.rua : address.address}
             />
             <br />
             <br />
@@ -447,19 +473,16 @@ const EditD = () => {
             <br />
             <br />
 
-            {/* <label htmlFor="apt">Apartamento</label>
-            <br />
-            <input type="text" id="apt" {...register("apt", { required: false })} />
-            <br />
-            <br /> */}
-
             <label htmlFor="bairro">Bairro</label>
             <br />
             <input
               type="text"
               id="bairro"
-              disabled={true}
-              defaultValue={address.district}
+              placeholder="Bairro do doador..."
+              {...register("bairro")}
+              defaultValue={
+                !address.district ? donator.bairro : address.district
+              }
             />
             <br />
             <br />
@@ -469,8 +492,9 @@ const EditD = () => {
             <input
               type="text"
               id="cidade"
-              disabled={true}
-              defaultValue={address.city}
+              placeholder="Cidade do doador..."
+              {...register("cidade")}
+              defaultValue={!address.city ? donator.cidade : address.city}
             />
             <br />
             <br />
@@ -480,8 +504,9 @@ const EditD = () => {
             <input
               type="text"
               id="estado"
-              disabled={true}
-              defaultValue={address.state}
+              placeholder="Estado do doador..."
+              {...register("estado")}
+              defaultValue={!address.state ? donator.estado : address.state}
             />
             <br />
             <br />
@@ -510,12 +535,12 @@ const EditD = () => {
             <label htmlFor="telefone1">Telefone1</label>
             <br />
             <input
-              type="number"
+              type="text"
               id="telefone1"
               required={true}
               minLength="10"
-              maxLength="11"
-              placeholder="0000000000"
+              maxLength="12"
+              placeholder="(00) 0000-0000"
               defaultValue={donator.telefone1}
               {...register("telefone1")}
             />
@@ -525,11 +550,11 @@ const EditD = () => {
             <label htmlFor="telefone2">Telefone2</label>
             <br />
             <input
-              type="number"
+              type="text"
               id="telefone2"
               minLength="10"
-              maxLength="11"
-              placeholder="0000000000"
+              maxLength="12"
+              placeholder="(00) 0000-0000"
               defaultValue={donator.telefone2}
               {...register("telefone2")}
             />
@@ -539,11 +564,11 @@ const EditD = () => {
             <label htmlFor="telefone3">Telefone3</label>
             <br />
             <input
-              type="number"
+              type="text"
               id="telefone3"
               minLength="10"
-              maxLength="11"
-              placeholder="0000000000"
+              maxLength="12"
+              placeholder="(00) 0000-0000"
               defaultValue={donator.telefone3}
               {...register("telefone3")}
             />

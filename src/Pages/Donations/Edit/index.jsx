@@ -8,6 +8,7 @@ import { BsFillInfoCircleFill as InfoIcon } from "react-icons/bs";
 import Nav from "../../../Components/Nav";
 import TopMenu from "../../../Components/TopMenu";
 import LoadingAnimation from "../../../Components/Animation/Loading";
+import ErrorAnimation from "../../../Components/Animation/Error";
 import styles from "./Edit.module.scss";
 
 const EditDonation = () => {
@@ -18,7 +19,14 @@ const EditDonation = () => {
   const [unityName, setUnityName] = useState();
   const [donation, setDonation] = useState({});
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState(false);
   const history = useHistory();
+
+  const handleError = () => {
+    if (error) setError(false);
+    else setError(true);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -32,7 +40,7 @@ const EditDonation = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          "https://app-node-api-test.herokuapp.com/donator",
+          "https://app-node-api-test.herokuapp.com/v1/donator",
           {
             headers: header,
           }
@@ -46,14 +54,17 @@ const EditDonation = () => {
           setDonators(data);
         }
       } catch (error) {
-        console.log(error);
+        setMessage(
+          "Não foi possível encontrar os doadores, contate os desenvolvedores ou tente novamente mais tarde!"
+        );
+        setError(true);
       }
     })();
 
     (async () => {
       try {
         const response = await Axios.get(
-          "https://app-node-api-test.herokuapp.com/collector",
+          "https://app-node-api-test.herokuapp.com/v1/collector",
           {
             headers: header,
           }
@@ -71,7 +82,10 @@ const EditDonation = () => {
           setUnities(data);
         }
       } catch (error) {
-        console.log(error);
+        setMessage(
+          "Não foi possível encontrar as unidades coletoras, contate os desenvolvedores ou tente novamente mais tarde!"
+        );
+        setError(true);
       }
     })();
     setLoading(false);
@@ -119,7 +133,10 @@ const EditDonation = () => {
       );
       history.push("/doacoes");
     } catch (error) {
-      console.log(error);
+      setMessage(
+        "Não foi possível alterar os dados da doação, contate os desenvolvedores ou tente novamente mais tarde!"
+      );
+      setError(true);
     }
   };
 
@@ -133,6 +150,11 @@ const EditDonation = () => {
       <LoadingAnimation loading={loading} />
       <Nav />
       <div className={styles.contentContainer}>
+        <ErrorAnimation
+          error={error}
+          handleError={handleError}
+          text={message}
+        />
         <TopMenu typePage="edit" title="Editar doação" />
 
         <div className={styles.formContainer}>

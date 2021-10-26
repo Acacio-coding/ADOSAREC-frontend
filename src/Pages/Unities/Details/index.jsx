@@ -5,12 +5,15 @@ import Axios from "axios";
 import Nav from "../../../Components/Nav";
 import TopMenu from "../../../Components/TopMenu";
 import RemoveAnimation from "../../../Components/Animation/Remove";
+import ErrorAnimation from "../../../Components/Animation/Error";
 import styles from "./Details.module.scss";
 
 const DetailsU = () => {
   const token = sessionStorage.getItem("token");
   const unity = JSON.parse(sessionStorage.getItem("unity"));
   const [remove, setRemove] = useState(false);
+  const [error, setError] = useState(false);
+  const [message, setMessage] = useState("");
   const history = useHistory();
 
   const handleRemove = () => {
@@ -18,11 +21,16 @@ const DetailsU = () => {
     else setRemove(true);
   };
 
+  const handleError = () => {
+    if (error) setError(false);
+    else setError(true);
+  };
+
   const handleRemoveUnity = async () => {
     (async () => {
       try {
         await Axios.delete(
-          `https://app-node-api-test.herokuapp.com/collector/${unity.id}`,
+          `https://app-node-api-test.herokuapp.com/v1/collector/${unity.id}`,
           {
             headers: {
               Authorization: `Bearer ${JSON.parse(token)}`,
@@ -32,7 +40,10 @@ const DetailsU = () => {
         setRemove(false);
         history.push("/unidades");
       } catch (error) {
-        console.log(error);
+        setMessage(
+          "Não foi possível remover a unidade coletora, contate os desenvolvedores ou tente novamente mais tarde!"
+        );
+        setError(true);
       }
     })();
   };
@@ -42,6 +53,11 @@ const DetailsU = () => {
       <Nav />
 
       <div className={styles.contentContainer}>
+        <ErrorAnimation
+          error={error}
+          handleError={handleError}
+          text={message}
+        />
         <TopMenu
           page="unidade"
           typePage="details"

@@ -7,6 +7,7 @@ import { BsFillInfoCircleFill as InfoIcon } from "react-icons/bs";
 import Nav from "../../../Components/Nav";
 import TopMenu from "../../../Components/TopMenu";
 import LoadingAnimation from "../../../Components/Animation/Loading";
+import ErrorAnimation from "../../../Components/Animation/Error";
 import styles from "./Register.module.scss";
 
 const RegisterDo = () => {
@@ -14,8 +15,15 @@ const RegisterDo = () => {
   const [donators, setDonators] = useState([{}]);
   const [unities, setUnities] = useState([{}]);
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState(false);
   const token = sessionStorage.getItem("token");
   const history = useHistory();
+
+  const handleError = () => {
+    if (error) setError(false);
+    else setError(true);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -36,10 +44,12 @@ const RegisterDo = () => {
 
         if (response) {
           setDonators(response.data);
-          setLoading(false);
         }
       } catch (error) {
-        console.log(error);
+        setMessage(
+          "Não foi possível encontrar os doadores, contate os desenvolvedores ou tente novamente mais tarde!"
+        );
+        setError(true);
       }
     })();
 
@@ -56,7 +66,10 @@ const RegisterDo = () => {
           setUnities(response.data);
         }
       } catch (error) {
-        console.log(error);
+        setMessage(
+          "Não foi possível encontrar as unidades coletoras, contate os desenvolvedores ou tente novamente mais tarde!"
+        );
+        setError(true);
       }
     })();
     setLoading(false);
@@ -65,7 +78,7 @@ const RegisterDo = () => {
   const handleData = async (data) => {
     if (data) {
       let rg = parseInt(data.doador_rg.slice(0, 9));
-      let name = data.doador_rg.slice(11, data.doador_rg.length);
+      let name = data.doador_rg.slice(10, data.doador_rg.length);
       data.doador_rg = rg;
       data.nome_doador = name;
       data.volume = parseInt(data.volume);
@@ -86,7 +99,10 @@ const RegisterDo = () => {
       );
       history.push("/doacoes");
     } catch (error) {
-      console.log(error);
+      setMessage(
+        "Não foi possível cadastrar a doação, contate os desenvolvedores ou tente novamente mais tarde!"
+      );
+      setError(true);
     }
   };
 
@@ -100,6 +116,11 @@ const RegisterDo = () => {
       <LoadingAnimation loading={loading} />
       <Nav />
       <div className={styles.contentContainer}>
+        <ErrorAnimation
+          error={error}
+          handleError={handleError}
+          text={message}
+        />
         <TopMenu typePage="register" title="Cadastrar doação" />
 
         <div className={styles.formContainer}>

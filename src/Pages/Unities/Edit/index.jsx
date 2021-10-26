@@ -12,14 +12,22 @@ import { HiLocationMarker as AddressIcon } from "react-icons/hi";
 import Nav from "../../../Components/Nav";
 import TopMenu from "../../../Components/TopMenu";
 import LoadingAnimation from "../../../Components/Animation/Loading/index";
+import ErrorAnimation from "../../../Components/Animation/Error";
 import styles from "./Edit.module.scss";
 
 const DetailsU = () => {
   const { register, handleSubmit } = useForm();
   const [unity, setUnity] = useState({});
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [message, setMessage] = useState("");
   const token = sessionStorage.getItem("token");
   const history = useHistory();
+
+  const handleError = () => {
+    if (error) setError(false);
+    else setError(true);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -55,7 +63,7 @@ const DetailsU = () => {
 
     try {
       await Axios.put(
-        `https://app-node-api-test.herokuapp.com/collector/${unity.id}`,
+        `https://app-node-api-test.herokuapp.com/v1/collector/${unity.id}`,
         data,
         {
           headers: header,
@@ -63,7 +71,10 @@ const DetailsU = () => {
       );
       history.push("/unidades");
     } catch (error) {
-      console.log(error);
+      setMessage(
+        "Não foi possível alterar os dados da unidade coletora, contate os desenvolvedores ou tente novamente mais tarde!"
+      );
+      setError(true);
     }
   };
 
@@ -72,6 +83,11 @@ const DetailsU = () => {
       <LoadingAnimation loading={loading} />
       <Nav />
       <div className={styles.contentContainer}>
+        <ErrorAnimation
+          error={error}
+          handleError={handleError}
+          text={message}
+        />
         <TopMenu typePage="edit" title="Editar unidade coletora" />
 
         <div className={styles.formContainer}>

@@ -4,14 +4,22 @@ import Axios from "axios";
 
 import Nav from "../../Components/Nav";
 import TopMenu from "../../Components/TopMenu";
-import styles from "./Unities.module.scss";
 import LoadingAnimation from "../../Components/Animation/Loading";
+import ErrorAnimation from "../../Components/Animation/Error";
+import styles from "./Unities.module.scss";
 
 const Unities = () => {
   const token = sessionStorage.getItem("token");
   const [unities, setUnities] = useState([{}]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [message, setMessage] = useState("");
   const [search, setSearch] = useState("");
+
+  const handleError = () => {
+    if (error) setError(false);
+    else setError(true);
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -23,7 +31,7 @@ const Unities = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          "https://app-node-api-test.herokuapp.com/collector",
+          "https://app-node-api-test.herokuapp.com/v1/collector",
           {
             headers: header,
           }
@@ -34,7 +42,11 @@ const Unities = () => {
           setLoading(false);
         }
       } catch (error) {
-        console.log(error);
+        setMessage(
+          "Não foi possível encontrar as unidades coletoras, contate os desenvolvedores ou tente novamente mais tarde!"
+        );
+        setError(true);
+        setLoading(false);
       }
     })();
   }, [token]);
@@ -46,12 +58,9 @@ const Unities = () => {
 
   const handleSearch = (term) => {
     let string = JSON.stringify(term.term);
+    string = string.slice(1, string.length - 1);
 
-    if (!string.length === 12)
-      string =
-        string.charAt(0) +
-        string.charAt(1).toUpperCase() +
-        string.slice(2).toLowerCase();
+    string = string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 
     setSearch(string);
   };
@@ -61,6 +70,11 @@ const Unities = () => {
       <LoadingAnimation loading={loading} />
       <Nav />
       <div className={styles.contentContainer}>
+        <ErrorAnimation
+          error={error}
+          handleError={handleError}
+          text={message}
+        />
         <TopMenu
           typePage="general"
           title="Unidades Coletoras"

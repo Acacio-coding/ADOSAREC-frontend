@@ -33,6 +33,18 @@
       justify-content: center;
       align-items: center;
 
+      .hide {
+        display: none;
+        pointer-events: none;
+        margin-bottom: 0.5em;
+      }
+
+      .show {
+        display: block;
+        color: #670000;
+        margin-bottom: 0.5em;
+      }
+
       .inputContainer {
         width: 90%;
         display: flex;

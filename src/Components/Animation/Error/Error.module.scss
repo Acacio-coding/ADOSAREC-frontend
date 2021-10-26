@@ -1,0 +1,46 @@
+.hideError {
+  position: absolute;
+  width: 500px;
+  height: 300px;
+  display: none;
+  pointer-events: none;
+}
+
+.showError {
+  width: 600px;
+  height: 80px;
+  padding: 1em;
+  position: absolute;
+  top: 1%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(136, 0, 0, 0.2);
+  border: solid 2px #670000;
+  border-radius: 5px;
+  color: #3f0000;
+  animation: slideIn 0.4s ease;
+
+  #icon {
+    margin-left: 5px;
+    font-size: 35px;
+    cursor: pointer;
+    transition: 100ms ease;
+  }
+
+  #icon:hover {
+    color: #670000;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+
+    to {
+      transform: translateX(0%);
+      opacity: 1;
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router";
 import { useForm } from "react-hook-form";
 import Axios from "axios";
@@ -11,16 +11,24 @@ import { HiLocationMarker as AddressIcon } from "react-icons/hi";
 
 import Nav from "../../../Components/Nav";
 import TopMenu from "../../../Components/TopMenu";
+import ErrorAnimation from "../../../Components/Animation/Error";
 import styles from "./Register.module.scss";
 
 const RegisterU = () => {
   const { register, handleSubmit } = useForm();
+  const [error, setError] = useState(false);
+  const [message, setMessage] = useState("");
   const token = sessionStorage.getItem("token");
   const history = useHistory();
 
+  const handleError = () => {
+    if (error) setError(false);
+    else setError(true);
+  };
+
   const handleData = async (data) => {
     data.nome =
-      data.cidade.charAt(0).toUpperCase() + data.cidade.slice(1).toLowerCase();
+      data.nome.charAt(0).toUpperCase() + data.nome.slice(1).toLowerCase();
 
     data.cidade =
       data.cidade.charAt(0).toUpperCase() + data.cidade.slice(1).toLowerCase();
@@ -34,7 +42,7 @@ const RegisterU = () => {
 
     try {
       await Axios.post(
-        "https://app-node-api-test.herokuapp.com/collector",
+        "https://app-node-api-test.herokuapp.com/v1/collector",
         data,
         {
           headers: header,
@@ -42,7 +50,10 @@ const RegisterU = () => {
       );
       history.push("/unidades");
     } catch (error) {
-      console.log(error);
+      setMessage(
+        "Não foi possível cadastrar a unidade coletora, contate os desenvolvedores ou tente novamente mais tarde!"
+      );
+      setError(true);
     }
   };
 
@@ -50,6 +61,11 @@ const RegisterU = () => {
     <div className={styles.fullContainer}>
       <Nav />
       <div className={styles.contentContainer}>
+        <ErrorAnimation
+          error={error}
+          handleError={handleError}
+          text={message}
+        />
         <TopMenu typePage="register" title="Cadastrar Unidades Coletoras" />
 
         <div className={styles.formContainer}>

@@ -11,25 +11,30 @@ import { HiLocationMarker as AddressIcon } from "react-icons/hi";
 
 import Nav from "../../../Components/Nav";
 import TopMenu from "../../../Components/TopMenu";
+import ErrorAnimation from "../../../Components/Animation/Error";
 import styles from "./Register.module.scss";
 
 const RegisterD = () => {
   const { register, handleSubmit } = useForm();
-  const [cep, setCep] = useState("");
+  const [cep, setCep] = useState(0);
   const [address, setAddress] = useState({});
   const [jobs, setJobs] = useState([{}]);
-  const [others, setOthers] = useState(false);
-  const [job, setJob] = useState("");
-  const [jobId, setJobId] = useState();
+  const [error, setError] = useState(false);
+  const [message, setMessage] = useState("");
   const token = sessionStorage.getItem("token");
   const history = useHistory();
 
+  const handleError = () => {
+    if (error) setError(false);
+    else setError(true);
+  };
+
   useEffect(() => {
-    if (cep.length === 8)
+    if (cep.length === 8) {
       (async () => {
         try {
           const response = await Axios.get(
-            `https://app-node-api-test.herokuapp.com/cep/${cep}`,
+            `https://app-node-api-test.herokuapp.com/v1/cep/${cep}`,
             {
               headers: {
                 Authorization: `Bearer ${JSON.parse(token)}`,
@@ -38,14 +43,18 @@ const RegisterD = () => {
           );
           setAddress(response.data);
         } catch (error) {
-          console.log(error);
+          setMessage(
+            "Não foi possível encontrar o endereço, contate os desenvolvedores ou tente novamente mais tarde!"
+          );
+          setError(true);
         }
       })();
+    }
 
     (async () => {
       try {
         const response = await Axios.get(
-          `https://app-node-api-test.herokuapp.com/profissao`,
+          `https://app-node-api-test.herokuapp.com/v1/profissao`,
           {
             headers: {
               Authorization: `Bearer ${JSON.parse(token)}`,
@@ -54,7 +63,10 @@ const RegisterD = () => {
         );
         setJobs(response.data);
       } catch (error) {
-        console.log(error);
+        setMessage(
+          "Não foi possível encontrar as profissões, contate os desenvolvedores ou tente novamente mais tarde!"
+        );
+        setError(true);
       }
     })();
   }, [cep, token]);
@@ -63,90 +75,55 @@ const RegisterD = () => {
     const anoNascimento = data.data_de_nascimento.slice(0, 4);
     const anoExpedicao = data.data_de_expedicao.slice(0, 4);
 
-    if (date.getFullYear() - anoNascimento < 18) alert("Menor de idade!");
-    else if (anoExpedicao - anoNascimento < 6)
-      alert(
+    if (date.getFullYear() - anoNascimento < 18) {
+      setMessage("Menor de idade!");
+      setError(true);
+    } else if (anoExpedicao - anoNascimento < 6) {
+      setMessage(
         "Ano de expedição do RG inválido, é necessário ter no mínimo 6 anos de idade para fazê-lo!"
       );
-    else {
-      if (data.profissao_id === "Outros") {
-        (async () => {
-          const body = {
-            nome: job,
-          };
+      setError(true);
+    } else {
+      data.orgao_expeditor_rg = data.orgao_expeditor_rg.toUpperCase();
 
-          try {
-            const response = await Axios.post(
-              `https://app-node-api-test.herokuapp.com/profissao`,
-              body,
-              {
-                headers: {
-                  Authorization: `Bearer ${JSON.parse(token)}`,
-                },
-              }
-            );
-            console.log(response);
-          } catch (error) {
-            console.log(error);
+      data.naturalidade =
+        data.naturalidade.charAt(0).toUpperCase() +
+        data.naturalidade.slice(1).toLowerCase();
+
+      data.cep = parseInt(data.cep);
+
+      data.bairro =
+        data.bairro.charAt(0).toUpperCase() +
+        data.bairro.slice(1).toLowerCase();
+
+      data.cidade =
+        data.cidade.charAt(0).toUpperCase() +
+        data.cidade.slice(1).toLowerCase();
+
+      data.estado =
+        data.estado.charAt(0).toUpperCase() +
+        data.estado.slice(1).toLowerCase();
+
+      data.status = true;
+
+      const header = {
+        Authorization: `Bearer ${JSON.parse(token)}`,
+        "Content-Type": "application/json",
+      };
+
+      try {
+        await Axios.post(
+          "https://app-node-api-test.herokuapp.com/v1/donator",
+          data,
+          {
+            headers: header,
           }
-        })();
-
-        try {
-          const response = await Axios.get(
-            `https://app-node-api-test.herokuapp.com/profissao`,
-            {
-              headers: {
-                Authorization: `Bearer ${JSON.parse(token)}`,
-              },
-            }
-          );
-          const data = response.data;
-          data.filter((value) => {
-            if (value.nome === job) setJobId(value.id);
-            return null;
-          });
-        } catch (error) {
-          console.log(error);
-        }
-
-        data.profissao_id = jobId;
-      }
-
-      if (data.profissao_id === jobId) {
-        data.orgao_expeditor_rg = data.orgao_expeditor_rg.toUpperCase();
-
-        data.naturalidade =
-          data.naturalidade.charAt(0).toUpperCase() +
-          data.naturalidade.slice(1).toLowerCase();
-
-        data.cep = data.cep.slice(0, 5) + "-" + data.cep.slice(5);
-
-        data.status = true;
-
-        const header = {
-          Authorization: `Bearer ${JSON.parse(token)}`,
-          "Content-Type": "application/json",
-        };
-
-        try {
-          await Axios.post(
-            "https://app-node-api-test.herokuapp.com/donator",
-            data,
-            {
-              headers: header,
-            }
-          );
-          history.push("/doadores");
-        } catch (error) {
-          console.log(error);
-        }
+        );
+        history.push("/doadores");
+      } catch (error) {
+        console.log(error);
       }
     }
-  };
-
-  const handleOthers = (option) => {
-    if (option === "Outros") setOthers(true);
-    else setOthers(false);
   };
 
   const date = new Date();
@@ -158,6 +135,11 @@ const RegisterD = () => {
     <div className={styles.fullContainer}>
       <Nav />
       <div className={styles.contentContainer}>
+        <ErrorAnimation
+          error={error}
+          handleError={handleError}
+          text={message}
+        />
         <TopMenu typePage="register" title="Cadastrar doador" />
 
         <div className={styles.formContainer}>
@@ -239,15 +221,25 @@ const RegisterD = () => {
             <br />
             <br />
 
-            {/* <label htmlFor="parent">Filiação</label>
+            <label htmlFor="parent">Filiação</label>
             <br />
             <input
               type="text"
               id="parent"
-              {...register("parent", { required: true })}
+              placeholder="Nome do pai..."
+              {...register("filiacao_pai", { required: true })}
             />
             <br />
-            <br /> */}
+            <br />
+
+            <input
+              type="text"
+              id="parent"
+              placeholder="Nome da mãe..."
+              {...register("filiacao_mae", { required: true })}
+            />
+            <br />
+            <br />
 
             <label htmlFor="naturalidade">Naturalidade</label>
             <br />
@@ -285,7 +277,6 @@ const RegisterD = () => {
               id="profissao"
               required={true}
               {...register("profissao_id")}
-              onChange={(event) => handleOthers(event.target.value)}
             >
               <option defaultValue hidden>
                 Selecione uma profissão...
@@ -302,16 +293,6 @@ const RegisterD = () => {
               })}
               <option value="Outros">Outros</option>
             </select>
-            <br />
-            <br />
-            <input
-              type="text"
-              required={true}
-              disabled={others ? false : true}
-              value={!others ? "" : job}
-              placeholder={others ? "Digite a profissão do doador..." : ""}
-              onChange={(event) => setJob(event.target.value)}
-            />
             <br />
             <br />
 
@@ -378,7 +359,8 @@ const RegisterD = () => {
             <input
               type="text"
               id="logra"
-              disabled={true}
+              placeholder="Logradouro do doador..."
+              {...register("rua")}
               defaultValue={address.address}
             />
             <br />
@@ -395,17 +377,14 @@ const RegisterD = () => {
             />
             <br />
             <br />
-            {/* <label htmlFor="apt">Apartamento</label>
-            <br />
-            <input type="text" id="apt" {...register("apt", { required: false })} />
-            <br />
-            <br /> */}
+
             <label htmlFor="bairro">Bairro</label>
             <br />
             <input
               type="text"
               id="bairro"
-              disabled={true}
+              placeholder="Bairro do doador..."
+              {...register("bairro")}
               defaultValue={address.district}
             />
             <br />
@@ -415,7 +394,8 @@ const RegisterD = () => {
             <input
               type="text"
               id="cidade"
-              disabled={true}
+              placeholder="Cidade do doador..."
+              {...register("cidade")}
               defaultValue={address.city}
             />
             <br />
@@ -425,7 +405,8 @@ const RegisterD = () => {
             <input
               type="text"
               id="estado"
-              disabled={true}
+              placeholder="Estado do doador..."
+              {...register("estado")}
               defaultValue={address.state}
             />
             <br />
@@ -451,12 +432,12 @@ const RegisterD = () => {
             <label htmlFor="telefone1">Telefone1</label>
             <br />
             <input
-              type="number"
+              type="text"
               id="telefone1"
               required={true}
               minLength="10"
-              maxLength="11"
-              placeholder="0000000000"
+              maxLength="12"
+              placeholder="(00) 0000-0000"
               {...register("telefone1")}
             />
             <br />
@@ -464,11 +445,11 @@ const RegisterD = () => {
             <label htmlFor="telefone2">Telefone2</label>
             <br />
             <input
-              type="number"
+              type="text"
               id="telefone2"
               minLength="10"
-              maxLength="11"
-              placeholder="0000000000"
+              maxLength="12"
+              placeholder="(00) 0000-0000"
               {...register("telefone2")}
             />
             <br />
@@ -476,11 +457,11 @@ const RegisterD = () => {
             <label htmlFor="telefone3">Telefone3</label>
             <br />
             <input
-              type="number"
+              type="text"
               id="telefone3"
               minLength="10"
-              maxLength="11"
-              placeholder="0000000000"
+              maxLength="12"
+              placeholder="(00) 0000-0000"
               {...register("telefone3")}
             />
             <br />
