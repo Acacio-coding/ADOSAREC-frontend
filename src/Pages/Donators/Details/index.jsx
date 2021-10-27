@@ -48,7 +48,6 @@ const DetailsD = () => {
         "Não foi possível remover o doador, contate os desenvolvedores ou tente novamente mais tarde!"
       );
       setError(true);
-      console.log(error);
     }
   };
 
@@ -125,6 +124,7 @@ const DetailsD = () => {
           "Não foi possível encontrar a unidade coletora das doações, contate os desenvolvedores ou tente novamente mais tarde!"
         );
         setError(true);
+        console.log(error);
       }
     })();
   }, [token, donator.cep, donator.nome, donator.profissao_id, donator.rg]);
