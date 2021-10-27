@@ -1,7 +1,6 @@
 import React, { useEffect, useState, memo } from "react";
 import { Link } from "react-router-dom";
 import Axios from "axios";
-
 import Nav from "../../Components/Nav";
 import TopMenu from "../../Components/TopMenu";
 import LoadingAnimation from "../../Components/Animation/Loading";

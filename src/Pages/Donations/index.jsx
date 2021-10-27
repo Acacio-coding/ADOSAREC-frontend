@@ -14,6 +14,7 @@ import styles from "./Donations.module.scss";
 const Donations = () => {
   const token = sessionStorage.getItem("token");
   const [donations, setDonations] = useState([{}]);
+  const [donators, setDonators] = useState([{}]);
   const [unities, setUnities] = useState([{}]);
   const [remove, setRemove] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -45,11 +46,30 @@ const Donations = () => {
 
         if (response) {
           setDonations(response.data);
-          setLoading(false);
         }
       } catch (error) {
         setMessage(
           "Não foi possível encontrar as doações, contate os desenvolvedores ou tente novamente mais tarde!"
+        );
+        setError(true);
+      }
+    })();
+
+    (async () => {
+      try {
+        const response = await Axios.get(
+          `https://app-node-api-test.herokuapp.com/v1/donator`,
+          {
+            headers: header,
+          }
+        );
+
+        if (response) {
+          setDonators(response.data);
+        }
+      } catch (error) {
+        setMessage(
+          "Não foi possível encontrar os doadores, contate os desenvolvedores ou tente novamente mais tarde!"
         );
         setError(true);
       }
@@ -76,6 +96,7 @@ const Donations = () => {
           "Não foi possível encontrar as unidades coletoras, contate os desenvolvedores ou tente novamente mais tarde!"
         );
         setError(true);
+        setLoading(false);
       }
     })();
   }, [token]);
@@ -214,6 +235,8 @@ const Donations = () => {
                   if (search) {
                     let foundUnity = false;
                     let id;
+                    let foundDonator = false;
+                    let rg;
                     const val = JSON.stringify(value);
 
                     unities.map((value, index) => {
@@ -224,8 +247,17 @@ const Donations = () => {
                       return null;
                     });
 
+                    donators.map((value, index) => {
+                      if (value.nome === search) {
+                        foundDonator = true;
+                        rg = value.rg;
+                      }
+                      return null;
+                    });
+
                     if (val.includes(search)) return value;
                     else if (foundUnity && val.includes(id)) return value;
+                    else if (foundDonator && val.includes(rg)) return value;
                     else return null;
                   }
                   return value;
@@ -253,6 +285,18 @@ const Donations = () => {
                     });
                   }
 
+                  let donatorRg = value.doador_rg;
+                  let donatorName;
+
+                  if (donators) {
+                    donatorName = donators.map((value) => {
+                      if (value.rg === donatorRg) {
+                        return value.nome;
+                      }
+                      return null;
+                    });
+                  }
+
                   if (index < donations.length - 1)
                     return (
                       <tr key={index}>
@@ -272,9 +316,7 @@ const Donations = () => {
                           </div>
                         </td>
 
-                        <td className={styles.BottomRight}>
-                          {value.nome_doador}
-                        </td>
+                        <td className={styles.BottomRight}>{donatorName}</td>
 
                         <td className={styles.BottomRight}>{stringDate}</td>
 
@@ -304,7 +346,7 @@ const Donations = () => {
                           </div>
                         </td>
 
-                        <td className={styles.Right}>{value.nome_doador}</td>
+                        <td className={styles.Right}>{donatorName}</td>
 
                         <td className={styles.Right}>{stringDate}</td>
 
