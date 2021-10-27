@@ -21,8 +21,6 @@ const RegisterD = () => {
   const [jobs, setJobs] = useState([{}]);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
-  const [cidade, setCidade] = useState("");
-  const [estado, setEstado] = useState("");
   const token = sessionStorage.getItem("token");
   const history = useHistory();
 
@@ -44,8 +42,6 @@ const RegisterD = () => {
             }
           );
           setAddress(response.data);
-          setEstado(address.state);
-          setCidade(address.city);
         } catch (error) {
           setMessage(
             "Não foi possível encontrar o endereço, contate os desenvolvedores ou tente novamente mais tarde!"
@@ -73,7 +69,7 @@ const RegisterD = () => {
         setError(true);
       }
     })();
-  }, [cep, token, address.city, address.state]);
+  }, [cep, token]);
 
   const handleData = async (data) => {
     const anoNascimento = data.data_de_nascimento.slice(0, 4);
@@ -102,23 +98,24 @@ const RegisterD = () => {
 
       data.cep = parseInt(data.cep);
 
-      data.rua = data.rua.charAt(0).toUpperCase() + data.rua.slice(1);
+      if (data.rua)
+        data.rua = data.rua.charAt(0).toUpperCase() + data.rua.slice(1);
+      else data.rua = address.address;
 
-      data.bairro =
-        data.bairro.charAt(0).toUpperCase() +
-        data.bairro.slice(1).toLowerCase();
+      if (data.bairro)
+        data.bairro =
+          data.bairro.charAt(0).toUpperCase() +
+          data.bairro.slice(1).toLowerCase();
+      else data.bairro = address.district;
 
       if (data.cidade)
         data.cidade =
           data.cidade.charAt(0).toUpperCase() +
           data.cidade.slice(1).toLowerCase();
-      else data.cidade = cidade;
+      else data.cidade = address.city;
 
-      if (data.estado)
-        data.estado =
-          data.estado.charAt(0).toUpperCase() +
-          data.estado.slice(1).toLowerCase();
-      else data.estado = estado;
+      if (data.estado) data.estado = data.estado.toUpperCase();
+      else data.estado = daddress.state;
 
       data.status = true;
 

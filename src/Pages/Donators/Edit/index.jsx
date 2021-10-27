@@ -177,11 +177,15 @@ const EditD = () => {
 
         data.cep = parseInt(data.cep);
 
-        data.rua = data.rua.charAt(0).toUpperCase() + data.rua.slice(1);
+        if (data.rua)
+          data.rua = data.rua.charAt(0).toUpperCase() + data.rua.slice(1);
+        else data.rua = address.address;
 
-        data.bairro =
-          data.bairro.charAt(0).toUpperCase() +
-          data.bairro.slice(1).toLowerCase();
+        if (data.bairro)
+          data.bairro =
+            data.bairro.charAt(0).toUpperCase() +
+            data.bairro.slice(1).toLowerCase();
+        else data.bairro = address.district;
 
         if (data.cidade)
           data.cidade =
