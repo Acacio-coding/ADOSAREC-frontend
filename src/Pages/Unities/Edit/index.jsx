@@ -105,6 +105,7 @@ const DetailsU = () => {
             <input
               type="text"
               id="name"
+              autoComplete="off"
               required={true}
               placeholder="Digite o nome da unidade coletora..."
               defaultValue={unity.nome}
@@ -125,6 +126,7 @@ const DetailsU = () => {
             <br />
             <input
               type="text"
+              autoComplete="off"
               id="cidade"
               placeholder="Digite a cidade da unidade coletora..."
               defaultValue={unity.cidade}
@@ -146,6 +148,7 @@ const DetailsU = () => {
             <input
               type="text"
               id="telefone"
+              autoComplete="off"
               required={true}
               minLength="10"
               maxLength="11"

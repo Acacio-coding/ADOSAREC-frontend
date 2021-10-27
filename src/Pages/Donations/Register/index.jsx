@@ -157,6 +157,7 @@ const RegisterDo = () => {
             <input
               type="date"
               id="donationData"
+              autoComplete="off"
               required={true}
               max={maxDate}
               {...register("data")}
@@ -169,6 +170,7 @@ const RegisterDo = () => {
             <input
               type="number"
               step="0.01"
+              autoComplete="off"
               id="donationVolume"
               required={true}
               {...register("volume")}

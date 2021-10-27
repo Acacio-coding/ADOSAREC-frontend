@@ -83,6 +83,7 @@ const RegisterU = () => {
             <input
               type="text"
               id="name"
+              autoComplete="off"
               required={true}
               placeholder="Digite o nome da unidade coletora..."
               {...register("nome")}
@@ -103,6 +104,7 @@ const RegisterU = () => {
             <input
               type="text"
               id="cidade"
+              autoComplete="off"
               placeholder="Digite a cidade da unidade coletora..."
               required={true}
               {...register("cidade")}
@@ -127,6 +129,7 @@ const RegisterU = () => {
               {...register("telefone")}
               minLength="13"
               maxLength="14"
+              autoComplete="off"
               placeholder="(00) 0000-0000"
             />
             <br />

@@ -55,6 +55,7 @@ const Login = () => {
               className={styles.input}
               type="text"
               placeholder="Usuário"
+              autoComplete="off"
               {...register("user", { required: true })}
             />
           </div>
@@ -66,6 +67,7 @@ const Login = () => {
             <input
               className={styles.input}
               type="password"
+              autoComplete="off"
               placeholder="Senha"
               {...register("password", { required: true })}
             />

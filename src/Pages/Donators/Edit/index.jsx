@@ -274,6 +274,7 @@ const EditD = () => {
               type="text"
               id="name"
               required={true}
+              autoComplete="off"
               placeholder="Digite o nome do doador..."
               defaultValue={donator.nome}
               {...register("nome")}
@@ -295,6 +296,7 @@ const EditD = () => {
             <br />
             <input
               type="date"
+              autoComplete="off"
               id="data_de_nascimento"
               required={true}
               max={maxDate}
@@ -310,6 +312,7 @@ const EditD = () => {
               type="number"
               id="rg"
               required={true}
+              autoComplete="off"
               placeholder="000000000"
               maxLength="9"
               minLength="9"
@@ -323,6 +326,7 @@ const EditD = () => {
             <br />
             <input
               type="text"
+              autoComplete="off"
               {...register("orgao_expeditor_rg")}
               id="orgao_expeditor_rg"
               placeholder="Digite o orgão expedidor..."
@@ -336,6 +340,7 @@ const EditD = () => {
             <br />
             <input
               type="date"
+              autoComplete="off"
               id="data_de_expedicao"
               required={true}
               max={maxDate}
@@ -349,6 +354,7 @@ const EditD = () => {
             <br />
             <input
               type="text"
+              autoComplete="off"
               id="parent"
               placeholder="Nome do pai..."
               {...register("filiacao_pai")}
@@ -359,6 +365,7 @@ const EditD = () => {
 
             <input
               type="text"
+              autoComplete="off"
               id="parent"
               placeholder="Nome da mãe..."
               {...register("filiacao_mae")}
@@ -371,6 +378,7 @@ const EditD = () => {
             <br />
             <input
               type="text"
+              autoComplete="off"
               id="naturalidade"
               placeholder="Digite a naturalidade do doador"
               required={true}
@@ -447,6 +455,7 @@ const EditD = () => {
 
             <input
               type="checkbox"
+              autoComplete="off"
               value={true}
               id="doador_de_medula"
               defaultChecked={medule}
@@ -468,6 +477,7 @@ const EditD = () => {
             <br />
             <input
               type="number"
+              autoComplete="off"
               id="cep"
               required={true}
               minLength="8"
@@ -484,6 +494,7 @@ const EditD = () => {
             <br />
             <input
               type="text"
+              autoComplete="off"
               id="logra"
               placeholder="Logradouro do doador..."
               {...register("rua")}
@@ -496,6 +507,7 @@ const EditD = () => {
             <br />
             <input
               type="text"
+              autoComplete="off"
               id="numero_residencia"
               required={true}
               min="0"
@@ -511,6 +523,7 @@ const EditD = () => {
             <input
               type="text"
               id="bairro"
+              autoComplete="off"
               placeholder="Bairro do doador..."
               {...register("bairro")}
               defaultValue={
@@ -525,6 +538,7 @@ const EditD = () => {
             <input
               type="text"
               id="cidade"
+              autoComplete="off"
               placeholder="Cidade do doador..."
               {...register("cidade")}
               defaultValue={
@@ -539,6 +553,7 @@ const EditD = () => {
             <input
               type="text"
               id="estado"
+              autoComplete="off"
               placeholder="Estado do doador..."
               {...register("estado")}
               defaultValue={
@@ -562,6 +577,7 @@ const EditD = () => {
             <input
               type="email"
               id="email"
+              autoComplete="off"
               placeholder="xxxxx@xxxx.xxx"
               defaultValue={donator.email}
               {...register("email")}
@@ -574,6 +590,7 @@ const EditD = () => {
             <input
               type="text"
               id="telefone1"
+              autoComplete="off"
               pattern="\d*"
               required
               minLength="10"
@@ -591,6 +608,7 @@ const EditD = () => {
               type="text"
               id="telefone2"
               pattern="\d*"
+              autoComplete="off"
               minLength="10"
               maxLength="11"
               placeholder="00000000000"
@@ -605,6 +623,7 @@ const EditD = () => {
             <input
               type="text"
               id="telefone3"
+              autoComplete="off"
               pattern="\d*"
               minLength="10"
               maxLength="11"

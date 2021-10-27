@@ -169,6 +169,7 @@ const RegisterD = () => {
             <input
               type="text"
               id="name"
+              autoComplete="off"
               required
               placeholder="Digite o nome do doador..."
               {...register("nome")}
@@ -192,6 +193,7 @@ const RegisterD = () => {
             <input
               type="date"
               id="data_de_nascimento"
+              autoComplete="off"
               required
               max={maxDate}
               {...register("data_de_nascimento")}
@@ -208,6 +210,7 @@ const RegisterD = () => {
               placeholder="000000000"
               minLength="9"
               maxLength="9"
+              autoComplete="off"
               {...register("rg")}
             />
             <br />
@@ -219,6 +222,7 @@ const RegisterD = () => {
               {...register("orgao_expeditor_rg")}
               id="orgao_expeditor_rg"
               placeholder="Digite o orgão expedidor..."
+              autoComplete="off"
               required
             />
             <br />
@@ -229,6 +233,7 @@ const RegisterD = () => {
               type="date"
               id="data_de_expedicao"
               required
+              autoComplete="off"
               max={maxDate}
               {...register("data_de_expedicao")}
             />
@@ -241,6 +246,7 @@ const RegisterD = () => {
               type="text"
               id="parent"
               placeholder="Nome do pai..."
+              autoComplete="off"
               {...register("filiacao_pai")}
             />
             <br />
@@ -250,6 +256,7 @@ const RegisterD = () => {
               type="text"
               id="parent"
               placeholder="Nome da mãe..."
+              autoComplete="off"
               {...register("filiacao_mae")}
             />
             <br />
@@ -261,6 +268,7 @@ const RegisterD = () => {
               type="text"
               id="naturalidade"
               placeholder="Digite a naturalidade do doador"
+              autoComplete="off"
               required
               {...register("naturalidade")}
             />
@@ -329,6 +337,7 @@ const RegisterD = () => {
               type="checkbox"
               value={true}
               id="doador_de_medula"
+              autoComplete="off"
               {...register("doador_de_medula")}
             />
             <label htmlFor="doador_de_medula">Doador de medula óssea?</label>
@@ -351,6 +360,7 @@ const RegisterD = () => {
               minLength="8"
               maxLength="8"
               placeholder="00000000"
+              autoComplete="off"
               {...register("cep")}
               onChange={(event) => setCep(event.target.value)}
             />
@@ -362,6 +372,7 @@ const RegisterD = () => {
               type="text"
               id="logra"
               placeholder="Logradouro do doador..."
+              autoComplete="off"
               {...register("rua")}
               defaultValue={address.address}
             />
@@ -376,6 +387,7 @@ const RegisterD = () => {
               placeholder="0000"
               minLength="1"
               required
+              autoComplete="off"
               {...register("numero_residencia")}
             />
             <br />
@@ -388,6 +400,7 @@ const RegisterD = () => {
               id="bairro"
               placeholder="Bairro do doador..."
               {...register("bairro")}
+              autoComplete="off"
               defaultValue={address.district}
             />
             <br />
@@ -399,6 +412,7 @@ const RegisterD = () => {
               id="cidade"
               placeholder="Cidade do doador..."
               {...register("cidade")}
+              autoComplete="off"
               defaultValue={address.city}
             />
             <br />
@@ -409,6 +423,7 @@ const RegisterD = () => {
               type="text"
               id="estado"
               placeholder="Estado do doador..."
+              autoComplete="off"
               {...register("estado", { minLength: 2, maxLength: 2 })}
               defaultValue={address.state}
             />
@@ -427,6 +442,7 @@ const RegisterD = () => {
             <input
               type="email"
               id="email"
+              autoComplete="off"
               {...register("email")}
               placeholder="xxxxx@xxxx.xxx"
             />
@@ -437,6 +453,7 @@ const RegisterD = () => {
             <input
               type="text"
               id="telefone1"
+              autoComplete="off"
               pattern="\d*"
               required
               minLength="10"
@@ -452,6 +469,7 @@ const RegisterD = () => {
               type="text"
               id="telefone2"
               pattern="\d*"
+              autoComplete="off"
               minLength="10"
               maxLength="11"
               placeholder="00000000000"
@@ -466,6 +484,7 @@ const RegisterD = () => {
               id="telefone3"
               pattern="\d*"
               minLength="10"
+              autoComplete="off"
               maxLength="11"
               placeholder="00000000000"
               {...register("telefone3")}

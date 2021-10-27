@@ -186,6 +186,7 @@ const EditDonation = () => {
             <br />
             <input
               type="date"
+              autoComplete="off"
               id="donationData"
               defaultValue={donation.date}
               required={true}
@@ -199,6 +200,7 @@ const EditDonation = () => {
             <br />
             <input
               type="number"
+              autoComplete="off"
               step="0.01"
               id="donationVolume"
               defaultValue={donation.volume}
