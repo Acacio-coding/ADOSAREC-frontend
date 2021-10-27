@@ -115,7 +115,7 @@ const RegisterD = () => {
       else data.cidade = address.city;
 
       if (data.estado) data.estado = data.estado.toUpperCase();
-      else data.estado = daddress.state;
+      else data.estado = address.state;
 
       data.status = true;
 
