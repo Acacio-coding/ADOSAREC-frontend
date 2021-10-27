@@ -126,7 +126,7 @@ const DetailsD = () => {
         setError(true);
       }
     })();
-  }, [token, donator.cep, donator.nome, donator.profissao_id]);
+  }, [token, donator.cep, donator.nome, donator.profissao_id, donator.rg]);
 
   let stringDate = JSON.stringify(donator.data_de_nascimento);
 
