@@ -95,7 +95,7 @@ const DetailsD = () => {
 
         if (response) {
           const data = response.data.filter((value) => {
-            if (value.nome_doador.includes(donator.nome)) return value;
+            if (value.doador_rg === donator.rg) return value;
             return null;
           });
           setDonations(data);

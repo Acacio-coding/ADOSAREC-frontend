@@ -124,13 +124,14 @@ const RegisterU = () => {
             <label htmlFor="telefone">Telefone</label>
             <br />
             <input
-              type="number"
+              type="text"
+              pattern="\d*"
               id="telefone"
               {...register("telefone")}
-              minLength="13"
-              maxLength="14"
+              minLength="10"
+              maxLength="11"
               autoComplete="off"
-              placeholder="(00) 0000-0000"
+              placeholder="00000000000"
             />
             <br />
             <br />

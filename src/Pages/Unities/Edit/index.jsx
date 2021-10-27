@@ -147,14 +147,14 @@ const DetailsU = () => {
             <br />
             <input
               type="text"
+              pattern="\d*"
               id="telefone"
-              autoComplete="off"
-              required={true}
+              {...register("telefone")}
               minLength="10"
               maxLength="11"
-              placeholder="0000000000"
+              autoComplete="off"
+              placeholder="00000000000"
               defaultValue={unity.telefone}
-              {...register("telefone")}
             />
             <br />
             <br />

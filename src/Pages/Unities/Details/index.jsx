@@ -89,7 +89,17 @@ const DetailsU = () => {
               <tr>
                 <th className={styles.lastTh}>Telefone:</th>
                 <td className={styles.lastTd}>
-                  {unity.telefone ? unity.telefone : "Não informado"}
+                  {unity.telefone
+                    ? unity.telefone.length === 11
+                      ? `(${unity.telefone.slice(0, 2)}) ${unity.telefone.slice(
+                          2,
+                          7
+                        )}-${unity.telefone.slice(7, 11)}`
+                      : `(${unity.telefone.slice(0, 2)}) ${unity.telefone.slice(
+                          2,
+                          6
+                        )}-${unity.telefone.slice(6, 10)}`
+                    : "Não informado"}
                 </td>
               </tr>
             </tbody>
