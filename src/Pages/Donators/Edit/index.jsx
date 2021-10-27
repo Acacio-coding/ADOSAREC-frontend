@@ -284,7 +284,11 @@ const EditD = () => {
 
             <label htmlFor="genero">Gênero</label>
             <br />
-            <select {...register("genero")} id="genero" value={donator.genero}>
+            <select
+              {...register("genero")}
+              id="genero"
+              defaultValue={donator.genero}
+            >
               <option value="masculino">Masculino</option>
               <option value="feminino">Feminino</option>
               <option value="outro">Outro</option>
@@ -394,7 +398,7 @@ const EditD = () => {
               {...register("estado_civil")}
               id="estado_civil"
               required={true}
-              value={donator.estado_civil}
+              defaultValue={donator.estado_civil}
             >
               <option value="Solteiro">Solteiro(a)</option>
               <option value="Casado">Casado(a)</option>
@@ -411,7 +415,7 @@ const EditD = () => {
               id="profissao"
               required={true}
               {...register("profissao")}
-              value={donator.profissao_id}
+              defaultValue={donator.profissao_id}
             >
               {jobs.map((value, index) => {
                 return (
@@ -429,7 +433,7 @@ const EditD = () => {
             <select
               {...register("grupo_sanguineo")}
               id="grupo_sanguineo"
-              value={donator.grupo_sanguineo}
+              defaultValue={donator.grupo_sanguineo}
             >
               <option value="A">A</option>
               <option value="B">B</option>
@@ -445,7 +449,7 @@ const EditD = () => {
               {...register("rh_sanguineo")}
               required={true}
               id="rh_sanguineo"
-              value={donator.rh_sanguineo}
+              defaultValue={donator.rh_sanguineo}
             >
               <option value={true}>+</option>
               <option value={false}>-</option>

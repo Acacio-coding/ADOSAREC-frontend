@@ -215,7 +215,7 @@ const EditDonation = () => {
             <select
               {...register("orgao_coletor_id")}
               id="unityColector"
-              value={unityName}
+              defaultValue={unityName}
             >
               {unities.map((value, index) => {
                 return (
