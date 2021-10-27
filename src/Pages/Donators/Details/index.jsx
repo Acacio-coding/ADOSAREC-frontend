@@ -48,6 +48,7 @@ const DetailsD = () => {
         "Não foi possível remover o doador, contate os desenvolvedores ou tente novamente mais tarde!"
       );
       setError(true);
+      console.log(error);
     }
   };
 
