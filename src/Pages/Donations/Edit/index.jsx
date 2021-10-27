@@ -99,10 +99,11 @@ const EditDonation = () => {
 
   const handleData = async (data) => {
     if (data.doador_rg) {
-      let rg = parseInt(data.doador_rg.slice(0, 1));
-      let name = data.doador_rg.slice(3, data.doador_rg.length);
+      let rg = parseInt(data.doador_rg.slice(0, 9));
+      let name = data.doador_rg.slice(10, data.doador_rg.length);
       data.doador_rg = rg;
       data.nome_doador = name;
+      data.volume = parseInt(data.volume);
     } else {
       data.doador_rg = donation.doador_rg;
       data.nome_doador = donation.nome_doador;

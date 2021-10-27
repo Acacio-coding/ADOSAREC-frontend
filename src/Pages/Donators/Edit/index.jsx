@@ -25,8 +25,6 @@ const EditD = () => {
   const [jobs, setJobs] = useState([{}]);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
-  const [cidade, setCidade] = useState("");
-  const [estado, setEstado] = useState("");
   const token = sessionStorage.getItem("token");
   const history = useHistory();
 
@@ -55,8 +53,6 @@ const EditD = () => {
           console.log(response.data);
           if (response) {
             setAddress(response.data);
-            setEstado(address.state);
-            setCidade(address.city);
           }
         } catch (error) {
           setMessage(
@@ -191,13 +187,10 @@ const EditD = () => {
           data.cidade =
             data.cidade.charAt(0).toUpperCase() +
             data.cidade.slice(1).toLowerCase();
-        else data.cidade = cidade;
+        else data.cidade = address.city;
 
-        if (data.estado)
-          data.estado =
-            data.estado.charAt(0).toUpperCase() +
-            data.estado.slice(1).toLowerCase();
-        else data.estado = estado;
+        if (data.estado) data.estado = data.estado.toUpperCase();
+        else data.estado = address.state;
 
         data.cep = parseInt(data.cep);
       }
@@ -354,7 +347,7 @@ const EditD = () => {
               type="text"
               id="parent"
               placeholder="Nome do pai..."
-              {...register("filiacao_pai", { required: true })}
+              {...register("filiacao_pai")}
               defaultValue={donator.filiacao_pai}
             />
             <br />
@@ -364,7 +357,7 @@ const EditD = () => {
               type="text"
               id="parent"
               placeholder="Nome da mãe..."
-              {...register("filiacao_mae", { required: true })}
+              {...register("filiacao_mae")}
               defaultValue={donator.filiacao_mae}
             />
             <br />
@@ -530,7 +523,9 @@ const EditD = () => {
               id="cidade"
               placeholder="Cidade do doador..."
               {...register("cidade")}
-              defaultValue={donator.cidade === "" ? cidade : donator.cidade}
+              defaultValue={
+                donator.cidade === "" ? address.city : donator.cidade
+              }
             />
             <br />
             <br />
@@ -542,7 +537,9 @@ const EditD = () => {
               id="estado"
               placeholder="Estado do doador..."
               {...register("estado")}
-              defaultValue={donator.estado === "" ? estado : donator.estado}
+              defaultValue={
+                donator.estado === "" ? address.state : donator.estado
+              }
             />
             <br />
             <br />
@@ -573,10 +570,11 @@ const EditD = () => {
             <input
               type="text"
               id="telefone1"
-              required={true}
+              pattern="\d*"
+              required
               minLength="10"
-              maxLength="12"
-              placeholder="(00) 0000-0000"
+              maxLength="11"
+              placeholder="00000000000"
               defaultValue={donator.telefone1}
               {...register("telefone1")}
             />
@@ -588,9 +586,10 @@ const EditD = () => {
             <input
               type="text"
               id="telefone2"
+              pattern="\d*"
               minLength="10"
-              maxLength="12"
-              placeholder="(00) 0000-0000"
+              maxLength="11"
+              placeholder="00000000000"
               defaultValue={donator.telefone2}
               {...register("telefone2")}
             />
@@ -602,9 +601,10 @@ const EditD = () => {
             <input
               type="text"
               id="telefone3"
+              pattern="\d*"
               minLength="10"
-              maxLength="12"
-              placeholder="(00) 0000-0000"
+              maxLength="11"
+              placeholder="00000000000"
               defaultValue={donator.telefone3}
               {...register("telefone3")}
             />

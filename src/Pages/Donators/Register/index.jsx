@@ -440,10 +440,11 @@ const RegisterD = () => {
             <input
               type="text"
               id="telefone1"
+              pattern="\d*"
               required
-              minLength="13"
-              maxLength="14"
-              placeholder="(00) 0000-0000"
+              minLength="10"
+              maxLength="11"
+              placeholder="00000000000"
               {...register("telefone1")}
             />
             <br />
@@ -453,9 +454,10 @@ const RegisterD = () => {
             <input
               type="text"
               id="telefone2"
-              minLength="13"
-              maxLength="14"
-              placeholder="(00) 0000-0000"
+              pattern="\d*"
+              minLength="10"
+              maxLength="11"
+              placeholder="00000000000"
               {...register("telefone2")}
             />
             <br />
@@ -465,9 +467,10 @@ const RegisterD = () => {
             <input
               type="text"
               id="telefone3"
-              minLength="13"
-              maxLength="14"
-              placeholder="(00) 0000-0000"
+              pattern="\d*"
+              minLength="10"
+              maxLength="11"
+              placeholder="00000000000"
               {...register("telefone3")}
             />
             <br />

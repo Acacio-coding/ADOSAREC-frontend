@@ -288,20 +288,68 @@ const DetailsD = () => {
 
                 <tr>
                   <th className={styles.th}>Telefone1:</th>
-                  <td className={styles.td}>{donator.telefone1}</td>
+                  <td className={styles.td}>
+                    {donator.telefone1.length === 11
+                      ? `(${donator.telefone1.slice(
+                          0,
+                          2
+                        )}) ${donator.telefone1.slice(
+                          2,
+                          7
+                        )}-${donator.telefone1.slice(7, 11)}`
+                      : `(${donator.telefone1.slice(
+                          0,
+                          2
+                        )}) ${donator.telefone1.slice(
+                          2,
+                          6
+                        )}-${donator.telefone1.slice(6, 10)}`}
+                  </td>
                 </tr>
 
                 <tr>
                   <th className={styles.th}>Telefone2:</th>
                   <td className={styles.td}>
-                    {donator.telefone2 ? donator.telefone2 : "Não informado"}
+                    {donator.telefone2
+                      ? donator.telefone2.length === 11
+                        ? `(${donator.telefone2.slice(
+                            0,
+                            2
+                          )}) ${donator.telefone2.slice(
+                            2,
+                            7
+                          )}-${donator.telefone2.slice(7, 11)}`
+                        : `(${donator.telefone2.slice(
+                            0,
+                            2
+                          )}) ${donator.telefone2.slice(
+                            2,
+                            6
+                          )}-${donator.telefone2.slice(6, 10)}`
+                      : "Não informado"}
                   </td>
                 </tr>
 
                 <tr>
                   <th className={styles.lastTh}>Telefone3:</th>
                   <td className={styles.lastTd}>
-                    {donator.telefone3 ? donator.telefone3 : "Não informado"}
+                    {donator.telefone3
+                      ? donator.telefone3.length === 11
+                        ? `(${donator.telefone3.slice(
+                            0,
+                            2
+                          )}) ${donator.telefone3.slice(
+                            2,
+                            7
+                          )}-${donator.telefone3.slice(7, 11)}`
+                        : `(${donator.telefone3.slice(
+                            0,
+                            2
+                          )}) ${donator.telefone3.slice(
+                            2,
+                            6
+                          )}-${donator.telefone3.slice(6, 10)}`
+                      : "Não informado"}
                   </td>
                 </tr>
               </tbody>

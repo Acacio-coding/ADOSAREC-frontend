@@ -96,8 +96,6 @@ const Donations = () => {
 
       handleRemove();
     }
-
-    console.log(sessionStorage.getItem("donation"));
   };
 
   const handleRemove = () => {
