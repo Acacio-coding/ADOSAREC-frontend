@@ -109,9 +109,9 @@ const EditD = () => {
     if (!data.data_de_expedicao)
       data.data_de_expedicao = donator.data_de_expedicao;
 
-    if (!data.filiacao_pai) data.filiacao_pai = donator.data.filiacao_pai;
+    if (!data.filiacao_pai) data.filiacao_pai = donator.filiacao_pai;
 
-    if (!data.filiacao_mae) data.filiacao_mae = donator.data.filiacao_mae;
+    if (!data.filiacao_mae) data.filiacao_mae = donator.filiacao_mae;
 
     if (!data.naturalidade) data.naturalidade = donator.naturalidade;
 
