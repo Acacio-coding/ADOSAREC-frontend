@@ -74,7 +74,6 @@ const DetailsD = () => {
           if (value.id === donator.profissao_id) setJob(value.nome);
           return null;
         });
-        setLoading(false);
       } catch (error) {
         setMessage(
           "Não foi possível encontrar as profissões, contate os desenvolvedores ou tente novamente mais tarde!"
@@ -98,13 +97,14 @@ const DetailsD = () => {
             if (value.doador_rg === donator.rg) return value;
             return null;
           });
-          setDonations(data);
+          if (data) setDonations(data);
         }
       } catch (error) {
         setMessage(
           "Não foi possível encontrar as doações do doador, contate os desenvolvedores ou tente novamente mais tarde!"
         );
         setError(true);
+        console.log(error);
       }
     })();
 
@@ -118,15 +118,14 @@ const DetailsD = () => {
         );
 
         if (response) setUnities(response.data);
-        setLoading(false);
       } catch (error) {
         setMessage(
           "Não foi possível encontrar a unidade coletora das doações, contate os desenvolvedores ou tente novamente mais tarde!"
         );
         setError(true);
-        console.log(error);
       }
     })();
+    setLoading(false);
   }, [token, donator.cep, donator.nome, donator.profissao_id, donator.rg]);
 
   let stringDate = JSON.stringify(donator.data_de_nascimento);
