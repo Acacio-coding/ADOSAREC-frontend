@@ -62,8 +62,8 @@ const Donators = () => {
     if (string.length >= 1 && string.length <= 3 && isNaN(string))
       string = string.toUpperCase();
 
-    if (isNaN(string) && string.length > 3)
-      string = string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    /* if (isNaN(string) && string.length > 3)
+      string = string.charAt(0).toUpperCase() + string.slice(1).toLowerCase(); */
 
     setSearch(string);
   };
@@ -151,7 +151,10 @@ const Donators = () => {
                       }
                     }
 
-                    if (search.length === 3) {
+                    if (
+                      (search.length === 3 && search.includes("+")) ||
+                      search.includes("-")
+                    ) {
                       if (
                         search.charAt(2) === "+" ||
                         search.charAt(2) === "-"
