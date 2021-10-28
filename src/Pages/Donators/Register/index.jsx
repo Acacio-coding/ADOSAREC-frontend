@@ -145,7 +145,13 @@ const RegisterD = () => {
         );
         history.push("/doadores");
       } catch (error) {
-        console.log(error);
+        const Error = error.response;
+        if (Error.status === 409) {
+          setMessage(
+            "O doador com o RG informado já foi cadastrado no sistema, verifique o dado e tente novamente!"
+          );
+          setError(true);
+        }
       }
     }
   };
