@@ -71,7 +71,9 @@ const DetailsD = () => {
         );
         const data = response.data;
         data.filter((value) => {
-          if (value.id === donator.profissao_id) setJob(value.nome);
+          if (value.id === donator.profissao_id) {
+            setJob(value.nome);
+          }
           return null;
         });
       } catch (error) {

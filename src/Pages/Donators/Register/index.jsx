@@ -2,6 +2,7 @@ import React, { useEffect, useState, memo } from "react";
 import { useHistory } from "react-router";
 import { useForm } from "react-hook-form";
 import Axios from "axios";
+import Select, { createFilter } from "react-select";
 
 import {
   BsFillInfoCircleFill as InfoIcon,
@@ -84,13 +85,23 @@ const RegisterD = () => {
       );
       setError(true);
     } else {
+      data.genero = gender.value;
+
+      data.estado_civil = civil.value;
+
+      data.profissao_id = job.value;
+
+      data.grupo_sanguineo = gs.value;
+
+      data.rh_sanguineo = rh.value;
+
+      data.doador_de_medula = medule.value;
+
       data.orgao_expeditor_rg = data.orgao_expeditor_rg.toUpperCase();
 
       data.rg = parseInt(data.rg);
 
       data.numero_residencia = parseInt(data.numero_residencia);
-
-      data.doador_de_medula = data.doador_de_medula === "true" ? true : false;
 
       data.naturalidade =
         data.naturalidade.charAt(0).toUpperCase() +
@@ -144,6 +155,26 @@ const RegisterD = () => {
     date.getMonth() + 1
   }-${date.getDate()}`;
 
+  const [gender, setGender] = useState({});
+  const [civil, setCivil] = useState({});
+  const [job, setJob] = useState({});
+  const [gs, setGs] = useState({});
+  const [rh, setRh] = useState({});
+  const [medule, setMedule] = useState({});
+
+  const style = {
+    control: (provided) => ({
+      ...provided,
+      border: "solid 1px #670000",
+      borderRadius: "none",
+      padding: "0",
+      boxShadow: "none",
+      "&:hover": {
+        border: "solid 1px #670000",
+      },
+    }),
+  };
+
   return (
     <div className={styles.fullContainer}>
       <Nav />
@@ -176,18 +207,22 @@ const RegisterD = () => {
             />
             <br />
             <br />
+
             <label htmlFor="genero">Gênero</label>
             <br />
-            <select {...register("genero")} id="genero">
-              <option defaultValue disabled hidden>
-                Selecione um gênero...
-              </option>
-              <option value="Masculino">Masculino</option>
-              <option value="Feminino">Feminino</option>
-              <option value="Outro">Outro</option>
-            </select>
+            <Select
+              options={[
+                { value: "Masculino", label: "Masculino" },
+                { value: "Feminino", label: "Feminino" },
+                { value: "Outro", label: "Outro" },
+              ]}
+              styles={style}
+              onChange={setGender}
+              required
+              placeholder="Selecione um gênero..."
+            />
             <br />
-            <br />
+
             <label htmlFor="data_de_nascimento">Data de nascimento</label>
             <br />
             <input
@@ -274,76 +309,87 @@ const RegisterD = () => {
             />
             <br />
             <br />
+
             <label htmlFor="estado_civil">Estado cívil</label>
             <br />
-            <select {...register("estado_civil")} id="estado_civil" required>
-              <option defaultValue hidden>
-                Selecione um estado cívil...
-              </option>
-              <option value="Solteiro">Solteiro(a)</option>
-              <option value="Casado">Casado(a)</option>
-              <option value="Separado">Separado(a)</option>
-              <option value="Divorciado">Divorciado(a)</option>
-              <option value="Viúvo">Viúvo(a)</option>
-            </select>
-            <br />
+            <Select
+              options={[
+                { value: "Solteiro(a)", label: "Solteiro(a)" },
+                { value: "Casado(a)", label: "Casado(a)" },
+                { value: "Separado(a)", label: "Separado(a)" },
+                { value: "Divorciado(a)", label: "Divorciado(a)" },
+                { value: "Viúvo(a)", label: "Viúvo(a)" },
+              ]}
+              styles={style}
+              onChange={setCivil}
+              required
+              placeholder="Selecione um estado cívil..."
+            />
             <br />
 
             <label htmlFor="profissao">Profissão</label>
             <br />
-            <select id="profissao" required {...register("profissao_id")}>
-              <option defaultValue hidden>
-                Selecione uma profissão...
-              </option>
-              {jobs.map((value, index) => {
-                if (value.nome === "Outros")
-                  return <option key={index}>{value.nome}</option>;
-                else
-                  return (
-                    <option key={index} value={value.id}>
-                      {value.nome}
-                    </option>
-                  );
+            <Select
+              filterOption={createFilter({ ignoreAccents: false })}
+              options={jobs.map((value, index) => {
+                return {
+                  value: value.id,
+                  label: value.nome,
+                };
               })}
-            </select>
-            <br />
+              onChange={setJob}
+              styles={style}
+              required
+              placeholder="Selecione uma profissão..."
+              isSearchable
+            />
             <br />
 
             <label htmlFor="grupo_sanguineo">Grupo sanguíneo</label>
             <br />
-            <select {...register("grupo_sanguineo")} id="grupo_sanguineo">
-              <option defaultValue hidden>
-                Selecione um grupo sanguíneo...
-              </option>
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="O">O</option>
-              <option value="AB">AB</option>
-            </select>
+            <Select
+              options={[
+                { value: "A", label: "A" },
+                { value: "B", label: "B" },
+                { value: "O", label: "O" },
+                { value: "AB", label: "AB" },
+              ]}
+              onChange={setGs}
+              styles={style}
+              required
+              placeholder="Selecione um grupo sanguíneo..."
+            />
             <br />
-            <br />
+
             <label htmlFor="rh_sanguineo">RH</label>
             <br />
-            <select {...register("rh_sanguineo")} required id="rh_sanguineo">
-              <option defaultValue hidden>
-                Selecione o RH...
-              </option>
-              <option value={true}>+</option>
-              <option value={false}>-</option>
-            </select>
-            <br />
-            <br />
-            <input
-              type="checkbox"
-              value={true}
-              id="doador_de_medula"
-              autoComplete="off"
-              {...register("doador_de_medula")}
+            <Select
+              options={[
+                { value: true, label: "+" },
+                { value: false, label: "-" },
+              ]}
+              styles={style}
+              onChange={setRh}
+              required
+              placeholder="Selecione o RH..."
             />
+            <br />
+
             <label htmlFor="doador_de_medula">Doador de medula óssea?</label>
             <br />
+            <Select
+              options={[
+                { value: true, label: "Sim" },
+                { value: false, label: "Não" },
+              ]}
+              styles={style}
+              required
+              placeholder="Selecione uma opção..."
+              onChange={setMedule}
+            />
             <br />
             <br />
+
             <div className={styles.subTitleContainer}>
               <div className={styles.iconContainer}>
                 <AddressIcon style={{ fontSize: "32px" }} />

@@ -2,6 +2,7 @@ import React, { useEffect, useState, memo } from "react";
 import Axios from "axios";
 import { useHistory } from "react-router";
 import { useForm } from "react-hook-form";
+import Select from "react-select";
 
 import {
   BsFillInfoCircleFill as InfoIcon,
@@ -21,7 +22,6 @@ const EditD = () => {
   const [cep, setCep] = useState("");
   const [address, setAddress] = useState({});
   const [loading, setLoading] = useState(false);
-  const [medule, setMedule] = useState();
   const [jobs, setJobs] = useState([{}]);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
@@ -34,11 +34,10 @@ const EditD = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     setDonator(JSON.parse(sessionStorage.getItem("donator")));
-    setMedule(donator.doador_de_medula);
 
     if (cep.length === 8) {
-      setLoading(true);
       (async () => {
         try {
           const response = await Axios.get(
@@ -74,18 +73,24 @@ const EditD = () => {
           }
         );
         setJobs(response.data);
+        response.data.map((value) => {
+          if (value.id === donator.profissao_id)
+            setProfissao({ label: value.nome, value: value.id });
+          return null;
+        });
         setLoading(false);
       } catch (error) {
         setMessage(
           "Não foi possível encontrar as profissões, contate os desenvolvedores ou tente novamente mais tarde!"
         );
         setError(true);
+        setLoading(false);
       }
     })();
   }, [
     cep,
     token,
-    donator.doador_de_medula,
+    donator.profissao_id,
     donator.cep,
     address.city,
     address.state,
@@ -96,7 +101,7 @@ const EditD = () => {
   const handleData = async (data) => {
     if (!data.nome) data.nome = donator.nome;
 
-    if (!data.genero) data.nome = donator.genero;
+    if (!data.genero) data.genero = donator.genero;
 
     if (!data.data_de_nascimento)
       data.data_de_nascimento = donator.data_de_nascimento;
@@ -117,15 +122,11 @@ const EditD = () => {
 
     if (!data.estado_civil) data.estado_civil = donator.estado_civil;
 
-    if (!data.profissao) data.profissao = donator.profissao;
+    if (!data.profissao_id) data.profissao_id = donator.profissao_id;
 
     if (!data.grupo_sanguineo) data.grupo_sanguineo = donator.grupo_sanguineo;
 
     if (!data.rh_sanguineo) data.rh_sanguineo = donator.rh_sanguineo;
-
-    if (!data.doador_de_medula) {
-      data.doador_de_medula = false;
-    } else data.doador_de_medula = true;
 
     if (!data.cep) data.cep = donator.cep;
 
@@ -163,7 +164,21 @@ const EditD = () => {
       } else {
         data.orgao_expeditor_rg = data.orgao_expeditor_rg.toUpperCase();
 
-        data.doador_de_medula = data.doador_de_medula === "true" ? true : false;
+        if (medule.value && donator.doador_de_medula)
+          data.doador_de_medula = donator.doador_de_medula;
+        else data.doador_de_medula = medule.value;
+
+        console.log(data.doador_de_medula);
+
+        data.genero = gender.value;
+
+        data.estado_civil = civil.value;
+
+        data.profissao_id = profissao.value;
+
+        data.grupo_sanguineo = gs.value;
+
+        data.rh_sanguineo = rh.value;
 
         data.rg = parseInt(data.rg);
 
@@ -246,6 +261,50 @@ const EditD = () => {
     date.getMonth() + 1
   }-${date.getDate()}`;
 
+  const style = {
+    control: (provided) => ({
+      ...provided,
+      border: "solid 1px #670000",
+      borderRadius: "none",
+      padding: "0",
+      boxShadow: "none",
+      "&:hover": {
+        border: "solid 1px #670000",
+      },
+    }),
+  };
+
+  const [gender, setGender] = useState({});
+  const [civil, setCivil] = useState({});
+  const [profissao, setProfissao] = useState({});
+  const [gs, setGs] = useState({});
+  const [rh, setRh] = useState({});
+  const [medule, setMedule] = useState({});
+
+  useEffect(() => {
+    setGender({ label: donator.genero, value: donator.genero });
+    setCivil({ label: donator.estado_civil, value: donator.estado_civil });
+    setGs({
+      label: donator.grupo_sanguineo,
+      value: donator.grupo_sanguineo,
+    });
+    setRh({
+      label: donator.rh_sanguineo ? "+" : "-",
+      value: donator.rh_sanguineo,
+    });
+    setMedule({
+      label: donator.doador_de_medula ? "Sim" : "Não",
+      value: donator.doador_de_medula,
+    });
+  }, [
+    donator.profissao_id,
+    donator.genero,
+    donator.estado_civil,
+    donator.grupo_sanguineo,
+    donator.rh_sanguineo,
+    donator.doador_de_medula,
+  ]);
+
   return (
     <div className={styles.fullContainer}>
       <LoadingAnimation loading={loading} />
@@ -284,16 +343,17 @@ const EditD = () => {
 
             <label htmlFor="genero">Gênero</label>
             <br />
-            <select
-              {...register("genero")}
-              id="genero"
-              defaultValue={donator.genero}
-            >
-              <option value="masculino">Masculino</option>
-              <option value="feminino">Feminino</option>
-              <option value="outro">Outro</option>
-            </select>
-            <br />
+            <Select
+              options={[
+                { value: "Masculino", label: "Masculino" },
+                { value: "Feminino", label: "Feminino" },
+                { value: "Outro", label: "Outro" },
+              ]}
+              styles={style}
+              required
+              value={gender}
+              onChange={setGender}
+            />
             <br />
 
             <label htmlFor="data_de_nascimento">Data de nascimento</label>
@@ -394,79 +454,80 @@ const EditD = () => {
 
             <label htmlFor="estado_civil">Estado cívil</label>
             <br />
-            <select
-              {...register("estado_civil")}
-              id="estado_civil"
-              required={true}
-              defaultValue={donator.estado_civil}
-            >
-              <option value="Solteiro">Solteiro(a)</option>
-              <option value="Casado">Casado(a)</option>
-              <option value="Separado">Separado(a)</option>
-              <option value="Divorciado">Divorciado(a)</option>
-              <option value="Viúvo">Viúvo(a)</option>
-            </select>
-            <br />
+            <Select
+              options={[
+                { value: "Solteiro(a)", label: "Solteiro(a)" },
+                { value: "Casado(a)", label: "Casado(a)" },
+                { value: "Separado(a)", label: "Separado(a)" },
+                { value: "Divorciado(a)", label: "Divorciado(a)" },
+                { value: "Viúvo(a)", label: "Viúvo(a)" },
+              ]}
+              styles={style}
+              required
+              value={civil}
+              onChange={setCivil}
+            />
             <br />
 
             <label htmlFor="profissao">Profissão</label>
             <br />
-            <select
-              id="profissao"
-              required={true}
-              {...register("profissao")}
-              defaultValue={donator.profissao_id}
-            >
-              {jobs.map((value, index) => {
-                return (
-                  <option key={index} value={value.id}>
-                    {value.nome}
-                  </option>
-                );
+            <Select
+              options={jobs.map((value, index) => {
+                return {
+                  value: value.id,
+                  label: value.nome,
+                };
               })}
-            </select>
-            <br />
+              styles={style}
+              required
+              value={profissao}
+              onChange={setProfissao}
+              isSearchable
+            />
             <br />
 
             <label htmlFor="grupo_sanguineo">Grupo sanguíneo</label>
             <br />
-            <select
-              {...register("grupo_sanguineo")}
-              id="grupo_sanguineo"
-              defaultValue={donator.grupo_sanguineo}
-            >
-              <option value="A">A</option>
-              <option value="B">B</option>
-              <option value="O">O</option>
-              <option value="AB">AB</option>
-            </select>
-            <br />
+            <Select
+              options={[
+                { value: "A", label: "A" },
+                { value: "B", label: "B" },
+                { value: "O", label: "O" },
+                { value: "AB", label: "AB" },
+              ]}
+              styles={style}
+              required
+              value={gs}
+              onChange={setGs}
+            />
             <br />
 
             <label htmlFor="rh_sanguineo">RH</label>
             <br />
-            <select
-              {...register("rh_sanguineo")}
-              required={true}
-              id="rh_sanguineo"
-              defaultValue={donator.rh_sanguineo}
-            >
-              <option value={true}>+</option>
-              <option value={false}>-</option>
-            </select>
-            <br />
+            <Select
+              options={[
+                { value: true, label: "+" },
+                { value: false, label: "-" },
+              ]}
+              styles={style}
+              required
+              value={rh}
+              onChange={setRh}
+            />
             <br />
 
-            <input
-              type="checkbox"
-              autoComplete="off"
-              value={true}
-              id="doador_de_medula"
-              defaultChecked={medule}
-              {...register("doador_de_medula")}
-            />
             <label htmlFor="doador_de_medula">Doador de medula óssea?</label>
             <br />
+            <Select
+              options={[
+                { value: true, label: "Sim" },
+                { value: false, label: "Não" },
+              ]}
+              styles={style}
+              required
+              value={medule}
+              onChange={setMedule}
+            />
             <br />
             <br />
 
@@ -476,6 +537,7 @@ const EditD = () => {
               </div>
               <span>Endereço</span>
             </div>
+            <br />
 
             <label htmlFor="cep">CEP</label>
             <br />
