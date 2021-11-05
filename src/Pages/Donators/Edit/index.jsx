@@ -19,7 +19,10 @@ const EditD = () => {
   const { register, handleSubmit } = useForm();
   const [donator, setDonator] = useState({});
   const [cep, setCep] = useState("");
-  const [address, setAddress] = useState({});
+  const [logradouro, setLogradouro] = useState("");
+  const [bairro, setBairro] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [estado, setEstado] = useState("");
   const [jobs, setJobs] = useState([{}]);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
@@ -34,11 +37,16 @@ const EditD = () => {
   useEffect(() => {
     setDonator(JSON.parse(sessionStorage.getItem("donator")));
 
+    setLogradouro(donator.rua);
+    setBairro(donator.bairro);
+    setCidade(donator.cidade);
+    setEstado(donator.estado);
+
     if (cep.length === 8) {
       (async () => {
         try {
           const response = await Axios.get(
-            `https://app-node-api-test.herokuapp.com/cep/${cep}`,
+            `https://app-node-api-test.herokuapp.com/v1/cep/${cep}`,
             {
               headers: {
                 Authorization: `Bearer ${JSON.parse(token)}`,
@@ -46,9 +54,12 @@ const EditD = () => {
             }
           );
 
-          console.log(response.data);
           if (response) {
-            setAddress(response.data);
+            const data = response.data;
+            setLogradouro(data.address);
+            setBairro(data.district);
+            setCidade(data.city);
+            setEstado(data.state);
           }
         } catch (error) {
           setMessage(
@@ -86,9 +97,10 @@ const EditD = () => {
     cep,
     token,
     donator.profissao_id,
-    donator.cep,
-    address.city,
-    address.state,
+    donator.rua,
+    donator.bairro,
+    donator.cidade,
+    donator.estado,
   ]);
 
   let rg = donator.rg;
@@ -184,6 +196,7 @@ const EditD = () => {
         );
         setError(true);
       } else {
+        setError(false);
         data.orgao_expeditor_rg = data.orgao_expeditor_rg.toUpperCase();
 
         if (medule.value && donator.doador_de_medula)
@@ -246,8 +259,8 @@ const EditD = () => {
           if (data.rua.charAt(data.rua.length) === " ")
             data.rua = data.rua.charAt(data.rua.length).replace(" ", "");
         } else {
-          if (address.address) {
-            let rua = JSON.stringify(address.address);
+          if (logradouro) {
+            let rua = JSON.stringify(logradouro);
             rua = rua.slice(1, rua.length - 1);
             data.rua = capitalize(rua);
           } else {
@@ -267,9 +280,7 @@ const EditD = () => {
               .charAt(data.bairro.length)
               .replace(" ", "");
         } else {
-          if (address.district) {
-            let bairro = JSON.stringify(address.district);
-            bairro = bairro.slice(1, bairro.length - 1);
+          if (bairro) {
             data.bairro = capitalize(bairro);
           } else {
             data.bairro = "Não informado";
@@ -288,9 +299,7 @@ const EditD = () => {
               .charAt(data.cidade.length)
               .replace(" ", "");
         } else {
-          if (address.city) {
-            let cidade = JSON.stringify(address.city);
-            cidade = cidade.slice(1, cidade.length - 1);
+          if (cidade) {
             data.cidade = capitalize(cidade);
           } else {
             data.cidade = "Não informado";
@@ -309,9 +318,7 @@ const EditD = () => {
               .charAt(data.estado.length)
               .replace(" ", "");
         } else {
-          if (address.state) {
-            let estado = JSON.stringify(address.state);
-            estado = estado.slice(1, estado.length - 1);
+          if (estado) {
             data.estado = estado.toUpperCase();
           } else {
             data.estado = "Não informado";
@@ -322,27 +329,30 @@ const EditD = () => {
 
     data.status = true;
 
-    const header = {
-      Authorization: `Bearer ${JSON.parse(token)}`,
-      "Content-Type": "application/json",
-    };
+    if (!error) {
+      const header = {
+        Authorization: `Bearer ${JSON.parse(token)}`,
+        "Content-Type": "application/json",
+      };
 
-    try {
-      await Axios.put(
-        `https://app-node-api-test.herokuapp.com/v1/donator/${rg}`,
-        data,
-        {
-          headers: header,
-        }
-      );
-      sessionStorage.removeItem("donator");
-      sessionStorage.setItem("donator", JSON.stringify(data));
-      history.push("/detalhes_doador");
-    } catch (error) {
-      setMessage(
-        "Não foi possível alterar os dados do doador, contate os desenvolvedores ou tente novamente mais tarde!"
-      );
-      setError(true);
+      try {
+        await Axios.put(
+          `https://app-node-api-test.herokuapp.com/v1/donator/${rg}`,
+          data,
+          {
+            headers: header,
+          }
+        );
+
+        sessionStorage.removeItem("donator");
+        sessionStorage.setItem("donator", JSON.stringify(data));
+        history.push("/detalhes_doador");
+      } catch (error) {
+        setMessage(
+          "Não foi possível alterar os dados do doador, contate os desenvolvedores ou tente novamente mais tarde!"
+        );
+        setError(true);
+      }
     }
   };
 
@@ -664,18 +674,13 @@ const EditD = () => {
             <label htmlFor="logra">Logradouro</label>
             <br />
             <input
+              onChange={(event) => setLogradouro(event.taget.value)}
               type="text"
               autoComplete="off"
               id="logra"
               placeholder="Logradouro do doador..."
               {...register("rua")}
-              defaultValue={
-                !donator.rua
-                  ? address.address
-                  : donator.rua === "Não informado"
-                  ? ""
-                  : donator.rua
-              }
+              defaultValue={logradouro}
             />
             <br />
             <br />
@@ -699,18 +704,13 @@ const EditD = () => {
             <label htmlFor="bairro">Bairro</label>
             <br />
             <input
+              onChange={(event) => setBairro(event.taget.value)}
               type="text"
               id="bairro"
               autoComplete="off"
               placeholder="Bairro do doador..."
               {...register("bairro")}
-              defaultValue={
-                donator.bairro === ""
-                  ? address.district
-                  : donator.bairro === "Não informado"
-                  ? ""
-                  : donator.bairro
-              }
+              defaultValue={bairro}
             />
             <br />
             <br />
@@ -718,18 +718,13 @@ const EditD = () => {
             <label htmlFor="cidade">Cidade</label>
             <br />
             <input
+              onChange={(event) => setCidade(event.taget.value)}
               type="text"
               id="cidade"
               autoComplete="off"
               placeholder="Cidade do doador..."
               {...register("cidade")}
-              defaultValue={
-                donator.cidade === ""
-                  ? address.city
-                  : donator.cidade === "Não informado"
-                  ? ""
-                  : donator.cidade
-              }
+              defaultValue={cidade}
             />
             <br />
             <br />
@@ -737,18 +732,13 @@ const EditD = () => {
             <label htmlFor="estado">Estado</label>
             <br />
             <input
+              onChange={(event) => setEstado(event.taget.value)}
               type="text"
               id="estado"
               autoComplete="off"
               placeholder="Estado do doador..."
               {...register("estado")}
-              defaultValue={
-                donator.estado === ""
-                  ? address.state
-                  : donator.estado === "Não informado"
-                  ? ""
-                  : donator.estado
-              }
+              defaultValue={estado}
             />
             <br />
             <br />

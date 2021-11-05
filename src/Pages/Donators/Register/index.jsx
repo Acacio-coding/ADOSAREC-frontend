@@ -114,6 +114,7 @@ const RegisterD = () => {
       );
       setError(true);
     } else {
+      setError(false);
       if (data.nome) {
         data.nome = data.nome.replace(/  +/g, " ");
         data.nome = capitalize(data.nome);
@@ -241,27 +242,29 @@ const RegisterD = () => {
 
       data.status = true;
 
-      const header = {
-        Authorization: `Bearer ${JSON.parse(token)}`,
-        "Content-Type": "application/json",
-      };
+      if (!error) {
+        const header = {
+          Authorization: `Bearer ${JSON.parse(token)}`,
+          "Content-Type": "application/json",
+        };
 
-      try {
-        await Axios.post(
-          "https://app-node-api-test.herokuapp.com/v1/donator",
-          data,
-          {
-            headers: header,
-          }
-        );
-        history.push("/doadores");
-      } catch (error) {
-        const Error = error.response;
-        if (Error.status === 409) {
-          setMessage(
-            "O doador com o RG informado já foi cadastrado no sistema, verifique o dado e tente novamente!"
+        try {
+          await Axios.post(
+            "https://app-node-api-test.herokuapp.com/v1/donator",
+            data,
+            {
+              headers: header,
+            }
           );
-          setError(true);
+          history.push("/doadores");
+        } catch (error) {
+          const Error = error.response;
+          if (Error.status === 409) {
+            setMessage(
+              "O doador com o RG informado já foi cadastrado no sistema, verifique o dado e tente novamente!"
+            );
+            setError(true);
+          }
         }
       }
     }
