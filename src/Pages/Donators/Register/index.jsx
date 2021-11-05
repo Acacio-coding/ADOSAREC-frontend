@@ -158,7 +158,6 @@ const RegisterD = () => {
       }
 
       if (data.cep) {
-        data.cep = data.cep.replace(/  +/g, " ");
         data.cep = parseInt(data.cep);
       } else {
         data.cep = 0;
