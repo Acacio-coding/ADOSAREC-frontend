@@ -212,7 +212,7 @@ const RegisterD = () => {
           data.cidade = data.cidade.charAt(data.cidade.length).replace(" ", "");
       } else {
         if (address.city) {
-          let cidade = JSON.stringify(address.district);
+          let cidade = JSON.stringify(address.city);
           cidade = cidade.slice(1, cidade.length - 1);
           data.cidade = capitalize(cidade);
         } else {

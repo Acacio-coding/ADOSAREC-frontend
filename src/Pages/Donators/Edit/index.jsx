@@ -52,7 +52,7 @@ const EditD = () => {
           }
         } catch (error) {
           setMessage(
-            "Não foi possível encontrar o endereço com o cep informado, contate os desenvolvedores ou tente novamente mais tarde!"
+            "Não foi possível encontrar o endereço, contate os desenvolvedores ou tente novamente mais tarde!"
           );
           setError(true);
         }
@@ -289,7 +289,7 @@ const EditD = () => {
               .replace(" ", "");
         } else {
           if (address.city) {
-            let cidade = JSON.stringify(address.district);
+            let cidade = JSON.stringify(address.city);
             cidade = cidade.slice(1, cidade.length - 1);
             data.cidade = capitalize(cidade);
           } else {
@@ -647,7 +647,8 @@ const EditD = () => {
             <label htmlFor="cep">CEP</label>
             <br />
             <input
-              type="number"
+              type="text"
+              pattern="\d*"
               autoComplete="off"
               id="cep"
               minLength="8"
