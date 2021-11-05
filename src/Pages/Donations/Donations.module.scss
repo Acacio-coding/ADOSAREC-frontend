@@ -27,22 +27,25 @@
         box-shadow: 0 4px 8px hsla(0, 0%, 0%, 0.2);
 
         th {
-          color: #670000;
+          color: #fff;
           font-weight: 600;
+          background-color: #670000;
+        }
+
+        tr:nth-child(even) {
+          background-color: #f2f2f2;
         }
 
         th,
         td {
           padding: 0.5em 2em;
-        }
 
-        td {
           div {
             margin-top: 1px;
             a {
               #editIcon {
                 font-size: 25px;
-                margin-right: 5px;
+                margin-right: 10px;
                 color: #670000;
                 text-decoration: none;
               }
@@ -62,19 +65,16 @@
               color: #3b0000;
             }
           }
-        }
 
-        .BottomRight {
-          border-right: solid 1px #670000;
-          border-bottom: solid 1px #670000;
-        }
+          a {
+            cursor: pointer;
+            text-decoration: none;
+            color: #000;
+          }
 
-        .Bottom {
-          border-bottom: solid 1px #670000;
-        }
-
-        .Right {
-          border-right: solid 1px #670000;
+          a:hover {
+            color: #670000;
+          }
         }
       }
     }

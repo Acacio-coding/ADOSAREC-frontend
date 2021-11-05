@@ -12,7 +12,6 @@ import { HiLocationMarker as AddressIcon } from "react-icons/hi";
 
 import Nav from "../../../Components/Nav";
 import TopMenu from "../../../Components/TopMenu";
-import LoadingAnimation from "../../../Components/Animation/Loading/index";
 import ErrorAnimation from "../../../Components/Animation/Error";
 import styles from "./Edit.module.scss";
 
@@ -21,7 +20,6 @@ const EditD = () => {
   const [donator, setDonator] = useState({});
   const [cep, setCep] = useState("");
   const [address, setAddress] = useState({});
-  const [loading, setLoading] = useState(false);
   const [jobs, setJobs] = useState([{}]);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
@@ -34,7 +32,6 @@ const EditD = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
     setDonator(JSON.parse(sessionStorage.getItem("donator")));
 
     if (cep.length === 8) {
@@ -78,13 +75,11 @@ const EditD = () => {
             setProfissao({ label: value.nome, value: value.id });
           return null;
         });
-        setLoading(false);
       } catch (error) {
         setMessage(
           "Não foi possível encontrar as profissões, contate os desenvolvedores ou tente novamente mais tarde!"
         );
         setError(true);
-        setLoading(false);
       }
     })();
   }, [
@@ -97,6 +92,14 @@ const EditD = () => {
   ]);
 
   let rg = donator.rg;
+
+  const capitalize = (string) => {
+    return string
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
 
   const handleData = async (data) => {
     if (!data.nome) data.nome = donator.nome;
@@ -161,6 +164,25 @@ const EditD = () => {
           "Ano de expedição do RG inválido, é necessário ter no mínimo 6 anos de idade para fazê-lo!"
         );
         setError(true);
+      } else if (data.telefone1 === data.telefone2) {
+        setMessage(
+          "O primeiro telefone é igual ao segundo, verifique os dados e tente novamente!"
+        );
+        setError(true);
+      } else if (data.telefone1 === data.telefone3) {
+        setMessage(
+          "O primeiro telefone é igual ao terceiro, verifique os dados e tente novamente!"
+        );
+        setError(true);
+      } else if (
+        data.telefone2 !== "" &&
+        data.telefone3 !== "" &&
+        data.telefone2 === data.telefone3
+      ) {
+        setMessage(
+          "O segundo telefone é igual ao terceiro, verifique os dados e tente novamente!"
+        );
+        setError(true);
       } else {
         data.orgao_expeditor_rg = data.orgao_expeditor_rg.toUpperCase();
 
@@ -168,7 +190,23 @@ const EditD = () => {
           data.doador_de_medula = donator.doador_de_medula;
         else data.doador_de_medula = medule.value;
 
-        console.log(data.doador_de_medula);
+        if (data.nome) {
+          data.nome = data.nome.toUpperCase();
+          data.nome = data.nome.replace(/\s\s+/g, " ");
+        }
+
+        if (data.filiacao_pai) {
+          data.filiacao_pai = data.filiacao_pai.replace(/  +/g, " ");
+          data.filiacao_pai = capitalize(data.filiacao_pai);
+        } else {
+          data.filiacao_pai = "Não informado";
+        }
+
+        data.filiacao_mae = data.filiacao_mae.replace(/  +/g, " ");
+        data.filiacao_mae = capitalize(data.filiacao_mae);
+
+        data.orgao_expeditor_rg = data.orgao_expeditor_rg.toUpperCase();
+        data.orgao_expeditor_rg = data.orgao_expeditor_rg.replace(/  +/g, " ");
 
         data.genero = gender.value;
 
@@ -182,36 +220,104 @@ const EditD = () => {
 
         data.rg = parseInt(data.rg);
 
-        data.cep = parseInt(data.cep);
+        if (data.numero_residencia) {
+          data.numero_residencia = parseInt(data.numero_residencia);
+        } else {
+          data.numero_residencia = 0;
+        }
 
-        data.numero_residencia = parseInt(data.numero_residencia);
+        if (data.naturalidade) {
+          data.naturalidade = data.naturalidade.replace(/  +/g, " ");
+          data.naturalidade = capitalize(data.naturalidade);
+        }
 
-        data.naturalidade =
-          data.naturalidade.charAt(0).toUpperCase() +
-          data.naturalidade.slice(1).toLowerCase();
+        if (data.cep) {
+          data.cep = data.cep.replace(/  +/g, " ");
+          data.cep = parseInt(data.cep);
+        } else {
+          data.cep = 0;
+        }
+        if (data.rua) {
+          data.rua = data.rua.replace(/  +/g, " ");
+          data.rua = capitalize(data.rua);
 
-        data.cep = parseInt(data.cep);
+          if (data.rua.charAt(0) === " ")
+            data.rua = data.rua.charAt(0).replace(" ", "");
 
-        if (data.rua)
-          data.rua = data.rua.charAt(0).toUpperCase() + data.rua.slice(1);
-        else data.rua = address.address;
+          if (data.rua.charAt(data.rua.length) === " ")
+            data.rua = data.rua.charAt(data.rua.length).replace(" ", "");
+        } else {
+          if (address.address) {
+            let rua = JSON.stringify(address.address);
+            rua = rua.slice(1, rua.length - 1);
+            data.rua = capitalize(rua);
+          } else {
+            data.rua = "Não informado";
+          }
+        }
 
-        if (data.bairro)
-          data.bairro =
-            data.bairro.charAt(0).toUpperCase() +
-            data.bairro.slice(1).toLowerCase();
-        else data.bairro = address.district;
+        if (data.bairro) {
+          data.bairro = data.bairro.replace(/  +/g, " ");
+          data.bairro = capitalize(data.bairro);
 
-        if (data.cidade)
-          data.cidade =
-            data.cidade.charAt(0).toUpperCase() +
-            data.cidade.slice(1).toLowerCase();
-        else data.cidade = address.city;
+          if (data.bairro.charAt(0) === " ")
+            data.bairro = data.bairro.charAt(0).replace(" ", "");
 
-        if (data.estado) data.estado = data.estado.toUpperCase();
-        else data.estado = address.state;
+          if (data.bairro.charAt(data.bairro.length) === " ")
+            data.bairro = data.bairro
+              .charAt(data.bairro.length)
+              .replace(" ", "");
+        } else {
+          if (address.district) {
+            let bairro = JSON.stringify(address.district);
+            bairro = bairro.slice(1, bairro.length - 1);
+            data.bairro = capitalize(bairro);
+          } else {
+            data.bairro = "Não informado";
+          }
+        }
 
-        data.cep = parseInt(data.cep);
+        if (data.cidade) {
+          data.cidade = data.cidade.replace(/  +/g, " ");
+          data.cidade = capitalize(data.cidade);
+
+          if (data.cidade.charAt(0) === " ")
+            data.cidade = data.cidade.charAt(0).replace(" ", "");
+
+          if (data.cidade.charAt(data.cidade.length) === " ")
+            data.cidade = data.cidade
+              .charAt(data.cidade.length)
+              .replace(" ", "");
+        } else {
+          if (address.city) {
+            let cidade = JSON.stringify(address.district);
+            cidade = cidade.slice(1, cidade.length - 1);
+            data.cidade = capitalize(cidade);
+          } else {
+            data.cidade = "Não informado";
+          }
+        }
+
+        if (data.estado) {
+          data.estado = data.estado.replace(/  +/g, " ");
+          data.estado = data.estado.toUpperCase();
+
+          if (data.estado.charAt(0) === " ")
+            data.estado = data.estado.charAt(0).replace(" ", "");
+
+          if (data.cidade.charAt(data.estado.length) === " ")
+            data.estado = data.estado
+              .charAt(data.estado.length)
+              .replace(" ", "");
+        } else {
+          if (address.state) {
+            let estado = JSON.stringify(address.state);
+            estado = estado.slice(1, estado.length - 1);
+            data.estado = estado.toUpperCase();
+          } else {
+            data.estado = "Não informado";
+          }
+        }
       }
     }
 
@@ -307,7 +413,6 @@ const EditD = () => {
 
   return (
     <div className={styles.fullContainer}>
-      <LoadingAnimation loading={loading} />
       <Nav />
       <div className={styles.contentContainer}>
         <ErrorAnimation
@@ -332,7 +437,7 @@ const EditD = () => {
             <input
               type="text"
               id="name"
-              required={true}
+              required
               autoComplete="off"
               placeholder="Digite o nome do doador..."
               defaultValue={donator.nome}
@@ -362,7 +467,7 @@ const EditD = () => {
               type="date"
               autoComplete="off"
               id="data_de_nascimento"
-              required={true}
+              required
               max={maxDate}
               defaultValue={donator.data_de_nascimento}
               {...register("data_de_nascimento")}
@@ -375,7 +480,7 @@ const EditD = () => {
             <input
               type="number"
               id="rg"
-              required={true}
+              required
               autoComplete="off"
               placeholder="000000000"
               maxLength="9"
@@ -394,7 +499,7 @@ const EditD = () => {
               {...register("orgao_expeditor_rg")}
               id="orgao_expeditor_rg"
               placeholder="Digite o orgão expedidor..."
-              required={true}
+              required
               defaultValue={donator.orgao_expeditor_rg}
             />
             <br />
@@ -431,6 +536,7 @@ const EditD = () => {
               type="text"
               autoComplete="off"
               id="parent"
+              required
               placeholder="Nome da mãe..."
               {...register("filiacao_mae")}
               defaultValue={donator.filiacao_mae}
@@ -445,7 +551,7 @@ const EditD = () => {
               autoComplete="off"
               id="naturalidade"
               placeholder="Digite a naturalidade do doador"
-              required={true}
+              required
               defaultValue={donator.naturalidade}
               {...register("naturalidade")}
             />
@@ -545,11 +651,10 @@ const EditD = () => {
               type="number"
               autoComplete="off"
               id="cep"
-              required={true}
               minLength="8"
               maxLength="8"
               placeholder="00000000"
-              defaultValue={donator.cep}
+              defaultValue={donator.cep === 0 ? "" : donator.cep}
               {...register("cep")}
               onChange={(event) => setCep(event.target.value)}
             />
@@ -564,7 +669,13 @@ const EditD = () => {
               id="logra"
               placeholder="Logradouro do doador..."
               {...register("rua")}
-              defaultValue={!donator.rua ? address.address : donator.rua}
+              defaultValue={
+                !donator.rua
+                  ? address.address
+                  : donator.rua === "Não informado"
+                  ? ""
+                  : donator.rua
+              }
             />
             <br />
             <br />
@@ -575,10 +686,11 @@ const EditD = () => {
               type="text"
               autoComplete="off"
               id="numero_residencia"
-              required={true}
               min="0"
               placeholder="0000"
-              defaultValue={donator.numero_residencia}
+              defaultValue={
+                donator.numero_residencia === 0 ? "" : donator.numero_residencia
+              }
               {...register("numero_residencia")}
             />
             <br />
@@ -593,7 +705,11 @@ const EditD = () => {
               placeholder="Bairro do doador..."
               {...register("bairro")}
               defaultValue={
-                donator.bairro === "" ? address.district : donator.bairro
+                donator.bairro === ""
+                  ? address.district
+                  : donator.bairro === "Não informado"
+                  ? ""
+                  : donator.bairro
               }
             />
             <br />
@@ -608,7 +724,11 @@ const EditD = () => {
               placeholder="Cidade do doador..."
               {...register("cidade")}
               defaultValue={
-                donator.cidade === "" ? address.city : donator.cidade
+                donator.cidade === ""
+                  ? address.city
+                  : donator.cidade === "Não informado"
+                  ? ""
+                  : donator.cidade
               }
             />
             <br />
@@ -623,7 +743,11 @@ const EditD = () => {
               placeholder="Estado do doador..."
               {...register("estado")}
               defaultValue={
-                donator.estado === "" ? address.state : donator.estado
+                donator.estado === ""
+                  ? address.state
+                  : donator.estado === "Não informado"
+                  ? ""
+                  : donator.estado
               }
             />
             <br />
@@ -644,7 +768,7 @@ const EditD = () => {
               type="email"
               id="email"
               autoComplete="off"
-              placeholder="xxxxx@xxxx.xxx"
+              placeholder="XXXXX@XXXXX.XXX"
               defaultValue={donator.email}
               {...register("email")}
             />

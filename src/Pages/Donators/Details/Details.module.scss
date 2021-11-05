@@ -28,7 +28,7 @@
 
           caption {
             font-size: 20px;
-            padding-bottom: 0.5em;
+            padding-bottom: 0.55em;
             color: #670000;
           }
 
@@ -72,8 +72,13 @@
           }
 
           th {
-            color: #670000;
+            color: #fff;
             font-weight: 600;
+            background-color: #670000;
+          }
+
+          tr:nth-child(even) {
+            background-color: #f2f2f2;
           }
 
           th,
@@ -89,19 +94,6 @@
             a:hover {
               color: #670000;
             }
-          }
-
-          .BottomRight {
-            border-right: solid 1px #670000;
-            border-bottom: solid 1px #670000;
-          }
-
-          .Bottom {
-            border-bottom: solid 1px #670000;
-          }
-
-          .Right {
-            border-right: solid 1px #670000;
           }
         }
       }

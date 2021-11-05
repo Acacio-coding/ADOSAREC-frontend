@@ -72,19 +72,63 @@ const RegisterD = () => {
     })();
   }, [cep, token]);
 
+  const capitalize = (string) => {
+    return string
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
   const handleData = async (data) => {
     const anoNascimento = data.data_de_nascimento.slice(0, 4);
     const anoExpedicao = data.data_de_expedicao.slice(0, 4);
 
     if (date.getFullYear() - anoNascimento < 18) {
-      setMessage("Menor de idade!");
+      setMessage(
+        "Menor de idade, para fazer uma doação é necessário ter 18 anos ou mais!"
+      );
       setError(true);
     } else if (anoExpedicao - anoNascimento < 6) {
       setMessage(
         "Ano de expedição do RG inválido, é necessário ter no mínimo 6 anos de idade para fazê-lo!"
       );
       setError(true);
+    } else if (data.telefone1 === data.telefone2) {
+      setMessage(
+        "O primeiro telefone é igual ao segundo, verifique os dados e tente novamente!"
+      );
+      setError(true);
+    } else if (data.telefone1 === data.telefone3) {
+      setMessage(
+        "O primeiro telefone é igual ao terceiro, verifique os dados e tente novamente!"
+      );
+      setError(true);
+    } else if (
+      data.telefone2 !== "" &&
+      data.telefone3 !== "" &&
+      data.telefone2 === data.telefone3
+    ) {
+      setMessage(
+        "O segundo telefone é igual ao terceiro, verifique os dados e tente novamente!"
+      );
+      setError(true);
     } else {
+      if (data.nome) {
+        data.nome = data.nome.replace(/  +/g, " ");
+        data.nome = capitalize(data.nome);
+      }
+
+      if (data.filiacao_pai) {
+        data.filiacao_pai = data.filiacao_pai.replace(/  +/g, " ");
+        data.filiacao_pai = capitalize(data.filiacao_pai);
+      } else {
+        data.filiacao_pai = "Não informado";
+      }
+
+      data.filiacao_mae = data.filiacao_mae.replace(/  +/g, " ");
+      data.filiacao_mae = capitalize(data.filiacao_mae);
+
       data.genero = gender.value;
 
       data.estado_civil = civil.value;
@@ -98,35 +142,103 @@ const RegisterD = () => {
       data.doador_de_medula = medule.value;
 
       data.orgao_expeditor_rg = data.orgao_expeditor_rg.toUpperCase();
+      data.orgao_expeditor_rg = data.orgao_expeditor_rg.replace(/  +/g, " ");
 
       data.rg = parseInt(data.rg);
 
-      data.numero_residencia = parseInt(data.numero_residencia);
+      if (data.numero_residencia) {
+        data.numero_residencia = parseInt(data.numero_residencia);
+      } else {
+        data.numero_residencia = 0;
+      }
 
-      data.naturalidade =
-        data.naturalidade.charAt(0).toUpperCase() +
-        data.naturalidade.slice(1).toLowerCase();
+      if (data.naturalidade) {
+        data.naturalidade = data.naturalidade.replace(/  +/g, " ");
+        data.naturalidade = capitalize(data.naturalidade);
+      }
 
-      data.cep = parseInt(data.cep);
+      if (data.cep) {
+        data.cep = data.cep.replace(/  +/g, " ");
+        data.cep = parseInt(data.cep);
+      } else {
+        data.cep = 0;
+      }
 
-      if (data.rua)
-        data.rua = data.rua.charAt(0).toUpperCase() + data.rua.slice(1);
-      else data.rua = address.address;
+      if (data.rua) {
+        data.rua = data.rua.replace(/  +/g, " ");
+        data.rua = capitalize(data.rua);
 
-      if (data.bairro)
-        data.bairro =
-          data.bairro.charAt(0).toUpperCase() +
-          data.bairro.slice(1).toLowerCase();
-      else data.bairro = address.district;
+        if (data.rua.charAt(0) === " ")
+          data.rua = data.rua.charAt(0).replace(" ", "");
 
-      if (data.cidade)
-        data.cidade =
-          data.cidade.charAt(0).toUpperCase() +
-          data.cidade.slice(1).toLowerCase();
-      else data.cidade = address.city;
+        if (data.rua.charAt(data.rua.length) === " ")
+          data.rua = data.rua.charAt(data.rua.length).replace(" ", "");
+      } else {
+        if (address.address) {
+          let rua = JSON.stringify(address.address);
+          rua = rua.slice(1, rua.length - 1);
+          data.rua = capitalize(rua);
+        } else {
+          data.rua = "Não informado";
+        }
+      }
 
-      if (data.estado) data.estado = data.estado.toUpperCase();
-      else data.estado = address.state;
+      if (data.bairro) {
+        data.bairro = data.bairro.replace(/  +/g, " ");
+        data.bairro = capitalize(data.bairro);
+
+        if (data.bairro.charAt(0) === " ")
+          data.bairro = data.bairro.charAt(0).replace(" ", "");
+
+        if (data.bairro.charAt(data.bairro.length) === " ")
+          data.bairro = data.bairro.charAt(data.bairro.length).replace(" ", "");
+      } else {
+        if (address.district) {
+          let bairro = JSON.stringify(address.district);
+          bairro = bairro.slice(1, bairro.length - 1);
+          data.bairro = capitalize(bairro);
+        } else {
+          data.bairro = "Não informado";
+        }
+      }
+
+      if (data.cidade) {
+        data.cidade = data.cidade.replace(/  +/g, " ");
+        data.cidade = capitalize(data.cidade);
+
+        if (data.cidade.charAt(0) === " ")
+          data.cidade = data.cidade.charAt(0).replace(" ", "");
+
+        if (data.cidade.charAt(data.cidade.length) === " ")
+          data.cidade = data.cidade.charAt(data.cidade.length).replace(" ", "");
+      } else {
+        if (address.city) {
+          let cidade = JSON.stringify(address.district);
+          cidade = cidade.slice(1, cidade.length - 1);
+          data.cidade = capitalize(cidade);
+        } else {
+          data.cidade = "Não informado";
+        }
+      }
+
+      if (data.estado) {
+        data.estado = data.estado.replace(/  +/g, " ");
+        data.estado = data.estado.toUpperCase();
+
+        if (data.estado.charAt(0) === " ")
+          data.estado = data.estado.charAt(0).replace(" ", "");
+
+        if (data.cidade.charAt(data.estado.length) === " ")
+          data.estado = data.estado.charAt(data.estado.length).replace(" ", "");
+      } else {
+        if (address.state) {
+          let estado = JSON.stringify(address.state);
+          estado = estado.slice(1, estado.length - 1);
+          data.estado = estado.toUpperCase();
+        } else {
+          data.estado = "Não informado";
+        }
+      }
 
       data.status = true;
 
@@ -296,6 +408,7 @@ const RegisterD = () => {
             <input
               type="text"
               id="parent"
+              required
               placeholder="Nome da mãe..."
               autoComplete="off"
               {...register("filiacao_mae")}
@@ -408,7 +521,6 @@ const RegisterD = () => {
               type="text"
               id="cep"
               pattern="\d*"
-              required
               minLength="8"
               maxLength="8"
               placeholder="00000000"
@@ -438,7 +550,6 @@ const RegisterD = () => {
               pattern="\d*"
               placeholder="0000"
               minLength="1"
-              required
               autoComplete="off"
               {...register("numero_residencia")}
             />
@@ -474,7 +585,7 @@ const RegisterD = () => {
             <input
               type="text"
               id="estado"
-              placeholder="Estado do doador..."
+              placeholder="Sigla do estado do doador..."
               autoComplete="off"
               {...register("estado", { minLength: 2, maxLength: 2 })}
               defaultValue={address.state}
@@ -496,7 +607,7 @@ const RegisterD = () => {
               id="email"
               autoComplete="off"
               {...register("email")}
-              placeholder="xxxxx@xxxx.xxx"
+              placeholder="XXXXX@XXXXX.XXX"
             />
             <br />
             <br />

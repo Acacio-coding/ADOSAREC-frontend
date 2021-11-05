@@ -62,8 +62,12 @@ const Donators = () => {
     if (string.length >= 1 && string.length <= 3 && isNaN(string))
       string = string.toUpperCase();
 
-    /* if (isNaN(string) && string.length > 3)
-      string = string.charAt(0).toUpperCase() + string.slice(1).toLowerCase(); */
+    if (isNaN(string) && string.length > 3) {
+      string = string.toUpperCase();
+      if (string.includes(" ")) {
+        string = string.replace(/\s\s+/g, " ");
+      }
+    }
 
     setSearch(string);
   };
@@ -90,30 +94,10 @@ const Donators = () => {
           <table>
             <thead>
               <tr>
-                <th
-                  className={
-                    donators.length < 1 ? styles.Right : styles.BottomRight
-                  }
-                >
-                  Nome
-                </th>
-                <th
-                  className={
-                    donators.length < 1 ? styles.Right : styles.BottomRight
-                  }
-                >
-                  Grupo Sanguíneo
-                </th>
-                <th
-                  className={
-                    donators.length < 1 ? styles.Right : styles.BottomRight
-                  }
-                >
-                  RH
-                </th>
-                <th className={donators.length < 1 ? null : styles.Bottom}>
-                  Cidade
-                </th>
+                <th>Nome</th>
+                <th>RG</th>
+                <th>Grupo Sanguíneo/RH</th>
+                <th>Cidade</th>
               </tr>
             </thead>
             <tbody>
@@ -124,8 +108,7 @@ const Donators = () => {
 
                     if (search.length === 1) {
                       let gs = value.grupo_sanguineo;
-                      if (gs.charAt(1)) return null;
-                      else return value;
+                      if (gs === search) return value;
                     }
 
                     if (search.length === 2) {
@@ -179,39 +162,31 @@ const Donators = () => {
                   if (index < donators.length - 1)
                     return (
                       <tr key={index}>
-                        <td
-                          className={styles.BottomRight}
-                          onClick={() => setDonator(value)}
-                        >
+                        <td onClick={() => setDonator(value)}>
                           <Link to="/detalhes_doador">{value.nome}</Link>
                         </td>
 
-                        <td className={styles.BottomRight}>
-                          {value.grupo_sanguineo}
-                        </td>
+                        <td>{value.rg}</td>
 
-                        <td className={styles.BottomRight}>
+                        <td>
+                          {value.grupo_sanguineo}{" "}
                           {value.rh_sanguineo === true ? "+" : "-"}
                         </td>
 
-                        <td className={styles.Bottom}>{value.cidade}</td>
+                        <td>{value.cidade}</td>
                       </tr>
                     );
                   else
                     return (
                       <tr key={index}>
-                        <td
-                          className={styles.Right}
-                          onClick={() => setDonator(value)}
-                        >
+                        <td onClick={() => setDonator(value)}>
                           <Link to="/detalhes_doador">{value.nome}</Link>
                         </td>
 
-                        <td className={styles.Right}>
-                          {value.grupo_sanguineo}
-                        </td>
+                        <td>{value.rg}</td>
 
-                        <td className={styles.Right}>
+                        <td>
+                          {value.grupo_sanguineo}{" "}
                           {value.rh_sanguineo === true ? "+" : "-"}
                         </td>
 

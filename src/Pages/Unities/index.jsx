@@ -87,23 +87,9 @@ const Unities = () => {
           <table>
             <thead>
               <tr>
-                <th
-                  className={
-                    unities.length < 1 ? styles.Right : styles.BottomRight
-                  }
-                >
-                  Unidade
-                </th>
-                <th
-                  className={
-                    unities.length < 1 ? styles.Right : styles.BottomRight
-                  }
-                >
-                  Cidade
-                </th>
-                <th className={unities.length < 1 ? null : styles.Bottom}>
-                  Telefone
-                </th>
+                <th>Unidade</th>
+                <th>Cidade</th>
+                <th>Telefone</th>
               </tr>
             </thead>
             <tbody>
@@ -120,16 +106,13 @@ const Unities = () => {
                   if (index < unities.length - 1) {
                     return (
                       <tr key={index}>
-                        <td
-                          className={styles.BottomRight}
-                          onClick={() => getUnity(value)}
-                        >
+                        <td onClick={() => getUnity(value)}>
                           <Link to="/detalhes_unidade">{value.nome}</Link>
                         </td>
 
-                        <td className={styles.BottomRight}>{value.cidade}</td>
+                        <td>{value.cidade}</td>
 
-                        <td className={styles.Bottom}>
+                        <td>
                           {value.telefone ? value.telefone : "Não informado"}
                         </td>
                       </tr>
@@ -137,14 +120,11 @@ const Unities = () => {
                   } else {
                     return (
                       <tr key={index}>
-                        <td
-                          className={styles.Right}
-                          onClick={() => getUnity(value)}
-                        >
+                        <td onClick={() => getUnity(value)}>
                           <Link to="/detalhes_unidade">{value.nome}</Link>
                         </td>
 
-                        <td className={styles.Right}>{value.cidade}</td>
+                        <td>{value.cidade}</td>
 
                         <td>
                           {value.telefone ? value.telefone : "Não informado"}

@@ -1,13 +1,13 @@
 import React, { useEffect, useState, memo } from "react";
 import Axios from "axios";
 import { useHistory } from "react-router";
+import Select, { createFilter } from "react-select";
 import { useForm } from "react-hook-form";
 
 import { BsFillInfoCircleFill as InfoIcon } from "react-icons/bs";
 
 import Nav from "../../../Components/Nav";
 import TopMenu from "../../../Components/TopMenu";
-import LoadingAnimation from "../../../Components/Animation/Loading";
 import ErrorAnimation from "../../../Components/Animation/Error";
 import styles from "./Edit.module.scss";
 
@@ -16,9 +16,9 @@ const EditDonation = () => {
   const token = sessionStorage.getItem("token");
   const [donators, setDonators] = useState([{}]);
   const [unities, setUnities] = useState([{}]);
-  const [unityName, setUnityName] = useState();
+  const [donator, setDonator] = useState({});
+  const [unity, setUnity] = useState({});
   const [donation, setDonation] = useState({});
-  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
   const history = useHistory();
@@ -29,7 +29,6 @@ const EditDonation = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
     setDonation(JSON.parse(sessionStorage.getItem("donation")));
 
     const header = {
@@ -47,11 +46,15 @@ const EditDonation = () => {
         );
 
         if (response) {
-          const data = response.data.filter((value) => {
-            if (value.nome.includes(donation.nome_doador)) return null;
-            return value;
+          response.data.filter((value) => {
+            if (value.rg === donation.doador_rg)
+              setDonator({
+                label: value.nome,
+                value: value.rg,
+              });
+            return null;
           });
-          setDonators(data);
+          setDonators(response.data);
         }
       } catch (error) {
         setMessage(
@@ -73,7 +76,10 @@ const EditDonation = () => {
         if (response) {
           response.data.filter((value) => {
             if (value.id === donation.orgao_coletor_id)
-              setUnityName(value.nome);
+              setUnity({
+                label: value.nome,
+                value: value.id,
+              });
             return null;
           });
           setUnities(response.data);
@@ -85,8 +91,7 @@ const EditDonation = () => {
         setError(true);
       }
     })();
-    setLoading(false);
-  }, [token, donation.nome_doador, donation.orgao_coletor_id]);
+  }, [token, donation.orgao_coletor_id, donation.doador_rg]);
 
   let stringDate = JSON.stringify(donation.data);
 
@@ -98,23 +103,15 @@ const EditDonation = () => {
   }
 
   const handleData = async (data) => {
-    if (data.doador_rg) {
-      let rg = parseInt(data.doador_rg.slice(0, 9));
-      let name = data.doador_rg.slice(10, data.doador_rg.length);
-      data.doador_rg = rg;
-      data.nome_doador = name;
-      data.volume = parseInt(data.volume);
-    } else {
-      data.doador_rg = donation.doador_rg;
-      data.nome_doador = donation.nome_doador;
-    }
-
     if (!data.data) data.data = donation.data;
 
     if (!data.volume) data.volume = donation.volume;
 
-    if (!data.orgao_coletor_id)
-      data.orgao_coletor_id = donation.orgao_coletor_id;
+    if (data) {
+      data.doador_rg = donator.value;
+      data.orgao_coletor_id = unity.value;
+      data.volume = parseInt(data.volume);
+    }
 
     const header = {
       Authorization: `Bearer ${JSON.parse(token)}`,
@@ -143,9 +140,21 @@ const EditDonation = () => {
     date.getMonth() + 1
   }-${date.getDate()}`;
 
+  const style = {
+    control: (provided) => ({
+      ...provided,
+      border: "solid 1px #670000",
+      borderRadius: "none",
+      padding: "0",
+      boxShadow: "none",
+      "&:hover": {
+        border: "solid 1px #670000",
+      },
+    }),
+  };
+
   return (
     <div className={styles.fullContainer}>
-      <LoadingAnimation loading={loading} />
       <Nav />
       <div className={styles.contentContainer}>
         <ErrorAnimation
@@ -167,19 +176,20 @@ const EditDonation = () => {
             <br />
             <label htmlFor="donatorName">Doador</label>
             <br />
-            <select {...register("doador_rg")} id="donatorName">
-              <option defaultValue hidden>
-                {donation.nome_doador}
-              </option>
-              {donators.map((value, index) => {
-                return (
-                  <option value={`${value.rg}, ${value.nome}`} key={index}>
-                    {value.nome}
-                  </option>
-                );
+            <Select
+              filterOption={createFilter({ ignoreAccents: false })}
+              options={donators.map((value) => {
+                return {
+                  value: value.rg,
+                  label: value.nome,
+                };
               })}
-            </select>
-            <br />
+              onChange={setDonator}
+              styles={style}
+              required
+              value={donator}
+              isSearchable
+            />
 
             <br />
             <label htmlFor="donationData">Data da doação</label>
@@ -205,6 +215,7 @@ const EditDonation = () => {
               id="donationVolume"
               defaultValue={donation.volume}
               required={true}
+              placeholder="000"
               {...register("volume")}
             />
             <br />
@@ -212,20 +223,20 @@ const EditDonation = () => {
             <br />
             <label htmlFor="unityColector">Unidade coletora</label>
             <br />
-            <select
-              {...register("orgao_coletor_id")}
-              id="unityColector"
-              defaultValue={unityName}
-            >
-              {unities.map((value, index) => {
-                return (
-                  <option key={index} value={value.id}>
-                    {value.nome}
-                  </option>
-                );
+            <Select
+              filterOption={createFilter({ ignoreAccents: false })}
+              options={unities.map((value) => {
+                return {
+                  value: value.id,
+                  label: value.nome,
+                };
               })}
-            </select>
-            <br />
+              onChange={setUnity}
+              styles={style}
+              required
+              value={unity}
+              isSearchable
+            />
             <br />
             <br />
 

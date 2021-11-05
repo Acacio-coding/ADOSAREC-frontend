@@ -33,8 +33,6 @@ const RegisterU = () => {
     data.cidade =
       data.cidade.charAt(0).toUpperCase() + data.cidade.slice(1).toLowerCase();
 
-    data.status = true;
-
     const header = {
       Authorization: `Bearer ${JSON.parse(token)}`,
       "Content-Type": "application/json",
@@ -98,6 +96,7 @@ const RegisterU = () => {
               </div>
               <span>Endereço</span>
             </div>
+            <br />
 
             <label htmlFor="cidade">Cidade</label>
             <br />
@@ -117,11 +116,11 @@ const RegisterU = () => {
               <div className={styles.iconContainer}>
                 <ContactIcon style={{ fontSize: "32px" }} />
               </div>
-              <span>Contato (opcional)</span>
+              <span>Contato</span>
             </div>
             <br />
 
-            <label htmlFor="telefone">Telefone</label>
+            <label htmlFor="telefone">Telefone (opcional)</label>
             <br />
             <input
               type="text"

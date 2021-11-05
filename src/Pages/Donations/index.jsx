@@ -196,37 +196,11 @@ const Donations = () => {
           <table>
             <thead>
               <tr>
-                <th
-                  className={
-                    donations.length < 1 ? styles.Right : styles.BottomRight
-                  }
-                >
-                  Ação
-                </th>
-                <th
-                  className={
-                    donations.length < 1 ? styles.Right : styles.BottomRight
-                  }
-                >
-                  Doador
-                </th>
-                <th
-                  className={
-                    donations.length < 1 ? styles.Right : styles.BottomRight
-                  }
-                >
-                  Data
-                </th>
-                <th
-                  className={
-                    donations.length < 1 ? styles.Right : styles.BottomRight
-                  }
-                >
-                  Volume
-                </th>
-                <th className={donations.length < 1 ? null : styles.Bottom}>
-                  Unidade de coleta
-                </th>
+                <th>Ação</th>
+                <th>Doador</th>
+                <th>Data</th>
+                <th>Volume</th>
+                <th>Unidade de coleta</th>
               </tr>
             </thead>
             <tbody>
@@ -300,7 +274,7 @@ const Donations = () => {
                   if (index < donations.length - 1)
                     return (
                       <tr key={index}>
-                        <td className={styles.BottomRight}>
+                        <td>
                           <div>
                             <Link
                               to={`/editar_doacao`}
@@ -316,21 +290,19 @@ const Donations = () => {
                           </div>
                         </td>
 
-                        <td className={styles.BottomRight}>{donatorName}</td>
+                        <td>{donatorName}</td>
 
-                        <td className={styles.BottomRight}>{stringDate}</td>
+                        <td>{stringDate}</td>
 
-                        <td className={styles.BottomRight}>
-                          {value.volume} ml
-                        </td>
+                        <td>{value.volume} ml</td>
 
-                        <td className={styles.Bottom}>{unityName}</td>
+                        <td>{unityName}</td>
                       </tr>
                     );
                   else
                     return (
                       <tr key={index}>
-                        <td className={styles.Right}>
+                        <td>
                           <div>
                             <Link
                               to={`/editar_doacao`}
@@ -346,11 +318,11 @@ const Donations = () => {
                           </div>
                         </td>
 
-                        <td className={styles.Right}>{donatorName}</td>
+                        <td>{donatorName}</td>
 
-                        <td className={styles.Right}>{stringDate}</td>
+                        <td>{stringDate}</td>
 
-                        <td className={styles.Right}>{value.volume} ml</td>
+                        <td>{value.volume} ml</td>
 
                         <td>{unityName}</td>
                       </tr>

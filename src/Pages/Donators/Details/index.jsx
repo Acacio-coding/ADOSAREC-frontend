@@ -247,40 +247,38 @@ const DetailsD = () => {
 
                 <tr>
                   <th className={styles.th}>Logradouro:</th>
-                  <td className={styles.td}>
-                    {donator.rua ? donator.rua : "Não informado"}
-                  </td>
+                  <td className={styles.td}>{donator.rua}</td>
                 </tr>
 
                 <tr>
                   <th className={styles.th}>Número residencial:</th>
-                  <td className={styles.td}>{donator.numero_residencia}</td>
+                  <td className={styles.td}>
+                    {donator.numero_residencia === 0
+                      ? "Não Informado"
+                      : donator.numero_residencia}
+                  </td>
                 </tr>
 
                 <tr>
                   <th className={styles.th}>Bairro:</th>
-                  <td className={styles.td}>
-                    {donator.bairro ? donator.bairro : "Não informado"}
-                  </td>
+                  <td className={styles.td}>{donator.bairro}</td>
                 </tr>
 
                 <tr>
                   <th className={styles.th}>Cidade:</th>
-                  <td className={styles.td}>
-                    {donator.cidade ? donator.cidade : "Não informado"}
-                  </td>
+                  <td className={styles.td}>{donator.cidade}</td>
                 </tr>
 
                 <tr>
                   <th className={styles.th}>Estado:</th>
-                  <td className={styles.td}>
-                    {donator.estado ? donator.estado : "Não informado"}
-                  </td>
+                  <td className={styles.td}>{donator.estado}</td>
                 </tr>
 
                 <tr>
                   <th className={styles.th}>CEP:</th>
-                  <td className={styles.td}>{donator.cep}</td>
+                  <td className={styles.td}>
+                    {donator.cep === 0 ? "Não informado" : donator.cep}
+                  </td>
                 </tr>
 
                 <tr>
@@ -364,23 +362,9 @@ const DetailsD = () => {
               <caption className={styles.legenda}>Doações do doador</caption>
               <thead>
                 <tr>
-                  <th
-                    className={
-                      donations.length < 1 ? styles.Right : styles.BottomRight
-                    }
-                  >
-                    Data
-                  </th>
-                  <th
-                    className={
-                      donations.length < 1 ? styles.Right : styles.BottomRight
-                    }
-                  >
-                    Volume
-                  </th>
-                  <th className={donations.length < 1 ? null : styles.Bottom}>
-                    Unidade de coleta
-                  </th>
+                  <th>Data</th>
+                  <th>Volume</th>
+                  <th>Unidade de coleta</th>
                 </tr>
               </thead>
               <tbody>
@@ -408,21 +392,19 @@ const DetailsD = () => {
                   if (index < donations.length - 1)
                     return (
                       <tr key={index}>
-                        <td className={styles.BottomRight}>{stringDate}</td>
+                        <td>{stringDate}</td>
 
-                        <td className={styles.BottomRight}>
-                          {value.volume} ml
-                        </td>
+                        <td>{value.volume} ml</td>
 
-                        <td className={styles.Bottom}>{unityName}</td>
+                        <td>{unityName}</td>
                       </tr>
                     );
                   else
                     return (
                       <tr key={index}>
-                        <td className={styles.Right}>{stringDate}</td>
+                        <td>{stringDate}</td>
 
-                        <td className={styles.Right}>{value.volume} ml</td>
+                        <td>{value.volume} ml</td>
 
                         <td>{unityName}</td>
                       </tr>

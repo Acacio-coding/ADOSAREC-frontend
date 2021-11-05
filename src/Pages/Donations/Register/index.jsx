@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { useForm } from "react-hook-form";
+import Select, { createFilter } from "react-select";
 import Axios from "axios";
 
 import { BsFillInfoCircleFill as InfoIcon } from "react-icons/bs";
@@ -77,10 +78,8 @@ const RegisterDo = () => {
 
   const handleData = async (data) => {
     if (data) {
-      let rg = parseInt(data.doador_rg.slice(0, 9));
-      let name = data.doador_rg.slice(10, data.doador_rg.length);
-      data.doador_rg = rg;
-      data.nome_doador = name;
+      data.doador_rg = donator.value;
+      data.orgao_coletor_id = unity.value;
       data.volume = parseInt(data.volume);
     }
 
@@ -88,6 +87,8 @@ const RegisterDo = () => {
       Authorization: `Bearer ${JSON.parse(token)}`,
       "Content-Type": "application/json",
     };
+
+    console.log(data);
 
     try {
       await Axios.post(
@@ -110,6 +111,22 @@ const RegisterDo = () => {
   const maxDate = `${date.getFullYear()}-${
     date.getMonth() + 1
   }-${date.getDate()}`;
+
+  const [donator, setDonator] = useState({});
+  const [unity, setUnity] = useState({});
+
+  const style = {
+    control: (provided) => ({
+      ...provided,
+      border: "solid 1px #670000",
+      borderRadius: "none",
+      padding: "0",
+      boxShadow: "none",
+      "&:hover": {
+        border: "solid 1px #670000",
+      },
+    }),
+  };
 
   return (
     <div className={styles.fullContainer}>
@@ -137,21 +154,22 @@ const RegisterDo = () => {
             <br />
             <label htmlFor="donatorName">Doador</label>
             <br />
-            <select id="donatorName" {...register("doador_rg")}>
-              <option defaultValue="" hidden>
-                Selecione um doador...
-              </option>
-              {donators.map((value, index) => {
-                return (
-                  <option value={`${value.rg}, ${value.nome}`} key={index}>
-                    {value.nome}
-                  </option>
-                );
+            <Select
+              filterOption={createFilter({ ignoreAccents: false })}
+              options={donators.map((value) => {
+                return {
+                  value: value.rg,
+                  label: value.nome,
+                };
               })}
-            </select>
+              onChange={setDonator}
+              styles={style}
+              required
+              placeholder="Selecione um(a) doador(a)..."
+              isSearchable
+            />
             <br />
 
-            <br />
             <label htmlFor="donationData">Data da doação</label>
             <br />
             <input
@@ -173,6 +191,7 @@ const RegisterDo = () => {
               autoComplete="off"
               id="donationVolume"
               required={true}
+              placeholder="000"
               {...register("volume")}
             />
             <br />
@@ -180,19 +199,20 @@ const RegisterDo = () => {
             <br />
             <label htmlFor="unityColector">Unidade coletora</label>
             <br />
-            <select {...register("orgao_coletor_id")} id="unityColector">
-              <option defaultValue hidden>
-                Selecione a unidade coletora...
-              </option>
-              {unities.map((value, index) => {
-                return (
-                  <option key={index} value={value.id}>
-                    {value.nome}
-                  </option>
-                );
+            <Select
+              filterOption={createFilter({ ignoreAccents: false })}
+              options={unities.map((value) => {
+                return {
+                  value: value.id,
+                  label: value.nome,
+                };
               })}
-            </select>
-            <br />
+              onChange={setUnity}
+              styles={style}
+              required
+              placeholder="Selecione uma unidade coletora..."
+              isSearchable
+            />
             <br />
             <br />
 
