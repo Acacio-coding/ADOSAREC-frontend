@@ -199,7 +199,7 @@ const EditDonation = () => {
               autoComplete="off"
               id="donationData"
               defaultValue={donation.date}
-              required={true}
+              required
               max={maxDate}
               {...register("data")}
             />
@@ -214,7 +214,9 @@ const EditDonation = () => {
               step="0.01"
               id="donationVolume"
               defaultValue={donation.volume}
-              required={true}
+              required
+              min="0"
+              max="450"
               placeholder="000"
               {...register("volume")}
             />
