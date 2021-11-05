@@ -55,6 +55,14 @@ const Donators = () => {
     sessionStorage.setItem("donator", JSON.stringify(donator));
   };
 
+  const capitalize = (string) => {
+    return string
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
   const handleSearch = (term) => {
     let string = JSON.stringify(term.term);
     string = string.slice(1, string.length - 1);
@@ -63,10 +71,7 @@ const Donators = () => {
       string = string.toUpperCase();
 
     if (isNaN(string) && string.length > 3) {
-      string = string.toUpperCase();
-      if (string.includes(" ")) {
-        string = string.replace(/\s\s+/g, " ");
-      }
+      string = capitalize(string);
     }
 
     setSearch(string);

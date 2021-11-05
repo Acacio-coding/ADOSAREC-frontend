@@ -147,11 +147,22 @@ const Donations = () => {
     }
   };
 
+  const capitalize = (string) => {
+    return string
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
   const handleSearch = (term) => {
     let string = JSON.stringify(term.term);
     string = string.slice(1, string.length - 1);
 
-    if (string.length === 10 && string.includes("/")) {
+    if (
+      (string.length === 10 && string.includes("/")) ||
+      string.includes("-")
+    ) {
       string = string.replaceAll("/", "-");
       string =
         string.slice(6, 10) +
@@ -159,9 +170,11 @@ const Donations = () => {
         string.slice(3, 5) +
         "-" +
         string.slice(0, 2);
-    } else if (isNaN(string)) {
-      string = string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    } else {
+      string = capitalize(string);
     }
+
+    console.log(string);
 
     setSearch(string);
   };
@@ -213,7 +226,7 @@ const Donations = () => {
                     let rg;
                     const val = JSON.stringify(value);
 
-                    unities.map((value, index) => {
+                    unities.map((value) => {
                       if (value.nome === search) {
                         foundUnity = true;
                         id = value.id;
@@ -221,7 +234,7 @@ const Donations = () => {
                       return null;
                     });
 
-                    donators.map((value, index) => {
+                    donators.map((value) => {
                       if (value.nome === search) {
                         foundDonator = true;
                         rg = value.rg;
@@ -230,8 +243,9 @@ const Donations = () => {
                     });
 
                     if (val.includes(search)) return value;
-                    else if (foundUnity && val.includes(id)) return value;
-                    else if (foundDonator && val.includes(rg)) return value;
+                    else if (foundUnity && value.id === id) {
+                      return value;
+                    } else if (foundDonator && val.includes(rg)) return value;
                     else return null;
                   }
                   return value;
