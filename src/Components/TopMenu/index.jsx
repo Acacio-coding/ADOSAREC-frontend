@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Select from "react-select";
 import { useHistory } from "react-router";
 
 import { FaSearch as SearchIcon } from "react-icons/fa";
@@ -19,9 +20,51 @@ const TopMenu = ({
   placeholder,
   handleRemove,
   func,
+  filter,
+  setFilter,
+  loading,
 }) => {
   const { register, handleSubmit } = useForm();
   const history = useHistory();
+
+  const style = {
+    control: (provided) => ({
+      ...provided,
+      border: "none",
+      width: "12em",
+      borderRadius: "5px",
+      marginRight: "20px",
+      padding: "0",
+      boxShadow: "0 4px 8px hsla(0, 0%, 0%, 0.2)",
+      backgroundColor: loading ? "background: hsla(0, 0%, 0%, 0.7)" : "#fff",
+      transition: "0ms",
+    }),
+
+    indicatorSeparator: (base) => ({
+      ...base,
+      backgroundColor: loading ? "#360000" : "#670000",
+      transition: "0ms",
+    }),
+
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected ? "#650000" : "#fff",
+      "&:hover": {
+        backgroundColor: state.isSelected ? "#650000" : "#0000001d",
+      },
+    }),
+
+    menu: (provided) => ({
+      ...provided,
+      width: "12em",
+    }),
+
+    dropdownIndicator: (base) => ({
+      ...base,
+      color: loading ? "#360000" : "#670000",
+      transition: "0ms",
+    }),
+  };
 
   if (typePage === "general")
     return (
@@ -30,6 +73,17 @@ const TopMenu = ({
           <h1>{title}</h1>
 
           <div className={styles.inputContainer}>
+            <Select
+              options={[
+                { value: "Active", label: "Ativos" },
+                { value: "Inactive", label: "Inativos" },
+              ]}
+              styles={style}
+              onChange={setFilter}
+              value={filter}
+              required
+            />
+
             <form onSubmit={handleSubmit(func)}>
               <input
                 type="text"
@@ -58,6 +112,17 @@ const TopMenu = ({
           <h1>{title}</h1>
 
           <div className={styles.inputContainer}>
+            <Select
+              options={[
+                { value: "Active", label: "Ativos" },
+                { value: "Inactive", label: "Inativos" },
+              ]}
+              styles={style}
+              onChange={setFilter}
+              value={filter}
+              required
+            />
+
             <form onSubmit={handleSubmit(func)}>
               <input
                 type="text"

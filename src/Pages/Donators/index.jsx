@@ -14,10 +14,15 @@ const Donators = () => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
   const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState({ value: "Active", label: "Ativos" });
 
   const handleError = () => {
     if (error) setError(false);
     else setError(true);
+  };
+
+  const handleFilter = (value) => {
+    setFilter(value);
   };
 
   useEffect(() => {
@@ -93,6 +98,9 @@ const Donators = () => {
           placeholder="Buscar doador..."
           page="doador"
           func={handleSearch}
+          filter={filter}
+          setFilter={handleFilter}
+          loading={loading}
         />
 
         <div className={styles.tableContainer}>
@@ -107,6 +115,13 @@ const Donators = () => {
             </thead>
             <tbody>
               {donators
+                .filter((value) => {
+                  if (filter.value === "Inactive")
+                    if (!value.status) return value;
+                    else return null;
+                  else if (value.status) return value;
+                  else return null;
+                })
                 .filter((value) => {
                   if (search) {
                     const val = JSON.stringify(value);

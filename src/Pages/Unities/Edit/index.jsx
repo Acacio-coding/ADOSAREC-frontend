@@ -35,23 +35,27 @@ const DetailsU = () => {
     setLoading(false);
   }, [token]);
 
+  const capitalize = (string) => {
+    return string
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
+
   const handleData = async (data) => {
     if (!data.nome) data.nome = unity.nome;
 
     if (!data.cidade) data.cidade = unity.cidade;
 
-    if (!data.email) data.email = unity.email;
-
     if (!data.telefone) data.telefone = unity.telefone;
 
     if (data) {
-      data.nome =
-        data.cidade.charAt(0).toUpperCase() +
-        data.cidade.slice(1).toLowerCase();
+      data.nome = data.nome.replace(/  +/g, " ");
+      data.nome = capitalize(data.nome);
 
-      data.cidade =
-        data.cidade.charAt(0).toUpperCase() +
-        data.cidade.slice(1).toLowerCase();
+      data.cidade = data.cidade.replace(/  +/g, " ");
+      data.cidade = capitalize(data.cidade);
     }
 
     data.status = true;
@@ -129,6 +133,7 @@ const DetailsU = () => {
               type="text"
               autoComplete="off"
               id="cidade"
+              {...register("cidade")}
               placeholder="Digite a cidade da unidade coletora..."
               defaultValue={unity.cidade}
             />
@@ -162,7 +167,7 @@ const DetailsU = () => {
             <br />
 
             <div className={styles.buttonContainer}>
-              <input type="submit" value="Cadastrar" />
+              <input type="submit" value="Atualizar" />
             </div>
           </form>
         </div>

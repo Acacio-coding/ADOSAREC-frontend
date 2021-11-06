@@ -6,6 +6,7 @@ import Nav from "../../Components/Nav";
 import TopMenu from "../../Components/TopMenu";
 import { RiPencilFill as EditIcon } from "react-icons/ri";
 import { IoMdTrash as RemoveIcon } from "react-icons/io";
+import { FaUserCheck as ActiveIcon } from "react-icons/fa";
 import LoadingAnimation from "../../Components/Animation/Loading";
 import RemoveAnimation from "../../Components/Animation/Remove";
 import ErrorAnimation from "../../Components/Animation/Error";
@@ -21,10 +22,15 @@ const Donations = () => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
   const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState({ value: "Active", label: "Ativos" });
 
   const handleError = () => {
     if (error) setError(false);
     else setError(true);
+  };
+
+  const handleFilter = (value) => {
+    setFilter(value);
   };
 
   useEffect(() => {
@@ -117,6 +123,40 @@ const Donations = () => {
 
       handleRemove();
     }
+
+    if (arg === "activate") {
+      let data = {};
+      data.data = donationData.data;
+      data.volume = donationData.volume;
+      data.doador_rg = donationData.doador_rg;
+      data.orgao_coletor_id = donationData.orgao_coletor_id;
+      data.status = true;
+
+      const id = donationData.id;
+
+      (async () => {
+        const header = {
+          Authorization: `Bearer ${JSON.parse(token)}`,
+          "Content-Type": "application/json",
+        };
+
+        try {
+          await Axios.put(
+            `https://app-node-api-test.herokuapp.com/v1/donation/${id}`,
+            data,
+            {
+              headers: header,
+            }
+          );
+          window.location.reload();
+        } catch (error) {
+          setMessage(
+            "Não foi possível alterar os dados da doação, contate os desenvolvedores ou tente novamente mais tarde!"
+          );
+          setError(true);
+        }
+      })();
+    }
   };
 
   const handleRemove = () => {
@@ -174,8 +214,6 @@ const Donations = () => {
       string = capitalize(string);
     }
 
-    console.log(string);
-
     setSearch(string);
   };
 
@@ -196,6 +234,9 @@ const Donations = () => {
           placeholder="Buscar doação..."
           page="doacao"
           func={handleSearch}
+          filter={filter}
+          setFilter={handleFilter}
+          loading={loading}
         />
 
         <RemoveAnimation
@@ -218,6 +259,13 @@ const Donations = () => {
             </thead>
             <tbody>
               {donations
+                .filter((value) => {
+                  if (filter.value === "Inactive")
+                    if (!value.status) return value;
+                    else return null;
+                  else if (value.status) return value;
+                  else return null;
+                })
                 .filter((value) => {
                   if (search) {
                     let foundUnity = false;
@@ -293,6 +341,11 @@ const Donations = () => {
                             <Link
                               to={`/editar_doacao`}
                               onClick={() => setDonation(value, "edit")}
+                              className={
+                                filter.value === "Active"
+                                  ? styles.show
+                                  : styles.hide
+                              }
                             >
                               <EditIcon id={styles.editIcon} />
                             </Link>
@@ -300,6 +353,21 @@ const Donations = () => {
                             <RemoveIcon
                               id={styles.removeIcon}
                               onClick={() => setDonation(value, "remove")}
+                              className={
+                                filter.value === "Active"
+                                  ? styles.show
+                                  : styles.hide
+                              }
+                            />
+
+                            <ActiveIcon
+                              id={styles.activeIcon}
+                              onClick={() => setDonation(value, "activate")}
+                              className={
+                                filter.value === "Inactive"
+                                  ? styles.show
+                                  : styles.hide
+                              }
                             />
                           </div>
                         </td>
@@ -321,6 +389,11 @@ const Donations = () => {
                             <Link
                               to={`/editar_doacao`}
                               onClick={() => setDonation(value, "edit")}
+                              className={
+                                filter.value === "Active"
+                                  ? styles.show
+                                  : styles.hide
+                              }
                             >
                               <EditIcon id={styles.editIcon} />
                             </Link>
@@ -328,6 +401,21 @@ const Donations = () => {
                             <RemoveIcon
                               id={styles.removeIcon}
                               onClick={() => setDonation(value, "remove")}
+                              className={
+                                filter.value === "Active"
+                                  ? styles.show
+                                  : styles.hide
+                              }
+                            />
+
+                            <ActiveIcon
+                              id={styles.activeIcon}
+                              onClick={() => setDonation(value, "activate")}
+                              className={
+                                filter.value === "Inactive"
+                                  ? styles.show
+                                  : styles.hide
+                              }
                             />
                           </div>
                         </td>

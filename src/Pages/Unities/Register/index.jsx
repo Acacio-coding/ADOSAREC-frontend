@@ -26,12 +26,20 @@ const RegisterU = () => {
     else setError(true);
   };
 
-  const handleData = async (data) => {
-    data.nome =
-      data.nome.charAt(0).toUpperCase() + data.nome.slice(1).toLowerCase();
+  const capitalize = (string) => {
+    return string
+      .toLowerCase()
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
 
-    data.cidade =
-      data.cidade.charAt(0).toUpperCase() + data.cidade.slice(1).toLowerCase();
+  const handleData = async (data) => {
+    data.nome = data.nome.replace(/  +/g, " ");
+    data.nome = capitalize(data.nome);
+
+    data.cidade = data.cidade.replace(/  +/g, " ");
+    data.cidade = capitalize(data.cidade);
 
     const header = {
       Authorization: `Bearer ${JSON.parse(token)}`,

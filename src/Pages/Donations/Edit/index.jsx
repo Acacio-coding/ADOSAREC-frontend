@@ -151,6 +151,27 @@ const EditDonation = () => {
         border: "solid 1px #670000",
       },
     }),
+
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected ? "#650000" : "#fff",
+      "&:hover": {
+        backgroundColor: state.isSelected ? "#650000" : "#0000001d",
+      },
+    }),
+
+    indicatorSeparator: (base) => ({
+      ...base,
+      backgroundColor: "#670000",
+    }),
+
+    dropdownIndicator: (base) => ({
+      ...base,
+      color: "#670000",
+      "&:hover": {
+        color: "#CCC",
+      },
+    }),
   };
 
   return (

@@ -15,10 +15,15 @@ const Unities = () => {
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
   const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState({ value: "Active", label: "Ativos" });
 
   const handleError = () => {
     if (error) setError(false);
     else setError(true);
+  };
+
+  const handleFilter = (value) => {
+    setFilter(value);
   };
 
   useEffect(() => {
@@ -81,6 +86,9 @@ const Unities = () => {
           placeholder="Buscar Unidade..."
           page="unidade"
           func={handleSearch}
+          filter={filter}
+          setFilter={handleFilter}
+          loading={loading}
         />
 
         <div className={styles.tableContainer}>
@@ -94,6 +102,15 @@ const Unities = () => {
             </thead>
             <tbody>
               {unities
+                .filter((value) => {
+                  if (filter.value === "Inactive")
+                    if (!value.status) return value;
+                    else return null;
+                  else if (filter.value === "Active")
+                    if (value.status) return value;
+                    else return null;
+                  else return value;
+                })
                 .filter((value) => {
                   if (search) {
                     const val = JSON.stringify(value);

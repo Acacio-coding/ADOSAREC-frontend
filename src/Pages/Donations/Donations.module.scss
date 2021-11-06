@@ -42,6 +42,17 @@
 
           div {
             margin-top: 1px;
+            .show {
+              visibility: visible;
+              pointer-events: all;
+            }
+
+            .hide {
+              display: none;
+              visibility: hidden;
+              pointer-events: none;
+            }
+
             a {
               #editIcon {
                 font-size: 25px;
@@ -53,6 +64,16 @@
               #editIcon:hover {
                 color: #3b0000;
               }
+            }
+
+            #activeIcon {
+              font-size: 25px;
+              color: #670000;
+              cursor: pointer;
+            }
+
+            #activeIcon:hover {
+              color: #3b0000;
             }
 
             #removeIcon {
