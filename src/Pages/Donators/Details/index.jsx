@@ -12,6 +12,7 @@ import styles from "./Details.module.scss";
 const DetailsD = () => {
   const token = sessionStorage.getItem("token");
   const donator = JSON.parse(sessionStorage.getItem("donator"));
+  const filter = JSON.parse(sessionStorage.getItem("filterDonator"));
   const [job, setJob] = useState();
   const [donations, setDonations] = useState([{}]);
   const [unities, setUnities] = useState([{}]);
@@ -145,6 +146,82 @@ const DetailsD = () => {
     donator.data_de_expedicao = day + month + year;
   }
 
+  const restore = async () => {
+    const header = {
+      Authorization: `Bearer ${JSON.parse(token)}`,
+      "Content-Type": "application/json",
+    };
+
+    const data = {};
+    data.nome = donator.nome;
+
+    data.genero = donator.genero;
+
+    data.data_de_nascimento = donator.data_de_nascimento;
+
+    data.rg = donator.rg;
+
+    data.orgao_expeditor_rg = donator.orgao_expeditor_rg;
+
+    data.data_de_expedicao = donator.data_de_expedicao;
+
+    data.filiacao_pai = donator.filiacao_pai;
+
+    data.filiacao_mae = donator.filiacao_mae;
+
+    data.naturalidade = donator.naturalidade;
+
+    data.estado_civil = donator.estado_civil;
+
+    data.profissao_id = donator.profissao_id;
+
+    data.grupo_sanguineo = donator.grupo_sanguineo;
+
+    data.rh_sanguineo = donator.rh_sanguineo;
+
+    data.cep = donator.cep;
+
+    data.rua = donator.rua;
+
+    data.bairro = donator.bairro;
+
+    data.cidade = donator.cidade;
+
+    data.estado = donator.estado;
+
+    data.numero_residencia = donator.numero_residencia;
+
+    data.email = donator.email;
+
+    data.telefone1 = donator.telefone1;
+
+    data.telefone2 = donator.telefone2;
+
+    data.telefone3 = donator.telefone3;
+
+    data.status = true;
+
+    try {
+      setLoading(true);
+      await Axios.put(
+        `https://app-node-api-test.herokuapp.com/v1/donator/${donator.rg}`,
+        data,
+        {
+          headers: header,
+        }
+      );
+
+      history.push("/doadores");
+      setLoading(false);
+    } catch (error) {
+      setMessage(
+        "Não foi possível restaurar o doador, contate os desenvolvedores ou tente novamente mais tarde!"
+      );
+      setLoading(false);
+      setError(true);
+    }
+  };
+
   return (
     <div className={styles.fullContainer}>
       <LoadingAnimation loading={loading} />
@@ -161,6 +238,8 @@ const DetailsD = () => {
           typePage="details"
           title={`Detalhes do doador ${donator.nome}`}
           handleRemove={handleRemove}
+          filter={filter}
+          func={restore}
         />
 
         <RemoveAnimation

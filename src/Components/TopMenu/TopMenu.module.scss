@@ -100,8 +100,33 @@
       background: #410000;
     }
 
-    .iconsContainer {
+    .show {
+      visibility: visible;
+      pointer-events: all;
+    }
+
+    .hide {
+      display: none;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    #activeIcon {
+      font-size: 32px;
+      color: #670000;
       display: flex;
+      align-items: center;
+      transition: 150ms ease;
+      cursor: pointer;
+    }
+
+    #activeIcon:hover {
+      color: #410000;
+    }
+
+    .show {
+      display: flex;
+
       a {
         font-size: 32px;
         color: #670000;

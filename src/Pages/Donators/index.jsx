@@ -26,6 +26,8 @@ const Donators = () => {
   };
 
   useEffect(() => {
+    sessionStorage.removeItem("filterDonations");
+
     setLoading(true);
     const header = {
       Authorization: `Bearer ${JSON.parse(token)}`,
@@ -58,6 +60,12 @@ const Donators = () => {
   const setDonator = (donator) => {
     if (sessionStorage.getItem("donator")) sessionStorage.removeItem("donator");
     sessionStorage.setItem("donator", JSON.stringify(donator));
+
+    if (filter.value === "Inactive") {
+      if (sessionStorage.getItem("filterDonator"))
+        sessionStorage.removeItem("filterDonator");
+      else sessionStorage.setItem("filterDonator", JSON.stringify(filter));
+    }
   };
 
   const capitalize = (string) => {

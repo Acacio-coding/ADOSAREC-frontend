@@ -5,12 +5,15 @@ import Axios from "axios";
 import Nav from "../../../Components/Nav";
 import TopMenu from "../../../Components/TopMenu";
 import RemoveAnimation from "../../../Components/Animation/Remove";
+import LoadingAnimation from "../../../Components/Animation/Loading/index";
 import ErrorAnimation from "../../../Components/Animation/Error";
 import styles from "./Details.module.scss";
 
 const DetailsU = () => {
   const token = sessionStorage.getItem("token");
+  const filter = JSON.parse(sessionStorage.getItem("filterUnity"));
   const unity = JSON.parse(sessionStorage.getItem("unity"));
+  const [loading, setLoading] = useState(false);
   const [remove, setRemove] = useState(false);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
@@ -48,8 +51,41 @@ const DetailsU = () => {
     })();
   };
 
+  const restore = async () => {
+    const header = {
+      Authorization: `Bearer ${JSON.parse(token)}`,
+      "Content-Type": "application/json",
+    };
+
+    const data = {};
+    data.nome = unity.nome;
+    data.cidade = unity.cidade;
+    data.telefone = unity.telefone;
+    data.status = true;
+
+    try {
+      setLoading(true);
+      await Axios.put(
+        `https://app-node-api-test.herokuapp.com/v1/collector/${unity.id}`,
+        data,
+        {
+          headers: header,
+        }
+      );
+      history.push("/unidades");
+      setLoading(true);
+    } catch (error) {
+      setMessage(
+        "Não foi possível alterar os dados da unidade coletora, contate os desenvolvedores ou tente novamente mais tarde!"
+      );
+      setLoading(false);
+      setError(true);
+    }
+  };
+
   return (
     <div className={styles.fullContainer}>
+      <LoadingAnimation loading={loading} />
       <Nav />
 
       <div className={styles.contentContainer}>
@@ -63,6 +99,8 @@ const DetailsU = () => {
           typePage="details"
           title={`Detalhes da unidade ${unity.nome} `}
           handleRemove={handleRemove}
+          filter={filter}
+          func={restore}
         />
 
         <RemoveAnimation

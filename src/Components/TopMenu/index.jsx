@@ -10,6 +10,7 @@ import {
   MdKeyboardBackspace as GoBack,
 } from "react-icons/md";
 import { IoMdTrash as RemoveIcon } from "react-icons/io";
+import { MdRestorePage as ActiveIcon } from "react-icons/md";
 import styles from "./TopMenu.module.scss";
 import { useForm } from "react-hook-form";
 
@@ -156,8 +157,21 @@ const TopMenu = ({
             <GoBack />
           </button>
 
-          <div className={styles.iconsContainer}>
-            <Link to={`/editar_${page}`} className={styles.paddedIcons}>
+          <ActiveIcon
+            id={styles.activeIcon}
+            className={
+              filter && filter.value === "Inactive" ? styles.show : styles.hide
+            }
+            onClick={func}
+          />
+
+          <div
+            className={
+              (styles.iconsContainer,
+              filter && filter.value === "Inactive" ? styles.hide : styles.show)
+            }
+          >
+            <Link to={`/editar_${page}`}>
               <EditIcon />
             </Link>
 

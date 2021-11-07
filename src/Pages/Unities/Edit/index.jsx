@@ -73,7 +73,10 @@ const DetailsU = () => {
           headers: header,
         }
       );
-      history.push("/unidades");
+
+      sessionStorage.removeItem("unity");
+      sessionStorage.setItem("unity", JSON.stringify(data));
+      history.push("/detalhes_unidade");
     } catch (error) {
       setMessage(
         "Não foi possível alterar os dados da unidade coletora, contate os desenvolvedores ou tente novamente mais tarde!"

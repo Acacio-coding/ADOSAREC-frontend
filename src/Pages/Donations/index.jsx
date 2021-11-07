@@ -6,7 +6,7 @@ import Nav from "../../Components/Nav";
 import TopMenu from "../../Components/TopMenu";
 import { RiPencilFill as EditIcon } from "react-icons/ri";
 import { IoMdTrash as RemoveIcon } from "react-icons/io";
-import { FaUserCheck as ActiveIcon } from "react-icons/fa";
+import { MdRestorePage as ActiveIcon } from "react-icons/md";
 import LoadingAnimation from "../../Components/Animation/Loading";
 import RemoveAnimation from "../../Components/Animation/Remove";
 import ErrorAnimation from "../../Components/Animation/Error";
@@ -151,7 +151,7 @@ const Donations = () => {
           window.location.reload();
         } catch (error) {
           setMessage(
-            "Não foi possível alterar os dados da doação, contate os desenvolvedores ou tente novamente mais tarde!"
+            "Não foi possível restaurar a doação, contate os desenvolvedores ou tente novamente mais tarde!"
           );
           setError(true);
         }

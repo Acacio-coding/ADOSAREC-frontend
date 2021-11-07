@@ -27,6 +27,8 @@ const Unities = () => {
   };
 
   useEffect(() => {
+    sessionStorage.removeItem("filterUnity");
+
     setLoading(true);
     const header = {
       Authorization: `Bearer ${JSON.parse(token)}`,
@@ -56,9 +58,15 @@ const Unities = () => {
     })();
   }, [token]);
 
-  const getUnity = (unity) => {
+  const setUnity = (unity) => {
     if (sessionStorage.getItem("unity")) sessionStorage.removeItem("unity");
     sessionStorage.setItem("unity", JSON.stringify(unity));
+
+    if (filter.value === "Inactive") {
+      if (sessionStorage.getItem("filterUnity"))
+        sessionStorage.removeItem("filterUnity");
+      else sessionStorage.setItem("filterUnity", JSON.stringify(filter));
+    }
   };
 
   const handleSearch = (term) => {
@@ -123,7 +131,7 @@ const Unities = () => {
                   if (index < unities.length - 1) {
                     return (
                       <tr key={index}>
-                        <td onClick={() => getUnity(value)}>
+                        <td onClick={() => setUnity(value)}>
                           <Link to="/detalhes_unidade">{value.nome}</Link>
                         </td>
 
@@ -137,7 +145,7 @@ const Unities = () => {
                   } else {
                     return (
                       <tr key={index}>
-                        <td onClick={() => getUnity(value)}>
+                        <td onClick={() => setUnity(value)}>
                           <Link to="/detalhes_unidade">{value.nome}</Link>
                         </td>
 
