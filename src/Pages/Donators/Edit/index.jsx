@@ -396,6 +396,11 @@ const EditD = () => {
       },
     }),
 
+    singleValue: (provided) => ({
+      ...provided,
+      color: "#000",
+    }),
+
     indicatorSeparator: (base) => ({
       ...base,
       backgroundColor: "#670000",
@@ -614,6 +619,7 @@ const EditD = () => {
                   label: value.nome,
                 };
               })}
+              noOptionsMessage={() => "Não há profissões cadastradas"}
               styles={style}
               required
               value={profissao}

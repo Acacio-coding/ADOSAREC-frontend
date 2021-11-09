@@ -27,6 +27,17 @@
           margin-bottom: 1em;
           font-size: 27px;
         }
+
+        .show {
+          display: block;
+          visibility: visible;
+        }
+
+        .hide {
+          display: none;
+          visibility: hidden;
+          pointer-events: none;
+        }
       }
 
       .statistics {
@@ -35,6 +46,11 @@
         flex-direction: column;
         align-items: center;
         gap: 10em;
+
+        h2 {
+          margin-bottom: 0.5em;
+          font-size: 27px;
+        }
 
         .donators {
           display: flex;
@@ -65,7 +81,7 @@
           align-items: center;
 
           .holder {
-            margin-top: 1em;
+            margin-top: 0.5em;
             display: flex;
             align-items: center;
 

@@ -55,6 +55,11 @@ const TopMenu = ({
       },
     }),
 
+    singleValue: (provided) => ({
+      ...provided,
+      color: "#000",
+    }),
+
     menu: (provided) => ({
       ...provided,
       width: "12em",

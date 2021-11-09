@@ -127,7 +127,9 @@ const Statistics = () => {
         <div className={styles.statisticsContainer}>
           <div className={styles.chart}>
             <h2>Porcentagem por tipo sanguíneo</h2>
-
+            <h3 className={donators.length < 1 ? styles.show : styles.hide}>
+              Não há informações para mostrar!
+            </h3>
             <div>
               <Pie
                 width={420}

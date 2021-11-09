@@ -167,6 +167,11 @@ const EditDonation = () => {
       backgroundColor: "#670000",
     }),
 
+    singleValue: (provided) => ({
+      ...provided,
+      color: "#000",
+    }),
+
     dropdownIndicator: (base) => ({
       ...base,
       color: "#670000",
@@ -207,6 +212,7 @@ const EditDonation = () => {
                   label: value.nome,
                 };
               })}
+              noOptionsMessage={() => "Não há doadores cadastrados"}
               onChange={setDonator}
               styles={style}
               required
@@ -256,6 +262,7 @@ const EditDonation = () => {
                   label: value.nome,
                 };
               })}
+              noOptionsMessage={() => "Não há unidades cadastradas"}
               onChange={setUnity}
               styles={style}
               required

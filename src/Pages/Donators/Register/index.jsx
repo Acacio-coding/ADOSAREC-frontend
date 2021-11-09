@@ -296,10 +296,16 @@ const RegisterD = () => {
 
     option: (provided, state) => ({
       ...provided,
+      color: "#000",
       backgroundColor: state.isSelected ? "#650000" : "#fff",
       "&:hover": {
         backgroundColor: state.isSelected ? "#650000" : "#0000001d",
       },
+    }),
+
+    singleValue: (provided) => ({
+      ...provided,
+      color: "#000",
     }),
 
     indicatorSeparator: (base) => ({
@@ -479,6 +485,7 @@ const RegisterD = () => {
                   label: value.nome,
                 };
               })}
+              noOptionsMessage={() => "Não há profissões cadastradas"}
               onChange={setJob}
               styles={style}
               required

@@ -138,6 +138,11 @@ const RegisterDo = () => {
       backgroundColor: "#670000",
     }),
 
+    singleValue: (provided) => ({
+      ...provided,
+      color: "#000",
+    }),
+
     dropdownIndicator: (base) => ({
       ...base,
       color: "#670000",
@@ -181,6 +186,7 @@ const RegisterDo = () => {
                   label: value.nome,
                 };
               })}
+              noOptionsMessage={() => "Não há doadores cadastrados"}
               onChange={setDonator}
               styles={style}
               required
@@ -228,6 +234,7 @@ const RegisterDo = () => {
                   label: value.nome,
                 };
               })}
+              noOptionsMessage={() => "Não há unidades cadastradas"}
               onChange={setUnity}
               styles={style}
               required
