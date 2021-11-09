@@ -113,6 +113,8 @@ const EditDonation = () => {
       data.volume = parseInt(data.volume);
     }
 
+    data.status = true;
+
     const header = {
       Authorization: `Bearer ${JSON.parse(token)}`,
       "Content-Type": "application/json",
