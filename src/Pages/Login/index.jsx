@@ -28,7 +28,7 @@ const Login = () => {
       if (response) {
         sessionStorage.setItem("token", JSON.stringify(response.data));
         setLoading(false);
-        history.push("/doadores");
+        history.push("/estatisticas");
       }
     } catch (error) {
       setError(true);

@@ -34,6 +34,7 @@ const Routes = () => {
   return (
     <Switch>
       <CustomRoute exact path="/" component={Login} />
+
       <CustomRoute isPrivate path="/estatisticas" component={Statistics} />
 
       <CustomRoute isPrivate path="/doadores" component={Donators} />
@@ -43,7 +44,7 @@ const Routes = () => {
 
       <CustomRoute isPrivate path="/doacoes" component={Donations} />
       <CustomRoute isPrivate path="/registrar_doacao" component={RegisterDo} />
-      <CustomRoute isPrivate path="/editar_doacao" component={EditDonation}/>
+      <CustomRoute isPrivate path="/editar_doacao" component={EditDonation} />
 
       <CustomRoute isPrivate path="/unidades" component={Unities} />
       <CustomRoute isPrivate path="/registrar_unidade" component={RegisterU} />
