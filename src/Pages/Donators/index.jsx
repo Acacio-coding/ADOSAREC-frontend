@@ -26,9 +26,9 @@ const Donators = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     sessionStorage.removeItem("filterDonations");
 
-    setLoading(true);
     const header = {
       Authorization: `Bearer ${JSON.parse(token)}`,
       "Content-Type": "application/json",
