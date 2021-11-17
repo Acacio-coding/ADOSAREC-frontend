@@ -132,8 +132,8 @@ const Statistics = () => {
             </h3>
             <div>
               <Pie
-                width={420}
-                height={420}
+                width={320}
+                height={320}
                 data={{
                   labels: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
                   datasets: [
