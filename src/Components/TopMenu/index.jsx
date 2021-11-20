@@ -1,9 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Select from "react-select";
 import { useHistory } from "react-router";
+import { useForm } from "react-hook-form";
+import Select from "react-select";
 
-import { FaSearch as SearchIcon } from "react-icons/fa";
+import { FaSearch as SearchIcon, FaFilePdf as PdfIcon } from "react-icons/fa";
 import { RiPencilFill as EditIcon } from "react-icons/ri";
 import {
   MdAddCircle as AddIcon,
@@ -11,8 +12,9 @@ import {
 } from "react-icons/md";
 import { IoMdTrash as RemoveIcon } from "react-icons/io";
 import { MdRestorePage as ActiveIcon } from "react-icons/md";
+
+import PDF from "../PDF";
 import styles from "./TopMenu.module.scss";
-import { useForm } from "react-hook-form";
 
 const TopMenu = ({
   page,
@@ -24,6 +26,11 @@ const TopMenu = ({
   filter,
   setFilter,
   loading,
+  donatorStatus,
+  donatorData,
+  donatorDonations,
+  unities,
+  job,
 }) => {
   const { register, handleSubmit } = useForm();
   const history = useHistory();
@@ -175,18 +182,20 @@ const TopMenu = ({
 
           <ActiveIcon
             id={styles.activeIcon}
-            className={
-              filter && filter.value === "Inactive" ? styles.show : styles.hide
-            }
+            className={!donatorStatus ? styles.show : styles.hide}
             onClick={func}
           />
 
           <div
             className={
-              (styles.iconsContainer,
-              filter && filter.value === "Inactive" ? styles.hide : styles.show)
+              (styles.iconsContainer, donatorStatus ? styles.show : styles.hide)
             }
           >
+            <PdfIcon
+              id={styles.pdfIcon}
+              onClick={() => PDF(donatorData, donatorDonations, unities, job)}
+            />
+
             <Link to={`/editar_${page}`}>
               <EditIcon />
             </Link>

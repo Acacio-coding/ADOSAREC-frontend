@@ -8,7 +8,7 @@ import ErrorAnimation from "../../Components/Animation/Error";
 import styles from "./Donators.module.scss";
 
 const Donators = () => {
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const [donators, setDonators] = useState([{}]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");

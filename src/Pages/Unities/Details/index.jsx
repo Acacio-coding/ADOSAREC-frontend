@@ -10,7 +10,7 @@ import ErrorAnimation from "../../../Components/Animation/Error";
 import styles from "./Details.module.scss";
 
 const DetailsU = () => {
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const filter = JSON.parse(sessionStorage.getItem("filterUnity"));
   const unity = JSON.parse(sessionStorage.getItem("unity"));
   const [loading, setLoading] = useState(false);

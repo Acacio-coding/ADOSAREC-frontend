@@ -12,7 +12,7 @@ import { Pie } from "react-chartjs-2";
 import styles from "./Statistics.module.scss";
 
 const Statistics = () => {
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
@@ -41,7 +41,11 @@ const Statistics = () => {
         );
 
         if (response) {
-          const data = response.data;
+          const data = response.data.filter((value) => {
+            if (value.status) return value;
+            else return null;
+          });
+
           setDonators(data);
 
           let A1 = 0;
@@ -93,7 +97,12 @@ const Statistics = () => {
         );
 
         if (response) {
-          setDonations(response.data);
+          setDonations(
+            response.data.filter((value) => {
+              if (value.status) return value;
+              else return null;
+            })
+          );
         }
         setLoading(false);
       } catch (error) {
@@ -132,8 +141,8 @@ const Statistics = () => {
             </h3>
             <div>
               <Pie
-                width={320}
-                height={320}
+                width={350}
+                height={350}
                 data={{
                   labels: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
                   datasets: [
@@ -158,7 +167,8 @@ const Statistics = () => {
 
                   plugins: {
                     legend: {
-                      display: false,
+                      display: true,
+                      position: "top",
                       labels: {
                         color: "#000",
                         font: {

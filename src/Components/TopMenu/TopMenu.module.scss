@@ -126,6 +126,7 @@
 
     .show {
       display: flex;
+      align-items: center;
 
       a {
         font-size: 32px;
@@ -136,6 +137,20 @@
       }
 
       a:hover {
+        color: #410000;
+      }
+
+      #pdfIcon {
+        font-size: 25px;
+        cursor: pointer;
+        color: #670000;
+        display: flex;
+        align-items: center;
+        transition: 150ms ease;
+        margin-right: 7px;
+      }
+
+      #pdfIcon:hover {
         color: #410000;
       }
 

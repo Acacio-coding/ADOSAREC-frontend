@@ -13,7 +13,7 @@ import styles from "./Edit.module.scss";
 
 const EditDonation = () => {
   const { register, handleSubmit } = useForm();
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const [donators, setDonators] = useState([{}]);
   const [unities, setUnities] = useState([{}]);
   const [donator, setDonator] = useState({});

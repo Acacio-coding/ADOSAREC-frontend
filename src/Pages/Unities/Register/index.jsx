@@ -18,7 +18,7 @@ const RegisterU = () => {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const history = useHistory();
 
   const handleError = () => {

@@ -21,7 +21,7 @@ import EditU from "./Pages/Unities/Edit";
 
 const CustomRoute = ({ isPrivate, ...rest }) => {
   const history = useHistory();
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
   if (isPrivate && !token) {
     history.push("/");

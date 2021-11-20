@@ -10,7 +10,7 @@ import ErrorAnimation from "../../../Components/Animation/Error";
 import styles from "./Details.module.scss";
 
 const DetailsD = () => {
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const donator = JSON.parse(sessionStorage.getItem("donator"));
   const filter = JSON.parse(sessionStorage.getItem("filterDonator"));
   const [job, setJob] = useState();
@@ -132,6 +132,8 @@ const DetailsD = () => {
   }, [token, donator.cep, donator.nome, donator.profissao_id, donator.rg]);
 
   let stringDate = JSON.stringify(donator.data_de_nascimento);
+  let trueBirth = JSON.stringify(donator.data_de_nascimento);
+  let truExp = JSON.stringify(donator.data_de_expedicao);
 
   if (stringDate) {
     let year = stringDate.slice(1, 5);
@@ -157,13 +159,13 @@ const DetailsD = () => {
 
     data.genero = donator.genero;
 
-    data.data_de_nascimento = donator.data_de_nascimento;
+    data.data_de_nascimento = trueBirth;
 
     data.rg = donator.rg;
 
     data.orgao_expeditor_rg = donator.orgao_expeditor_rg;
 
-    data.data_de_expedicao = donator.data_de_expedicao;
+    data.data_de_expedicao = truExp;
 
     data.filiacao_pai = donator.filiacao_pai;
 
@@ -236,10 +238,21 @@ const DetailsD = () => {
         <TopMenu
           page="doador"
           typePage="details"
-          title={`Detalhes do doador ${donator.nome}`}
+          title={
+            donator.genero === "Feminino"
+              ? `Detalhes da doadora: ${donator.nome}`
+              : donator.genero === "Outro"
+              ? `Detalhes do(a) doador(a): ${donator.nome}`
+              : `Detalhes do doador: ${donator.nome}`
+          }
+          donatorStatus={donator.status}
           handleRemove={handleRemove}
           filter={filter}
           func={restore}
+          donatorData={donator}
+          donatorDonations={donations}
+          unities={unities}
+          job={job}
         />
 
         <RemoveAnimation
@@ -252,7 +265,13 @@ const DetailsD = () => {
         <div className={styles.tableContainer}>
           <div id={styles.donator}>
             <table>
-              <caption>Informações do doador</caption>
+              <caption>
+                {donator.genero === "Feminino"
+                  ? "Informações da doadora"
+                  : donator.genero === "Outro"
+                  ? "Informações do(a) doador(a)"
+                  : "Informações do doador"}
+              </caption>
               <tbody>
                 <tr>
                   <th className={styles.th}>Nome:</th>
@@ -271,7 +290,11 @@ const DetailsD = () => {
 
                 <tr>
                   <th className={styles.th}>RG:</th>
-                  <td className={styles.td}>{donator.rg}</td>
+                  <td className={styles.td}>{`${donator.rg
+                    .toString()
+                    .slice(0, 2)}.${donator.rg
+                    .toString()
+                    .slice(2, 5)}.${donator.rg.toString().slice(5, 8)}`}</td>
                 </tr>
 
                 <tr>
@@ -438,7 +461,13 @@ const DetailsD = () => {
           <div id={styles.donation}>
             {/* Donations */}
             <table>
-              <caption className={styles.legenda}>Doações do doador</caption>
+              <caption className={styles.legenda}>
+                {donator.genero === "Feminino"
+                  ? "Doações da doadora"
+                  : donator.genero === "Outro"
+                  ? "Doações do(a) doador(a)"
+                  : "Doações do doador"}
+              </caption>
               <thead>
                 <tr>
                   <th>Data</th>

@@ -13,7 +13,7 @@ import ErrorAnimation from "../../Components/Animation/Error";
 import styles from "./Donations.module.scss";
 
 const Donations = () => {
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const [donations, setDonations] = useState([{}]);
   const [donators, setDonators] = useState([{}]);
   const [unities, setUnities] = useState([{}]);
@@ -337,7 +337,7 @@ const Donations = () => {
                     return (
                       <tr key={index}>
                         <td>
-                          <div>
+                          <div id={styles.iconsDiv}>
                             <Link
                               to={`/editar_doacao`}
                               onClick={() => setDonation(value, "edit")}
@@ -385,7 +385,7 @@ const Donations = () => {
                     return (
                       <tr key={index}>
                         <td>
-                          <div>
+                          <div id={styles.iconsDiv}>
                             <Link
                               to={`/editar_doacao`}
                               onClick={() => setDonation(value, "edit")}

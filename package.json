@@ -13,6 +13,7 @@
     "json-loader": "^0.5.7",
     "lottie-react": "^2.1.0",
     "moment": "^2.29.1",
+    "pdfmake": "^0.2.4",
     "react": "^17.0.2",
     "react-chartjs-2": "^3.3.0",
     "react-countup": "^6.1.0",

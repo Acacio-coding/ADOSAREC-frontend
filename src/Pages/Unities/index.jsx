@@ -9,7 +9,7 @@ import ErrorAnimation from "../../Components/Animation/Error";
 import styles from "./Unities.module.scss";
 
 const Unities = () => {
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const [unities, setUnities] = useState([{}]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);

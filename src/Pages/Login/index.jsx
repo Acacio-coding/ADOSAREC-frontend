@@ -19,6 +19,7 @@ const Login = () => {
 
   const handleSentData = async (data) => {
     setLoading(true);
+    if (localStorage.getItem("token")) localStorage.removeItem("token");
 
     try {
       const response = await axios.get(
@@ -26,7 +27,7 @@ const Login = () => {
       );
 
       if (response) {
-        sessionStorage.setItem("token", JSON.stringify(response.data));
+        localStorage.setItem("token", JSON.stringify(response.data));
         setLoading(false);
         history.push("/estatisticas");
       }

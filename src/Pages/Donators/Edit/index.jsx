@@ -22,11 +22,11 @@ const EditD = () => {
   const [logradouro, setLogradouro] = useState("");
   const [bairro, setBairro] = useState("");
   const [cidade, setCidade] = useState("");
-  const [estado, setEstado] = useState("");
   const [jobs, setJobs] = useState([{}]);
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
-  const token = sessionStorage.getItem("token");
+  const [stt, setStt] = useState({});
+  const token = localStorage.getItem("token");
   const history = useHistory();
 
   const handleError = () => {
@@ -40,7 +40,7 @@ const EditD = () => {
     setLogradouro(donator.rua);
     setBairro(donator.bairro);
     setCidade(donator.cidade);
-    setEstado(donator.estado);
+    setStt({ value: donator.estado, label: donator.estado });
 
     if (cep.length === 8) {
       (async () => {
@@ -54,13 +54,68 @@ const EditD = () => {
             }
           );
 
-          if (response) {
-            const data = response.data;
-            setLogradouro(data.address);
-            setBairro(data.district);
-            setCidade(data.city);
-            setEstado(data.state);
-          }
+          const data = response.data;
+          setLogradouro(data.address);
+          setBairro(data.district);
+          setCidade(data.city);
+          if (data.state === "AC") setStt({ value: "Acre", label: "Acre" });
+          if (data.state === "AL")
+            setStt({ value: "Alagoas", label: "Alagoas" });
+          if (data.state === "AP") setStt({ value: "Amapá", label: "Amapá" });
+          if (data.state === "AM")
+            setStt({ value: "Amazonas", label: "Amazonas" });
+          if (data.state === "BA") setStt({ value: "Bahia", label: "Bahia" });
+          if (data.state === "ES")
+            setStt({ value: "Espírito Santo", label: "Espírito Santo" });
+          if (data.state === "GO") setStt({ value: "Goiás", label: "Goiás" });
+          if (data.state === "MA")
+            setStt({ value: "Maranhão", label: "Maranhão" });
+          if (data.state === "MT")
+            setStt({ value: "Mato Grosso", label: "Mato Grosso" });
+          if (data.state === "MS")
+            setStt({
+              value: "Mato Grosso do Sul ",
+              label: "Mato Grosso do Sul ",
+            });
+          if (data.state === "MG")
+            setStt({ value: "Minas Gerais", label: "Minas Gerais" });
+          if (data.state === "PA") setStt({ value: "Pará", label: "Pará" });
+          if (data.state === "PB")
+            setStt({ value: "Paraíba", label: "Paraíba" });
+          if (data.state === "PR") setStt({ value: "Paraná", label: "Paraná" });
+          if (data.state === "PE")
+            setStt({ value: "Pernambuco", label: "Pernambuco" });
+          if (data.state === "PI") setStt({ value: "Piauí", label: "Piauí" });
+          if (data.state === "RJ")
+            setStt({ value: "Rio de Janeiro", label: "Rio de Janeiro" });
+          if (data.state === "RN")
+            setStt({
+              value: "Rio Grande do Norte",
+              label: "Rio Grande do Norte",
+            });
+          if (data.state === "RS")
+            setStt({
+              value: "Rio Grande do Sul ",
+              label: "Rio Grande do Sul",
+            });
+          if (data.state === "RO")
+            setStt({ value: "Rondônia", label: "Rondônia" });
+          if (data.state === "RR")
+            setStt({ value: "Roraima", label: "Roraima" });
+          if (data.state === "SC")
+            setStt({ value: "Santa Catarina ", label: "Santa Catarina " });
+          if (data.state === "SP")
+            setStt({ value: "São Paulo", label: "São Paulo" });
+          if (data.state === "SE")
+            setStt({ value: "Sergipe", label: "Sergipe" });
+          if (data.state === "TO")
+            setStt({ value: "Tocantins", label: "Tocantins" });
+          if (data.state === "DF")
+            setStt({
+              value: "Distrito Federal ",
+              label: "Distrito Federal ",
+            });
+          if (!data.state) setStt({});
         } catch (error) {
           setMessage(
             "Não foi possível encontrar o endereço, contate os desenvolvedores ou tente novamente mais tarde!"
@@ -204,8 +259,8 @@ const EditD = () => {
         else data.doador_de_medula = medule.value;
 
         if (data.nome) {
-          data.nome = data.nome.toUpperCase();
           data.nome = data.nome.replace(/\s\s+/g, " ");
+          data.nome = capitalize(data.nome);
         }
 
         if (data.filiacao_pai) {
@@ -306,24 +361,7 @@ const EditD = () => {
           }
         }
 
-        if (data.estado) {
-          data.estado = data.estado.replace(/  +/g, " ");
-          data.estado = data.estado.toUpperCase();
-
-          if (data.estado.charAt(0) === " ")
-            data.estado = data.estado.charAt(0).replace(" ", "");
-
-          if (data.cidade.charAt(data.estado.length) === " ")
-            data.estado = data.estado
-              .charAt(data.estado.length)
-              .replace(" ", "");
-        } else {
-          if (estado) {
-            data.estado = estado.toUpperCase();
-          } else {
-            data.estado = "Não informado";
-          }
-        }
+        data.estado = stt.value;
       }
     }
 
@@ -758,14 +796,39 @@ const EditD = () => {
 
             <label htmlFor="estado">Estado</label>
             <br />
-            <input
-              onChange={(event) => setEstado(event.taget.value)}
-              type="text"
-              id="estado"
-              autoComplete="off"
-              placeholder="Estado do doador..."
-              {...register("estado")}
-              defaultValue={estado}
+            <Select
+              options={[
+                { value: "Acre", label: "Acre" },
+                { value: "Alagoas", label: "Alagoas" },
+                { value: "Amapá", label: "Amapá" },
+                { value: "Bahia", label: "Bahia" },
+                { value: "Ceará", label: "Ceará" },
+                { value: "Espírito Santo", label: "Espírito Santo" },
+                { value: "Goiás", label: "Goiás" },
+                { value: "Maranhão", label: "Maranhão" },
+                { value: "Mato Grosso", label: "Mato Grosso" },
+                { value: "Mato Grosso do Sul ", label: "Mato Grosso do Sul " },
+                { value: "Minas Gerais", label: "Minas Gerais" },
+                { value: "Pará", label: "Pará" },
+                { value: "Paraíba", label: "Paraíba" },
+                { value: "Paraná", label: "Paraná" },
+                { value: "Pernambuco", label: "Pernambuco" },
+                { value: "Piauí", label: "Piauí" },
+                { value: "Rio de Janeiro", label: "Rio de Janeiro" },
+                { value: "Rio Grande do Sul ", label: "Rio Grande do Sul " },
+                { value: "Rondônia", label: "Rondônia" },
+                { value: "Roraima", label: "Roraima" },
+                { value: "Santa Catarina ", label: "Santa Catarina " },
+                { value: "São Paulo", label: "São Paulo" },
+                { value: "Sergipe", label: "Sergipe" },
+                { value: "Tocantins", label: "Tocantins" },
+                { value: "Distrito Federal ", label: "Distrito Federal " },
+              ]}
+              onChange={setStt}
+              styles={style}
+              value={!stt.value ? "" : stt}
+              required
+              placeholder="Selecione um estado..."
             />
             <br />
             <br />

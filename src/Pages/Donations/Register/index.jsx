@@ -18,7 +18,7 @@ const RegisterDo = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState(false);
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const history = useHistory();
 
   const handleError = () => {
