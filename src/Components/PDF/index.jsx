@@ -27,7 +27,7 @@ const PDF = (donator, donations, unities, job) => {
 
     return [
       { text: stringDate, margin: [0, 2, 0, 2] },
-      { text: value.volume, margin: [0, 2, 0, 2] },
+      { text: `${value.volume} ml`, margin: [0, 2, 0, 2] },
       { text: unityName, margin: [0, 2, 0, 2] },
     ];
   });
