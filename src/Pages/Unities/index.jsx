@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router";
 import Axios from "axios";
 
 import Nav from "../../Components/Nav";
@@ -9,6 +10,7 @@ import ErrorAnimation from "../../Components/Animation/Error";
 import styles from "./Unities.module.scss";
 
 const Unities = () => {
+  const history = useHistory();
   const token = localStorage.getItem("token");
   const [unities, setUnities] = useState([{}]);
   const [loading, setLoading] = useState(false);
@@ -49,14 +51,20 @@ const Unities = () => {
           setLoading(false);
         }
       } catch (error) {
-        setMessage(
-          "Não foi possível encontrar as unidades coletoras, contate os desenvolvedores ou tente novamente mais tarde!"
-        );
-        setError(true);
-        setLoading(false);
+        if (error.status === 401) {
+          localStorage.removeItem("token");
+          history.push("/");
+          setLoading(false);
+        } else {
+          setMessage(
+            "Não foi possível encontrar as unidades coletoras, contate os desenvolvedores ou tente novamente mais tarde!"
+          );
+          setError(true);
+          setLoading(false);
+        }
       }
     })();
-  }, [token]);
+  }, [token, history]);
 
   const setUnity = (unity) => {
     if (sessionStorage.getItem("unity")) sessionStorage.removeItem("unity");

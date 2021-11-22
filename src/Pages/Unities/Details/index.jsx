@@ -1,4 +1,4 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useEffect } from "react";
 import { useHistory } from "react-router";
 import Axios from "axios";
 
@@ -18,6 +18,10 @@ const DetailsU = () => {
   const [error, setError] = useState(false);
   const [message, setMessage] = useState("");
   const history = useHistory();
+
+  useEffect(() => {
+    if (!sessionStorage.getItem("unity")) history.push("/unidades");
+  }, [history]);
 
   const handleRemove = () => {
     if (remove) setRemove(false);

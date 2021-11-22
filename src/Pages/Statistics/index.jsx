@@ -1,4 +1,5 @@
 import React, { useEffect, useState, memo } from "react";
+import { useHistory } from "react-router";
 import Axios from "axios";
 
 import Nav from "../../Components/Nav";
@@ -12,6 +13,7 @@ import { Pie } from "react-chartjs-2";
 import styles from "./Statistics.module.scss";
 
 const Statistics = () => {
+  const history = useHistory();
   const token = localStorage.getItem("token");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -26,6 +28,7 @@ const Statistics = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     const header = {
       Authorization: `Bearer ${JSON.parse(token)}`,
       "Content-Type": "application/json",
@@ -80,10 +83,15 @@ const Statistics = () => {
           setChartData([A1, A0, B1, B0, AB1, AB0, O1, O0]);
         }
       } catch (error) {
-        setMessage(
-          "Não foi possível encontrar os doadores, contate os desenvolvedores ou tente novamente mais tarde!"
-        );
-        setError(true);
+        if (error.status === 401) {
+          localStorage.removeItem("token");
+          history.push("/");
+        } else {
+          setMessage(
+            "Não foi possível encontrar os doadores, contate os desenvolvedores ou tente novamente mais tarde!"
+          );
+          setError(true);
+        }
       }
     })();
 
@@ -113,7 +121,7 @@ const Statistics = () => {
         setLoading(false);
       }
     })();
-  }, [token]);
+  }, [token, history]);
 
   return (
     <div className={styles.fullContainer}>
@@ -167,7 +175,7 @@ const Statistics = () => {
 
                   plugins: {
                     legend: {
-                      display: true,
+                      display: donators.length < 1 ? false : true,
                       position: "top",
                       labels: {
                         color: "#000",

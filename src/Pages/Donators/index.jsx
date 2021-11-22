@@ -1,5 +1,6 @@
 import React, { useEffect, useState, memo } from "react";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router";
 import Axios from "axios";
 import Nav from "../../Components/Nav";
 import TopMenu from "../../Components/TopMenu";
@@ -9,6 +10,7 @@ import styles from "./Donators.module.scss";
 
 const Donators = () => {
   const token = localStorage.getItem("token");
+  const history = useHistory();
   const [donators, setDonators] = useState([{}]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -48,14 +50,19 @@ const Donators = () => {
           setLoading(false);
         }
       } catch (error) {
-        setMessage(
-          "Não foi possível encontrar os doadores, contate os desenvolvedores ou tente novamente mais tarde!"
-        );
-        setError(true);
+        if (error.status === 401) {
+          localStorage.removeItem("token");
+          history.push("/");
+        } else {
+          setMessage(
+            "Não foi possível encontrar os doadores, contate os desenvolvedores ou tente novamente mais tarde!"
+          );
+          setError(true);
+        }
         setLoading(false);
       }
     })();
-  }, [token]);
+  }, [token, history]);
 
   const setDonator = (donator) => {
     if (sessionStorage.getItem("donator")) sessionStorage.removeItem("donator");

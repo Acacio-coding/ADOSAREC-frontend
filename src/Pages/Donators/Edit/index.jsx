@@ -35,6 +35,7 @@ const EditD = () => {
   };
 
   useEffect(() => {
+    if (!sessionStorage.getItem("donator")) history.push("/doadores");
     setDonator(JSON.parse(sessionStorage.getItem("donator")));
 
     setLogradouro(donator.rua);
@@ -142,10 +143,15 @@ const EditD = () => {
           return null;
         });
       } catch (error) {
-        setMessage(
-          "Não foi possível encontrar as profissões, contate os desenvolvedores ou tente novamente mais tarde!"
-        );
-        setError(true);
+        if (error.status === 401) {
+          localStorage.removeItem("token");
+          history.push("/");
+        } else {
+          setMessage(
+            "Não foi possível encontrar as profissões, contate os desenvolvedores ou tente novamente mais tarde!"
+          );
+          setError(true);
+        }
       }
     })();
   }, [
@@ -156,6 +162,7 @@ const EditD = () => {
     donator.bairro,
     donator.cidade,
     donator.estado,
+    history,
   ]);
 
   let rg = donator.rg;

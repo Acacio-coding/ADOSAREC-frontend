@@ -29,6 +29,7 @@ const EditDonation = () => {
   };
 
   useEffect(() => {
+    if (!sessionStorage.getItem("donation")) history.push("/doacoes");
     setDonation(JSON.parse(sessionStorage.getItem("donation")));
 
     const header = {
@@ -57,10 +58,15 @@ const EditDonation = () => {
           setDonators(response.data);
         }
       } catch (error) {
-        setMessage(
-          "Não foi possível encontrar os doadores, contate os desenvolvedores ou tente novamente mais tarde!"
-        );
-        setError(true);
+        if (error.status === 401) {
+          localStorage.removeItem("token");
+          history.push("/");
+        } else {
+          setMessage(
+            "Não foi possível encontrar os doadores, contate os desenvolvedores ou tente novamente mais tarde!"
+          );
+          setError(true);
+        }
       }
     })();
 
@@ -91,7 +97,7 @@ const EditDonation = () => {
         setError(true);
       }
     })();
-  }, [token, donation.orgao_coletor_id, donation.doador_rg]);
+  }, [token, donation.orgao_coletor_id, donation.doador_rg, history]);
 
   let stringDate = JSON.stringify(donation.data);
 

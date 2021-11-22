@@ -101,10 +101,15 @@ const RegisterD = () => {
           if (address.state === "DF")
             setStt({ value: "Distrito Federal ", label: "Distrito Federal " });
         } catch (error) {
-          setMessage(
-            "Não foi possível encontrar o endereço, contate os desenvolvedores ou tente novamente mais tarde!"
-          );
-          setError(true);
+          if (error.status === 401) {
+            localStorage.removeItem("token");
+            history.push("/");
+          } else {
+            setMessage(
+              "Não foi possível encontrar o endereço, contate os desenvolvedores ou tente novamente mais tarde!"
+            );
+            setError(true);
+          }
         }
       })();
     }
@@ -121,13 +126,18 @@ const RegisterD = () => {
         );
         setJobs(response.data);
       } catch (error) {
-        setMessage(
-          "Não foi possível encontrar as profissões, contate os desenvolvedores ou tente novamente mais tarde!"
-        );
-        setError(true);
+        if (error.status === 401) {
+          localStorage.removeItem("token");
+          history.push("/");
+        } else {
+          setMessage(
+            "Não foi possível encontrar as profissões, contate os desenvolvedores ou tente novamente mais tarde!"
+          );
+          setError(true);
+        }
       }
     })();
-  }, [cep, token, address.state]);
+  }, [cep, token, address.state, history]);
 
   const capitalize = (string) => {
     return string

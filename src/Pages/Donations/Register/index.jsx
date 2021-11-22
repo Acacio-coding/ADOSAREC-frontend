@@ -47,10 +47,15 @@ const RegisterDo = () => {
           setDonators(response.data);
         }
       } catch (error) {
-        setMessage(
-          "Não foi possível encontrar os doadores, contate os desenvolvedores ou tente novamente mais tarde!"
-        );
-        setError(true);
+        if (error.status === 401) {
+          localStorage.removeItem("token");
+          history.push("/");
+        } else {
+          setMessage(
+            "Não foi possível encontrar os doadores, contate os desenvolvedores ou tente novamente mais tarde!"
+          );
+          setError(true);
+        }
       }
     })();
 
@@ -74,7 +79,7 @@ const RegisterDo = () => {
       }
     })();
     setLoading(false);
-  }, [token]);
+  }, [token, history]);
 
   const handleData = async (data) => {
     if (data) {

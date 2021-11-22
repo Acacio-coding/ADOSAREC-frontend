@@ -30,10 +30,12 @@ const DetailsU = () => {
   };
 
   useEffect(() => {
+    if (!sessionStorage.getItem("unity")) history.push("/unidades");
+
     setLoading(true);
     setUnity(JSON.parse(sessionStorage.getItem("unity")));
     setLoading(false);
-  }, [token]);
+  }, [token, history]);
 
   const capitalize = (string) => {
     return string
@@ -78,10 +80,15 @@ const DetailsU = () => {
       sessionStorage.setItem("unity", JSON.stringify(data));
       history.push("/detalhes_unidade");
     } catch (error) {
-      setMessage(
-        "Não foi possível alterar os dados da unidade coletora, contate os desenvolvedores ou tente novamente mais tarde!"
-      );
-      setError(true);
+      if (error.status === 401) {
+        localStorage.removeItem("token");
+        history.push("/");
+      } else {
+        setMessage(
+          "Não foi possível alterar os dados da unidade coletora, contate os desenvolvedores ou tente novamente mais tarde!"
+        );
+        setError(true);
+      }
     }
   };
 

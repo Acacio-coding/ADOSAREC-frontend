@@ -1,5 +1,6 @@
 import React, { useEffect, useState, memo } from "react";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router";
 import Axios from "axios";
 
 import Nav from "../../Components/Nav";
@@ -14,6 +15,7 @@ import styles from "./Donations.module.scss";
 
 const Donations = () => {
   const token = localStorage.getItem("token");
+  const history = useHistory();
   const [donations, setDonations] = useState([{}]);
   const [donators, setDonators] = useState([{}]);
   const [unities, setUnities] = useState([{}]);
@@ -54,10 +56,15 @@ const Donations = () => {
           setDonations(response.data);
         }
       } catch (error) {
-        setMessage(
-          "Não foi possível encontrar as doações, contate os desenvolvedores ou tente novamente mais tarde!"
-        );
-        setError(true);
+        if (error.status === 401) {
+          localStorage.removeItem("token");
+          history.push("/");
+        } else {
+          setMessage(
+            "Não foi possível encontrar as doações, contate os desenvolvedores ou tente novamente mais tarde!"
+          );
+          setError(true);
+        }
       }
     })();
 
@@ -105,7 +112,7 @@ const Donations = () => {
         setLoading(false);
       }
     })();
-  }, [token]);
+  }, [token, history]);
 
   const setDonation = (donationData, arg) => {
     if (arg === "edit") {

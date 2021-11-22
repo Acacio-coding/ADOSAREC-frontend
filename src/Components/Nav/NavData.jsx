@@ -1,6 +1,6 @@
 import React from "react";
-import { AiOutlineBarChart as Chart } from "react-icons/ai";
-import { HiUser as Donator } from "react-icons/hi";
+import { RiPieChartFill as Chart } from "react-icons/ri";
+import { FaUser as Donator } from "react-icons/fa";
 import { ImDroplet as Donation } from "react-icons/im";
 import { FaHospitalSymbol as Unidades } from "react-icons/fa";
 

@@ -28,6 +28,7 @@ const Login = () => {
 
       if (response) {
         localStorage.setItem("token", JSON.stringify(response.data));
+
         setLoading(false);
         history.push("/estatisticas");
       }

@@ -53,6 +53,7 @@ const DetailsD = () => {
   };
 
   useEffect(() => {
+    if (!sessionStorage.getItem("donator")) history.push("/doadores");
     setLoading(true);
 
     const header = {
@@ -78,10 +79,15 @@ const DetailsD = () => {
           return null;
         });
       } catch (error) {
-        setMessage(
-          "Não foi possível encontrar as profissões, contate os desenvolvedores ou tente novamente mais tarde!"
-        );
-        setError(true);
+        if (error.status === 401) {
+          localStorage.removeItem("token");
+          history.push("/");
+        } else {
+          setMessage(
+            "Não foi possível encontrar as profissões, contate os desenvolvedores ou tente novamente mais tarde!"
+          );
+          setError(true);
+        }
       }
     })();
 
@@ -129,7 +135,14 @@ const DetailsD = () => {
         setLoading(false);
       }
     })();
-  }, [token, donator.cep, donator.nome, donator.profissao_id, donator.rg]);
+  }, [
+    token,
+    donator.cep,
+    donator.nome,
+    donator.profissao_id,
+    donator.rg,
+    history,
+  ]);
 
   let stringDate = JSON.stringify(donator.data_de_nascimento);
   let trueBirth = JSON.stringify(donator.data_de_nascimento);
