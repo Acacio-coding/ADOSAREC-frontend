@@ -19,10 +19,7 @@ const RemoveAnimation = ({
           </div>
 
           <div className={styles.removeMessageBottom}>
-            <p>
-              {`Você tem certeza que deseja remover essa doação? 
-            Essa ação não poderá ser desfeita!`}
-            </p>
+            <p>{`Você tem certeza que deseja remover essa doação?`}</p>
             <div>
               <button onClick={handleRemovePage}>Remover</button>
               <button onClick={handleRemove}>Cancelar</button>
@@ -41,10 +38,7 @@ const RemoveAnimation = ({
           </div>
 
           <div className={styles.removeMessageBottom}>
-            <p>
-              {`Você tem certeza que deseja remover a unidade 
-                  ${unityNome}? Essa ação não poderá ser desfeita!`}
-            </p>
+            <p>{`Você tem certeza que deseja remover a unidade: ${unityNome}?`}</p>
             <div>
               <button onClick={handleRemovePage}>Remover</button>
               <button onClick={handleRemove}>Cancelar</button>
@@ -63,8 +57,7 @@ const RemoveAnimation = ({
 
         <div className={styles.removeMessageBottom}>
           <p>
-            {`Você tem certeza que deseja remover o doador 
-                  ${donatorNome}? Essa ação não poderá ser desfeita!`}
+            {`Você tem certeza que deseja remover o doador: ${donatorNome}?`}
           </p>
           <div>
             <button onClick={handleRemovePage}>Remover</button>
