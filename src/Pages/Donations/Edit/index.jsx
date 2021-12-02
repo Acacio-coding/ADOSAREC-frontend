@@ -115,38 +115,59 @@ const EditDonation = () => {
 
     if (data) {
       data.doador_rg = donator.value;
+
       data.orgao_coletor_id = unity.value;
-      data.volume = parseInt(data.volume);
+
+      try {
+        data.volume = parseInt(data.volume);
+      } catch (error) {
+        setMessage("Volume de doação inválido!");
+        setError(true);
+      }
+
+      data.status = true;
     }
 
-    data.status = true;
-
-    const header = {
-      Authorization: `Bearer ${JSON.parse(token)}`,
-      "Content-Type": "application/json",
-    };
-
-    try {
-      await Axios.put(
-        `https://app-node-api-test.herokuapp.com/v1/donation/${donation.id}`,
-        data,
-        {
-          headers: header,
-        }
-      );
-      history.push("/doacoes");
-    } catch (error) {
-      setMessage(
-        "Não foi possível alterar os dados da doação, contate os desenvolvedores ou tente novamente mais tarde!"
-      );
+    if (data.data.length < 10) {
+      setMessage("Data de doação inválida!");
       setError(true);
+    } else if (!data.doador_rg) {
+      setMessage("Campo doador está vazio!");
+      setError(true);
+    } else if (!data.orgao_coletor_id) {
+      setMessage("Campo unidade coletora está vazio!");
+      setError(true);
+    } else {
+      const header = {
+        Authorization: `Bearer ${JSON.parse(token)}`,
+        "Content-Type": "application/json",
+      };
+
+      try {
+        await Axios.put(
+          `https://app-node-api-test.herokuapp.com/v1/donation/${donation.id}`,
+          data,
+          {
+            headers: header,
+          }
+        );
+        history.push("/doacoes");
+      } catch (error) {
+        setMessage(
+          "Não foi possível alterar os dados da doação, contate os desenvolvedores ou tente novamente mais tarde!"
+        );
+        setError(true);
+      }
     }
   };
 
   const date = new Date();
+
   const maxDate = `${date.getFullYear()}-${
     date.getMonth() + 1
   }-${date.getDate()}`;
+
+  const minDate = `1991-11-25`;
 
   const style = {
     control: (provided) => ({
@@ -236,6 +257,7 @@ const EditDonation = () => {
               defaultValue={donation.date}
               required
               max={maxDate}
+              min={minDate}
               {...register("data")}
             />
             <br />

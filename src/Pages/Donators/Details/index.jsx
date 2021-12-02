@@ -146,7 +146,7 @@ const DetailsD = () => {
 
   let stringDate = JSON.stringify(donator.data_de_nascimento);
   let trueBirth = JSON.stringify(donator.data_de_nascimento);
-  let truExp = JSON.stringify(donator.data_de_expedicao);
+  /* let truExp = JSON.stringify(donator.data_de_expedicao); */
 
   if (stringDate) {
     let year = stringDate.slice(1, 5);
@@ -154,11 +154,11 @@ const DetailsD = () => {
     let day = stringDate.slice(9, 11) + "-";
     donator.data_de_nascimento = day + month + year;
 
-    stringDate = JSON.stringify(donator.data_de_expedicao);
+    /* stringDate = JSON.stringify(donator.data_de_expedicao);
     year = stringDate.slice(1, 5);
     month = stringDate.slice(6, 8) + "-";
     day = stringDate.slice(9, 11) + "-";
-    donator.data_de_expedicao = day + month + year;
+    donator.data_de_expedicao = day + month + year; */
   }
 
   const restore = async () => {
@@ -178,7 +178,7 @@ const DetailsD = () => {
 
     data.orgao_expeditor_rg = donator.orgao_expeditor_rg;
 
-    data.data_de_expedicao = truExp;
+    /* data.data_de_expedicao = truExp; */
 
     data.filiacao_pai = donator.filiacao_pai;
 
@@ -303,11 +303,15 @@ const DetailsD = () => {
 
                 <tr>
                   <th className={styles.th}>RG:</th>
-                  <td className={styles.td}>{`${donator.rg
-                    .toString()
-                    .slice(0, 2)}.${donator.rg
-                    .toString()
-                    .slice(2, 5)}.${donator.rg.toString().slice(5, 8)}`}</td>
+                  <td className={styles.td}>
+                    {donator.rg.toString().length === 7
+                      ? `${donator.rg.toString().slice(0, 1)}.${donator.rg
+                          .toString()
+                          .slice(1, 4)}.${donator.rg.toString().slice(4, 7)}`
+                      : `${donator.rg.toString().slice(0, 2)}.${donator.rg
+                          .toString()
+                          .slice(2, 5)}.${donator.rg.toString().slice(5, 8)}`}
+                  </td>
                 </tr>
 
                 <tr>
@@ -315,10 +319,10 @@ const DetailsD = () => {
                   <td className={styles.td}>{donator.orgao_expeditor_rg}</td>
                 </tr>
 
-                <tr>
+                {/*  <tr>
                   <th className={styles.th}>Data de expedição:</th>
                   <td className={styles.td}>{donator.data_de_expedicao}</td>
-                </tr>
+                </tr> */}
 
                 <tr>
                   <th className={styles.th}>Naturalidade:</th>
@@ -398,7 +402,9 @@ const DetailsD = () => {
 
                 <tr>
                   <th className={styles.th}>Email:</th>
-                  <td className={styles.td}>{donator.email}</td>
+                  <td className={styles.td}>
+                    {donator.email ? donator.email : "Não informado"}
+                  </td>
                 </tr>
 
                 <tr>

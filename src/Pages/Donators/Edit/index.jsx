@@ -188,8 +188,8 @@ const EditD = () => {
     if (!data.orgao_expeditor_rg)
       data.orgao_expeditor_rg = donator.orgao_expeditor_rg;
 
-    if (!data.data_de_expedicao)
-      data.data_de_expedicao = donator.data_de_expedicao;
+    /* if (!data.data_de_expedicao)
+      data.data_de_expedicao = donator.data_de_expedicao; */
 
     if (!data.filiacao_pai) data.filiacao_pai = donator.filiacao_pai;
 
@@ -228,17 +228,41 @@ const EditD = () => {
 
     if (data) {
       const anoNascimento = data.data_de_nascimento.slice(0, 4);
-      const anoExpedicao = data.data_de_expedicao.slice(0, 4);
+      /* const anoExpedicao = data.data_de_expedicao.slice(0, 4); */
 
-      if (date.getFullYear() - anoNascimento < 18) {
+      if (data.data_de_nascimento.length < 10) {
+        setMessage("Data de nascimento inválida!");
+        setError(true);
+      } else if (!rh) {
+        setMessage("Campo rh está vazio!");
+        setError(true);
+      } else if (!gs) {
+        setMessage("Campo grupo sanguíneo está vazio!");
+        setError(true);
+      } else if (!profissao) {
+        setMessage("Campo profissão está vazio!");
+        setError(true);
+      } else if (!civil) {
+        setMessage("Campo estado cívil está vazio!");
+        setError(true);
+      } else if (!gender) {
+        setMessage("Campo gênero está vazio!");
+        setError(true);
+      } else if (!medule) {
+        setMessage("Campo doador de medula está vazio!");
+        setError(true);
+      } else if (!stt) {
+        setMessage("Campo estado está vazio!");
+        setError(true);
+      } else if (date.getFullYear() - anoNascimento < 18) {
         setMessage("Menor de idade!");
         setError(true);
-      } else if (anoExpedicao < anoNascimento) {
+      } /* else if (anoExpedicao < anoNascimento) {
         setMessage(
           "Ano de expedição do RG inválido, é necessário ter no mínimo 6 anos de idade para fazê-lo!"
         );
         setError(true);
-      } else if (data.telefone1 === data.telefone2) {
+      } */ else if (data.telefone1 === data.telefone2) {
         setMessage(
           "O primeiro telefone é igual ao segundo, verifique os dados e tente novamente!"
         );
@@ -409,17 +433,20 @@ const EditD = () => {
     let day = stringDate.slice(9, 11);
     donator.data_de_nascimento = year + month + day;
 
-    stringDate = JSON.stringify(donator.data_de_expedicao);
+    /* stringDate = JSON.stringify(donator.data_de_expedicao);
     year = stringDate.slice(1, 5) + "-";
     month = stringDate.slice(6, 8) + "-";
     day = stringDate.slice(9, 11);
-    donator.data_de_expedicao = year + month + day;
+    donator.data_de_expedicao = year + month + day; */
   }
 
   const date = new Date();
+
   const maxDate = `${date.getFullYear()}-${
     date.getMonth() + 1
   }-${date.getDate()}`;
+
+  const minDate = `1900-01-01`;
 
   const style = {
     control: (provided) => ({
@@ -549,6 +576,7 @@ const EditD = () => {
               id="data_de_nascimento"
               required
               max={maxDate}
+              min={minDate}
               defaultValue={donator.data_de_nascimento}
               {...register("data_de_nascimento")}
             />
@@ -563,8 +591,8 @@ const EditD = () => {
               required
               autoComplete="off"
               placeholder="000000000"
-              maxLength="9"
-              minLength="9"
+              maxLength="8"
+              minLength="7"
               defaultValue={donator.rg}
               {...register("rg")}
             />
@@ -585,7 +613,7 @@ const EditD = () => {
             <br />
             <br />
 
-            <label htmlFor="data_de_expedicao">Data de expedição</label>
+            {/* <label htmlFor="data_de_expedicao">Data de expedição</label>
             <br />
             <input
               type="date"
@@ -593,11 +621,12 @@ const EditD = () => {
               id="data_de_expedicao"
               required={true}
               max={maxDate}
+              min={minDate}
               defaultValue={donator.data_de_expedicao}
               {...register("data_de_expedicao")}
             />
             <br />
-            <br />
+            <br /> */}
 
             <label htmlFor="parent">Filiação</label>
             <br />

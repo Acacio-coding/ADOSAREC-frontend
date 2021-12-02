@@ -149,19 +149,43 @@ const RegisterD = () => {
 
   const handleData = async (data) => {
     const anoNascimento = data.data_de_nascimento.slice(0, 4);
-    const anoExpedicao = data.data_de_expedicao.slice(0, 4);
+    /* const anoExpedicao = data.data_de_expedicao.slice(0, 4); */
 
-    if (date.getFullYear() - anoNascimento < 18) {
+    if (data.data_de_nascimento.length < 10) {
+      setMessage("Data de nascimento inválida!");
+      setError(true);
+    } else if (!rh) {
+      setMessage("Campo rh está vazio!");
+      setError(true);
+    } else if (!gs) {
+      setMessage("Campo grupo sanguíneo está vazio!");
+      setError(true);
+    } else if (!job) {
+      setMessage("Campo profissão está vazio!");
+      setError(true);
+    } else if (!civil) {
+      setMessage("Campo estado cívil está vazio!");
+      setError(true);
+    } else if (!gender) {
+      setMessage("Campo gênero está vazio!");
+      setError(true);
+    } else if (!medule) {
+      setMessage("Campo doador de medula está vazio!");
+      setError(true);
+    } else if (!stt) {
+      setMessage("Campo estado está vazio!");
+      setError(true);
+    } else if (date.getFullYear() - anoNascimento < 18) {
       setMessage(
         "Menor de idade, para fazer uma doação é necessário ter 18 anos ou mais!"
       );
       setError(true);
-    } else if (anoExpedicao - anoNascimento < 6) {
+    } /* else if (anoExpedicao - anoNascimento < 6) {
       setMessage(
         "Ano de expedição do RG inválido, é necessário ter no mínimo 6 anos de idade para fazê-lo!"
       );
       setError(true);
-    } else if (data.telefone1 === data.telefone2) {
+    } */ else if (data.telefone1 === data.telefone2) {
       setMessage(
         "O primeiro telefone é igual ao segundo, verifique os dados e tente novamente!"
       );
@@ -321,9 +345,12 @@ const RegisterD = () => {
   };
 
   const date = new Date();
+
   const maxDate = `${date.getFullYear()}-${
     date.getMonth() + 1
   }-${date.getDate()}`;
+
+  const minDate = `1900-01-01`;
 
   const [gender, setGender] = useState({});
   const [civil, setCivil] = useState({});
@@ -428,6 +455,7 @@ const RegisterD = () => {
               autoComplete="off"
               required
               max={maxDate}
+              min={minDate}
               {...register("data_de_nascimento")}
             />
             <br />
@@ -440,7 +468,7 @@ const RegisterD = () => {
               id="rg"
               required
               placeholder="00000000"
-              minLength="8"
+              minLength="7"
               maxLength="8"
               autoComplete="off"
               {...register("rg")}
@@ -459,7 +487,8 @@ const RegisterD = () => {
             />
             <br />
             <br />
-            <label htmlFor="data_de_expedicao">Data de expedição</label>
+
+            {/* <label htmlFor="data_de_expedicao">Data de expedição</label>
             <br />
             <input
               type="date"
@@ -467,10 +496,11 @@ const RegisterD = () => {
               required
               autoComplete="off"
               max={maxDate}
+              min={minDate}
               {...register("data_de_expedicao")}
             />
             <br />
-            <br />
+            <br /> */}
 
             <label htmlFor="parent">Filiação</label>
             <br />
@@ -582,7 +612,6 @@ const RegisterD = () => {
                 { value: false, label: "Não" },
               ]}
               styles={style}
-              required
               placeholder="Selecione uma opção..."
               onChange={setMedule}
             />
@@ -657,6 +686,7 @@ const RegisterD = () => {
               placeholder="Cidade do doador..."
               {...register("cidade")}
               autoComplete="off"
+              required
               defaultValue={address.city}
             />
             <br />
@@ -694,7 +724,6 @@ const RegisterD = () => {
               onChange={setStt}
               styles={style}
               value={!stt.value ? "" : stt}
-              required
               placeholder="Selecione um estado..."
             />
             <br />
