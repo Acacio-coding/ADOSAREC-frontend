@@ -1,4 +1,4 @@
-# Sistema de controle de cadastro de doadores para ADOSAREC.
+# Sistema de controle de cadastro de doadores para a ADOSAREC.
 
 Destinado ao projeto de controle de cadastro de doadores à ADOSAREC (Associação dos Doadores de Sangue da Região de Canoinhas), sobretudo ao que é função do front-end.
 
