@@ -188,9 +188,6 @@ const EditD = () => {
     if (!data.orgao_expeditor_rg)
       data.orgao_expeditor_rg = donator.orgao_expeditor_rg;
 
-    /* if (!data.data_de_expedicao)
-      data.data_de_expedicao = donator.data_de_expedicao; */
-
     if (!data.filiacao_pai) data.filiacao_pai = donator.filiacao_pai;
 
     if (!data.filiacao_mae) data.filiacao_mae = donator.filiacao_mae;
@@ -228,7 +225,6 @@ const EditD = () => {
 
     if (data) {
       const anoNascimento = data.data_de_nascimento.slice(0, 4);
-      /* const anoExpedicao = data.data_de_expedicao.slice(0, 4); */
 
       if (data.data_de_nascimento.length < 10) {
         setMessage("Data de nascimento inválida!");
@@ -257,12 +253,7 @@ const EditD = () => {
       } else if (date.getFullYear() - anoNascimento < 18) {
         setMessage("Menor de idade!");
         setError(true);
-      } /* else if (anoExpedicao < anoNascimento) {
-        setMessage(
-          "Ano de expedição do RG inválido, é necessário ter no mínimo 6 anos de idade para fazê-lo!"
-        );
-        setError(true);
-      } */ else if (data.telefone1 === data.telefone2) {
+      } else if (data.telefone1 === data.telefone2) {
         setMessage(
           "O primeiro telefone é igual ao segundo, verifique os dados e tente novamente!"
         );
@@ -432,12 +423,6 @@ const EditD = () => {
     let month = stringDate.slice(6, 8) + "-";
     let day = stringDate.slice(9, 11);
     donator.data_de_nascimento = year + month + day;
-
-    /* stringDate = JSON.stringify(donator.data_de_expedicao);
-    year = stringDate.slice(1, 5) + "-";
-    month = stringDate.slice(6, 8) + "-";
-    day = stringDate.slice(9, 11);
-    donator.data_de_expedicao = year + month + day; */
   }
 
   const date = new Date();
@@ -612,21 +597,6 @@ const EditD = () => {
             />
             <br />
             <br />
-
-            {/* <label htmlFor="data_de_expedicao">Data de expedição</label>
-            <br />
-            <input
-              type="date"
-              autoComplete="off"
-              id="data_de_expedicao"
-              required={true}
-              max={maxDate}
-              min={minDate}
-              defaultValue={donator.data_de_expedicao}
-              {...register("data_de_expedicao")}
-            />
-            <br />
-            <br /> */}
 
             <label htmlFor="parent">Filiação</label>
             <br />

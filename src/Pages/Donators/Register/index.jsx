@@ -149,7 +149,6 @@ const RegisterD = () => {
 
   const handleData = async (data) => {
     const anoNascimento = data.data_de_nascimento.slice(0, 4);
-    /* const anoExpedicao = data.data_de_expedicao.slice(0, 4); */
 
     if (data.data_de_nascimento.length < 10) {
       setMessage("Data de nascimento inválida!");
@@ -180,12 +179,7 @@ const RegisterD = () => {
         "Menor de idade, para fazer uma doação é necessário ter 18 anos ou mais!"
       );
       setError(true);
-    } /* else if (anoExpedicao - anoNascimento < 6) {
-      setMessage(
-        "Ano de expedição do RG inválido, é necessário ter no mínimo 6 anos de idade para fazê-lo!"
-      );
-      setError(true);
-    } */ else if (data.telefone1 === data.telefone2) {
+    } else if (data.telefone1 === data.telefone2) {
       setMessage(
         "O primeiro telefone é igual ao segundo, verifique os dados e tente novamente!"
       );
@@ -487,20 +481,6 @@ const RegisterD = () => {
             />
             <br />
             <br />
-
-            {/* <label htmlFor="data_de_expedicao">Data de expedição</label>
-            <br />
-            <input
-              type="date"
-              id="data_de_expedicao"
-              required
-              autoComplete="off"
-              max={maxDate}
-              min={minDate}
-              {...register("data_de_expedicao")}
-            />
-            <br />
-            <br /> */}
 
             <label htmlFor="parent">Filiação</label>
             <br />
