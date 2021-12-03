@@ -70,11 +70,6 @@ const PDF = (donator, donations, unities, job) => {
             `${donator.orgao_expeditor_rg}`,
           ],
 
-          [
-            { text: "Data de expedição", bold: true },
-            `${donator.data_de_expedicao}`,
-          ],
-
           [{ text: "Naturalidade", bold: true }, `${donator.naturalidade}`],
 
           [{ text: "Estado cívil", bold: true }, `${donator.estado_civil}`],
