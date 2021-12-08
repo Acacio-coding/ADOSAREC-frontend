@@ -37,7 +37,7 @@ const Statistics = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          "https://app-node-api-test.herokuapp.com/v1/donator",
+          `${process.env.REACT_APP_SECRET_NAME}/v1/donator`,
           {
             headers: header,
           }
@@ -98,7 +98,7 @@ const Statistics = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          "https://app-node-api-test.herokuapp.com/v1/donation",
+          `${process.env.REACT_APP_SECRET_NAME}/v1/donation`,
           {
             headers: header,
           }

@@ -48,7 +48,7 @@ const RegisterU = () => {
 
     try {
       await Axios.post(
-        "https://app-node-api-test.herokuapp.com/v1/collector",
+        `${process.env.REACT_APP_SECRET_NAME}/v1/collector`,
         data,
         {
           headers: header,

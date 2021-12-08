@@ -40,7 +40,7 @@ const Unities = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          "https://app-node-api-test.herokuapp.com/v1/collector",
+          `${process.env.REACT_APP_SECRET_NAME}/v1/collector`,
           {
             headers: header,
           }

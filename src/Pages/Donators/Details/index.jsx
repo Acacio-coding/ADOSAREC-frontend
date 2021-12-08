@@ -35,7 +35,7 @@ const DetailsD = () => {
   const handleRemoveDonator = async () => {
     try {
       await Axios.delete(
-        `https://app-node-api-test.herokuapp.com/v1/donator/${donator.rg}`,
+        `${process.env.REACT_APP_SECRET_NAME}/v1/donator/${donator.rg}`,
         {
           headers: {
             Authorization: `Bearer ${JSON.parse(token)}`,
@@ -64,7 +64,7 @@ const DetailsD = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          `https://app-node-api-test.herokuapp.com/v1/profissao`,
+          `${process.env.REACT_APP_SECRET_NAME}/v1/profissao`,
           {
             headers: {
               Authorization: `Bearer ${JSON.parse(token)}`,
@@ -94,7 +94,7 @@ const DetailsD = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          "https://app-node-api-test.herokuapp.com/v1/donation",
+          `${process.env.REACT_APP_SECRET_NAME}/v1/donation`,
           {
             headers: header,
           }
@@ -119,7 +119,7 @@ const DetailsD = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          `https://app-node-api-test.herokuapp.com/v1/collector`,
+          `${process.env.REACT_APP_SECRET_NAME}/v1/collector`,
           {
             headers: header,
           }
@@ -219,7 +219,7 @@ const DetailsD = () => {
     try {
       setLoading(true);
       await Axios.put(
-        `https://app-node-api-test.herokuapp.com/v1/donator/${donator.rg}`,
+        `${process.env.REACT_APP_SECRET_NAME}/v1/donator/${donator.rg}`,
         data,
         {
           headers: header,

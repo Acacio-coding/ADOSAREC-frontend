@@ -69,7 +69,7 @@ const DetailsU = () => {
 
     try {
       await Axios.put(
-        `https://app-node-api-test.herokuapp.com/v1/collector/${unity.id}`,
+        `${process.env.REACT_APP_SECRET_NAME}/v1/collector/${unity.id}`,
         data,
         {
           headers: header,

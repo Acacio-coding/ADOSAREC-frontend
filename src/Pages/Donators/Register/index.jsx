@@ -36,7 +36,7 @@ const RegisterD = () => {
       (async () => {
         try {
           const response = await Axios.get(
-            `https://app-node-api-test.herokuapp.com/v1/cep/${cep}`,
+            `${process.env.REACT_APP_SECRET_NAME}/v1/cep/${cep}`,
             {
               headers: {
                 Authorization: `Bearer ${JSON.parse(token)}`,
@@ -117,7 +117,7 @@ const RegisterD = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          `https://app-node-api-test.herokuapp.com/v1/profissao`,
+          `${process.env.REACT_APP_SECRET_NAME}/v1/profissao`,
           {
             headers: {
               Authorization: `Bearer ${JSON.parse(token)}`,
@@ -318,7 +318,7 @@ const RegisterD = () => {
 
         try {
           await Axios.post(
-            "https://app-node-api-test.herokuapp.com/v1/donator",
+            `${process.env.REACT_APP_SECRET_NAME}/v1/donator`,
             data,
             {
               headers: header,

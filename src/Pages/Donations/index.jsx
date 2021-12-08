@@ -46,7 +46,7 @@ const Donations = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          "https://app-node-api-test.herokuapp.com/v1/donation",
+          `${process.env.REACT_APP_SECRET_NAME}/v1/donation`,
           {
             headers: header,
           }
@@ -71,7 +71,7 @@ const Donations = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          `https://app-node-api-test.herokuapp.com/v1/donator`,
+          `${process.env.REACT_APP_SECRET_NAME}/v1/donator`,
           {
             headers: header,
           }
@@ -96,7 +96,7 @@ const Donations = () => {
 
       try {
         const response = await Axios.get(
-          `https://app-node-api-test.herokuapp.com/v1/collector`,
+          `${process.env.REACT_APP_SECRET_NAME}/v1/collector`,
           {
             headers: header,
           }
@@ -149,7 +149,7 @@ const Donations = () => {
 
         try {
           await Axios.put(
-            `https://app-node-api-test.herokuapp.com/v1/donation/${id}`,
+            `${process.env.REACT_APP_SECRET_NAME}v1/donation/${id}`,
             data,
             {
               headers: header,
@@ -176,7 +176,7 @@ const Donations = () => {
       const donation = JSON.parse(sessionStorage.getItem("donation"));
       try {
         await Axios.delete(
-          `https://app-node-api-test.herokuapp.com/v1/donation/${donation.id}`,
+          `${process.env.REACT_APP_SECRET_NAME}/v1/donation/${donation.id}`,
           {
             headers: {
               Authorization: `Bearer ${JSON.parse(token)}`,

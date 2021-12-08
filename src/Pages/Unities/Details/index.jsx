@@ -37,7 +37,7 @@ const DetailsU = () => {
     (async () => {
       try {
         await Axios.delete(
-          `https://app-node-api-test.herokuapp.com/v1/collector/${unity.id}`,
+          `${process.env.REACT_APP_SECRET_NAME}/v1/collector/${unity.id}`,
           {
             headers: {
               Authorization: `Bearer ${JSON.parse(token)}`,
@@ -70,7 +70,7 @@ const DetailsU = () => {
     try {
       setLoading(true);
       await Axios.put(
-        `https://app-node-api-test.herokuapp.com/v1/collector/${unity.id}`,
+        `${process.env.REACT_APP_SECRET_NAME}/v1/collector/${unity.id}`,
         data,
         {
           headers: header,

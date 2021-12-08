@@ -40,7 +40,7 @@ const EditDonation = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          "https://app-node-api-test.herokuapp.com/v1/donator",
+          `${process.env.REACT_APP_SECRET_NAME}/v1/donator`,
           {
             headers: header,
           }
@@ -73,7 +73,7 @@ const EditDonation = () => {
     (async () => {
       try {
         const response = await Axios.get(
-          "https://app-node-api-test.herokuapp.com/v1/collector",
+          `${process.env.REACT_APP_SECRET_NAME}/v1/collector`,
           {
             headers: header,
           }
@@ -145,7 +145,7 @@ const EditDonation = () => {
 
       try {
         await Axios.put(
-          `https://app-node-api-test.herokuapp.com/v1/donation/${donation.id}`,
+          `${process.env.REACT_APP_SECRET_NAME}/v1/donation/${donation.id}`,
           data,
           {
             headers: header,
