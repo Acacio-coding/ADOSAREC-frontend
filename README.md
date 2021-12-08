@@ -2,16 +2,31 @@
 
 Destinado ao projeto de controle de cadastro de doadores à ADOSAREC (Associação dos Doadores de Sangue da Região de Canoinhas), sobretudo ao que é função do front-end.
 
-## Desenvolvedores
+## Requerimentos
 
-Após clonar ou baixar o repositório
+- Node 16.13 ou superior
+- Yarn 1.22 ou superior
 
-### `npm i`
+## Para utilizar o projeto
 
-### `yarn install`
+Para node:
+```
+npm i
+```
 
-Iniciar servidor de desnvolvimento
+Para yarn:
+```
+yarn install
+```
 
-### `npm start`
+Para iniciar o servidor de desenvolvimento utilize:
 
-### `yarn start`
+Para node:
+```
+npm start
+```
+
+Para yarn:
+```
+yarn start
+```
