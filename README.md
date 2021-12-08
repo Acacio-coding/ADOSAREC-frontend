@@ -19,7 +19,7 @@ Para yarn:
 yarn install
 ```
 
-Para iniciar o servidor de desenvolvimento utilize:
+## Para iniciar o servidor de desenvolvimento
 
 Para node:
 ```
